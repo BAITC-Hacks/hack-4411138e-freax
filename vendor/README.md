@@ -1,0 +1,1 @@
+Lucide 1.47.0 (ISC), official npm package https://registry.npmjs.org/lucide/-/lucide-1.47.0.tgz. Only the imported icon modules and createElement/defaultAttributes are vendored; source-map comments removed. Original license preserved in lucide/LICENSE. No runtime CDN or build dependency. Logo supplied by the user, preserved byte-for-byte.

@@ -8,6 +8,7 @@ from urllib.error import HTTPError
 from http.server import ThreadingHTTPServer
 from server import Handler
 from test_analyzer import docx, para
+from test_packets import pdfs
 
 
 class HttpTests(unittest.TestCase):
@@ -73,10 +74,92 @@ class HttpTests(unittest.TestCase):
         with self.assertRaises(HTTPError) as raised:self.post(self.payload(),'https://example.org')
         self.assertEqual(raised.exception.code,403)
 
+    def test_frontend_modules_and_original_logo_are_served(self):
+        from server import STATIC, ROOT
+        paths = [p for p in STATIC if p.endswith(('.mjs', '.svg'))]
+        paths += ['i18n.js', 'icons.js', 'preferences.js', 'analysis.js']
+        for path in paths:
+            with self.subTest(path=path), urlopen(self.base + '/' + path) as response:
+                self.assertEqual(response.status, 200)
+                self.assertEqual(response.read(), (ROOT / path).read_bytes())
+                self.assertNotIn('application/octet-stream', response.headers['Content-Type'])
+
+    def test_vendor_paths_cannot_escape_allowlist(self):
+        for path in ['/vendor/lucide/../../server.py', '/vendor/README.md', '/assets/../.env']:
+            with self.subTest(path=path), self.assertRaises(HTTPError) as raised:
+                urlopen(self.base + path)
+            self.assertEqual(raised.exception.code, 404)
+
+    def test_eight_document_packet_preserves_individual_sources(self):
+        from server import ROOT
+        paths=sorted((ROOT/'sources').glob('AYQYN_ПРИМЕР_*.docx'))
+        self.assertEqual(len(paths),8)
+        packet=[{'name':p.name,'data':base64.b64encode(p.read_bytes()).decode()} for p in reversed(paths)]
+        result=self.post({'documents':packet})
+        self.assertEqual(len(result['documents']),8)
+        self.assertEqual({d['side'] for d in result['documents']},{'before','after'})
+        ids=[p['id'] for side in ['before','after'] for p in result[side]['paragraphs']]
+        self.assertEqual(len(ids),len(set(ids)))
+        self.assertEqual(result['trace'][-1]['stage'],'traceSources')
+        for f in result['findings']:
+            for side in ['before','after']:
+                self.assertTrue(set(f[side+'_ids']) <= {p['id'] for p in result[side]['paragraphs']})
+        for d in result['documents']:
+            self.assertTrue(all(p['document_name']==d['name'] for p in d['paragraphs']))
+        self.assertEqual(len([f for f in result['findings'] if f['type'].startswith('department_')]),4)
+
+    def test_unresolved_packet_returns_review_then_accepts_overrides(self):
+        packet=list(self.payload().values())
+        for item in packet:item['name']='anonymous.docx'
+        result=self.post({'documents':packet})
+        self.assertTrue(result['needs_review'])
+        self.assertNotIn('findings',result)
+        packet[0]['side']='before';packet[1]['side']='after'
+        result=self.post({'documents':packet})
+        self.assertEqual([d['classification'] for d in result['documents']],['manual','manual'])
+        self.assertTrue(result['findings'])
+
+    def test_unresolved_ai_failure_does_not_guess(self):
+        packet=list(self.payload().values())
+        for item in packet:item['name']='unknown.docx'
+        with patch('server.classify_with_model',side_effect=ValueError('Model unavailable')):
+            result=self.post({'documents':packet,'useAI':True})
+        self.assertTrue(result['needs_review']);self.assertEqual(result['classification_warning'],'Model unavailable')
+
+    def test_packet_rejects_non_string_data(self):
+        packet=list(self.payload().values());packet[0]['data']=42
+        with self.assertRaises(HTTPError) as raised:self.post({'documents':packet})
+        self.assertEqual(raised.exception.code,400)
+
+    def test_packet_count_bounds(self):
+        sample=self.payload()['before']
+        for count in [0,1,21]:
+            with self.subTest(count=count),self.assertRaises(HTTPError) as raised:self.post({'documents':[sample]*count})
+            self.assertEqual(raised.exception.code,400)
+
     def test_private_source_files_not_served(self):
         for path in ['/server.py','/.env','/.git/config']:
             with self.subTest(path=path),self.assertRaises(HTTPError) as raised:urlopen(self.base+path)
             self.assertEqual(raised.exception.code,404)
+
+    def test_packet_endpoint_reads_four_actual_pdfs_without_model(self):
+        request=Request(self.base+'/api/packet/read',data=json.dumps({'documents':pdfs('C010'),'mode':'auto'}).encode(),
+                        headers={'Content-Type':'application/json'})
+        with patch('server.compare_with_model') as model, urlopen(request,timeout=10) as response:
+            result=json.load(response)
+        model.assert_not_called()
+        self.assertTrue(result['ready'])
+        self.assertEqual(result['unique_count'],4)
+        self.assertTrue(all(d['format']=='pdf' for d in result['documents']))
+
+    def test_packet_endpoint_retains_unread_sources(self):
+        documents=pdfs('C010')+[{'name':'budget.xlsx','data':base64.b64encode(b'xlsx').decode()}]
+        request=Request(self.base+'/api/packet/read',data=json.dumps({'documents':documents}).encode(),
+                        headers={'Content-Type':'application/json'})
+        with urlopen(request,timeout=10) as response:
+            result=json.load(response)
+        self.assertFalse(result['ready'])
+        self.assertEqual(result['documents'][-1]['read_status'],'error')
 
 
 if __name__=='__main__':unittest.main()

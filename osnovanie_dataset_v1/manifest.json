@@ -1,0 +1,108 @@
+{
+  "dataset": "Osnovanie Synthetic OrgDiff RU",
+  "version": "1.0",
+  "case_count": 10,
+  "pdf_count": 40,
+  "cases": [
+    {
+      "case_id": "C001",
+      "documents": [
+        "C001_before_org",
+        "C001_before_functions",
+        "C001_after_org",
+        "C001_after_functions"
+      ],
+      "synthetic": true
+    },
+    {
+      "case_id": "C002",
+      "documents": [
+        "C002_before_org",
+        "C002_before_functions",
+        "C002_after_org",
+        "C002_after_functions"
+      ],
+      "synthetic": true
+    },
+    {
+      "case_id": "C003",
+      "documents": [
+        "C003_before_org",
+        "C003_before_functions",
+        "C003_after_org",
+        "C003_after_functions"
+      ],
+      "synthetic": true
+    },
+    {
+      "case_id": "C004",
+      "documents": [
+        "C004_before_org",
+        "C004_before_functions",
+        "C004_after_org",
+        "C004_after_functions"
+      ],
+      "synthetic": true
+    },
+    {
+      "case_id": "C005",
+      "documents": [
+        "C005_before_org",
+        "C005_before_functions",
+        "C005_after_org",
+        "C005_after_functions"
+      ],
+      "synthetic": true
+    },
+    {
+      "case_id": "C006",
+      "documents": [
+        "C006_before_org",
+        "C006_before_functions",
+        "C006_after_org",
+        "C006_after_functions"
+      ],
+      "synthetic": true
+    },
+    {
+      "case_id": "C007",
+      "documents": [
+        "C007_before_org",
+        "C007_before_functions",
+        "C007_after_org",
+        "C007_after_functions"
+      ],
+      "synthetic": true
+    },
+    {
+      "case_id": "C008",
+      "documents": [
+        "C008_before_org",
+        "C008_before_functions",
+        "C008_after_org",
+        "C008_after_functions"
+      ],
+      "synthetic": true
+    },
+    {
+      "case_id": "C009",
+      "documents": [
+        "C009_before_org",
+        "C009_before_functions",
+        "C009_after_org",
+        "C009_after_functions"
+      ],
+      "synthetic": true
+    },
+    {
+      "case_id": "C010",
+      "documents": [
+        "C010_before_org",
+        "C010_before_functions",
+        "C010_after_org",
+        "C010_after_functions"
+      ],
+      "synthetic": true
+    }
+  ]
+}
