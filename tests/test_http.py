@@ -73,6 +73,22 @@ class HttpTests(unittest.TestCase):
         with self.assertRaises(HTTPError) as raised:self.post(self.payload(),'https://example.org')
         self.assertEqual(raised.exception.code,403)
 
+    def test_frontend_modules_and_original_logo_are_served(self):
+        from server import STATIC, ROOT
+        paths = [p for p in STATIC if p.endswith(('.mjs', '.svg'))]
+        paths += ['i18n.js', 'icons.js', 'preferences.js', 'analysis.js']
+        for path in paths:
+            with self.subTest(path=path), urlopen(self.base + '/' + path) as response:
+                self.assertEqual(response.status, 200)
+                self.assertEqual(response.read(), (ROOT / path).read_bytes())
+                self.assertNotIn('application/octet-stream', response.headers['Content-Type'])
+
+    def test_vendor_paths_cannot_escape_allowlist(self):
+        for path in ['/vendor/lucide/../../server.py', '/vendor/README.md', '/assets/../.env']:
+            with self.subTest(path=path), self.assertRaises(HTTPError) as raised:
+                urlopen(self.base + path)
+            self.assertEqual(raised.exception.code, 404)
+
     def test_private_source_files_not_served(self):
         for path in ['/server.py','/.env','/.git/config']:
             with self.subTest(path=path),self.assertRaises(HTTPError) as raised:urlopen(self.base+path)

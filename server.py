@@ -13,6 +13,41 @@ from llm import compare_with_model
 
 ROOT = Path(__file__).resolve().parent
 STATIC = {'index.html','analyze.html','styles.css','analyze.css','app.js','analysis.js','cases.js','sources.js'}
+# Explicit frontend asset allowlist; private files remain inaccessible.
+STATIC.update({
+    'assets/kazakhtelecom-logo.svg',
+    'i18n.js',
+    'icons.js',
+    'preferences.js',
+    'vendor/lucide/createElement.mjs',
+    'vendor/lucide/defaultAttributes.mjs',
+    'vendor/lucide/icons/arrow-right.mjs',
+    'vendor/lucide/icons/building.mjs',
+    'vendor/lucide/icons/check.mjs',
+    'vendor/lucide/icons/chevron-left.mjs',
+    'vendor/lucide/icons/chevron-right.mjs',
+    'vendor/lucide/icons/circle-check.mjs',
+    'vendor/lucide/icons/download.mjs',
+    'vendor/lucide/icons/external-link.mjs',
+    'vendor/lucide/icons/file-text.mjs',
+    'vendor/lucide/icons/files.mjs',
+    'vendor/lucide/icons/git-compare-arrows.mjs',
+    'vendor/lucide/icons/info.mjs',
+    'vendor/lucide/icons/list-checks.mjs',
+    'vendor/lucide/icons/loader-circle.mjs',
+    'vendor/lucide/icons/menu.mjs',
+    'vendor/lucide/icons/monitor.mjs',
+    'vendor/lucide/icons/moon.mjs',
+    'vendor/lucide/icons/plus.mjs',
+    'vendor/lucide/icons/search.mjs',
+    'vendor/lucide/icons/settings.mjs',
+    'vendor/lucide/icons/shield-check.mjs',
+    'vendor/lucide/icons/sun.mjs',
+    'vendor/lucide/icons/trash.mjs',
+    'vendor/lucide/icons/triangle-alert.mjs',
+    'vendor/lucide/icons/upload.mjs',
+    'vendor/lucide/icons/x.mjs',
+})
 
 
 def decode_document(value):
