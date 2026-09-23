@@ -27,7 +27,10 @@ RESEARCH_LOCK=threading.Lock()
 # Explicit frontend asset allowlist; private files remain inaccessible.
 STATIC.update({
     'assets/kazakhtelecom-logo.svg',
-    'i18n.js', 'ayqyn.js', 'ayqyn.css', 'demo-sources.js',
+    'i18n.js', 'ayqyn.js', 'ayqyn.css', 'demo-sources.js', 'demo.js','report.js',
+    'assets/ayqyn-mark.svg', 'assets/c010/demo.json',
+    'assets/c010/inputs/C010/before/org.pdf', 'assets/c010/inputs/C010/before/functions.pdf',
+    'assets/c010/inputs/C010/after/org.pdf', 'assets/c010/inputs/C010/after/functions.pdf',
     'icons.js',
     'preferences.js',
     'vendor/lucide/createElement.mjs',
