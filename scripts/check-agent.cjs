@@ -1,0 +1,28 @@
+const assert=require('node:assert/strict'),fs=require('node:fs');
+(async()=>{
+ const url=file=>'data:text/javascript;charset=utf-8,'+encodeURIComponent(fs.readFileSync(file,'utf8'));
+ const modelUrl=url('agent-model.js'),M=await import(modelUrl),{adaptDemo}=await import(url('demo.js'));
+ const {executeDemo}=await import('data:text/javascript;charset=utf-8,'+encodeURIComponent(fs.readFileSync('demo-agent.js','utf8').replace("'./agent-model.js'",JSON.stringify(modelUrl))));
+ const fixture=JSON.parse(fs.readFileSync('assets/c010/demo.json','utf8'));
+ const fresh=()=>M.makeCase(adaptDemo(structuredClone(fixture)),[],'Test','case-test');
+ const finding=r=>({type:'finding',id:r.snapshot.findings.find(f=>f.type==='duplication').id,versionId:r.analysisVersionId});
+ const start=(r,op='recheck',text='Почему реестр дублируется?',refs=[finding(r)],id=crypto.randomUUID())=>M.beginRun(r,{clientMessageId:id,text,contextRefs:refs,operation:op,locale:'ru'});
+ const emitter=r=>async(type,payload)=>M.applyEvent(r,{eventId:crypto.randomUUID(),sequence:r.conversation.sequence+1,conversationId:r.conversation.id,analysisVersionId:r.analysisVersionId,runId:r.conversation.runs.at(-1).id,type,payload});
+ let r=fresh();assert.equal(r.conversation.messages.length,1);const {run}=start(r,'recheck',undefined,undefined,'client-1');assert.equal(start(r,'recheck',undefined,undefined,'client-1').duplicate,true);assert.equal(r.conversation.messages.length,3);assert.throws(()=>start(r),/runActive/);
+ assert.throws(()=>M.resolveRef(r,{...finding(r),versionId:'another-case'}),/staleContext/);assert.throws(()=>M.resolveRef(r,{type:'fragment',id:'foreign',documentId:'foreign',versionId:r.analysisVersionId}),/sourceUnavailable/);
+ const event={eventId:'one',sequence:1,conversationId:r.conversation.id,analysisVersionId:r.analysisVersionId,runId:run.id,type:'run-status',payload:{status:'running'}};
+ assert(M.applyEvent(r,event));assert.equal(M.applyEvent(r,event),false);assert.throws(()=>M.applyEvent(r,{...event,eventId:'gap',sequence:3}),/eventGap/);
+ await executeDemo(r,run,{emit:emitter(r),signal:new AbortController().signal,load:async()=>fixture,buildMarkdown:()=>''});assert.equal(run.status,'completed');const parts=r.conversation.messages.at(-1).parts,citations=parts.filter(p=>p.type==='citation');assert.deepEqual(parts.find(p=>p.type==='tool'&&p.name==='readFragments').scope,['C010_after_functions']);assert.deepEqual(citations.map(c=>M.resolveRef(r,c.ref).fragment.section),['2.2','2.7']);assert(parts.find(p=>p.type==='finding').common.includes('единый реестр аварий'));assert(r.snapshot.findings.every(f=>!f.reviewed));
+ const count=r.conversation.events.length;assert.equal(M.applyEvent(r,{...event,eventId:'late',sequence:r.conversation.sequence+1,payload:{status:'running'}}),false);assert.equal(r.conversation.events.length,count);
+ const words={artifactVersions:'Версии заключения',analysisVersion:'Анализ {version}',userClarification:'Пояснение пользователя, не факт из документа'};
+ start(r,'search','Центр собирает данные, аналитика выпускает отчёт',[]);await executeDemo(r,r.conversation.runs.at(-1),{emit:emitter(r),signal:new AbortController().signal,load:async()=>fixture,buildMarkdown:()=>''});
+ for(let n=1;n<=2;n++){const draft=start(r,'draft','Подготовь заключение',[]).run;await executeDemo(r,draft,{emit:emitter(r),signal:new AbortController().signal,load:async()=>fixture,buildMarkdown:()=>M.artifactMarkdown(r,'# DEMO C010',words)});assert.equal(r.artifacts.at(-1).version,n);assert(r.artifacts.at(-1).content.includes('Пояснение пользователя, не факт из документа'));assert(r.artifacts.at(-1).content.includes('> Центр собирает данные'));assert(!r.artifacts.at(-1).content.includes('> Подготовь заключение'));}
+ const original=r.artifacts[0].content;M.markArtifactsOutdated(r);assert(r.artifacts.every(a=>a.status==='outdated'));assert.equal(r.artifacts[0].content,original);
+ r=fresh();const cancelled=start(r).run,abort=new AbortController();let release,entered;const enteredPromise=new Promise(resolve=>entered=resolve),loadPromise=new Promise(resolve=>release=resolve);
+ const executing=executeDemo(r,cancelled,{emit:emitter(r),signal:abort.signal,load:()=>{entered();return loadPromise;},buildMarkdown:()=>''});await enteredPromise;abort.abort();release(fixture);await executing;assert.equal(cancelled.status,'cancelled');assert(r.conversation.messages.at(-1).parts.some(p=>p.type==='tool'&&p.status==='cancelled'));assert(!r.conversation.messages.at(-1).parts.some(p=>p.type==='citation'));
+ r=fresh();const failed=start(r).run;await executeDemo(r,failed,{emit:emitter(r),signal:new AbortController().signal,load:async()=>{throw Error('offline');},buildMarkdown:()=>''});assert.equal(failed.status,'failed');assert(r.conversation.messages.at(-1).parts.some(p=>p.status==='failed'));
+ r=fresh();start(r);M.interruptUnfinished(r);assert.equal(r.conversation.runs[0].status,'interrupted');assert.equal(r.conversation.messages.length,3);M.interruptUnfinished(r);assert.equal(r.conversation.messages.length,3);
+ r=fresh();r.kind='analysis';await assert.rejects(executeDemo(r,start(r).run,{emit:emitter(r),signal:new AbortController().signal}),/agentUnavailable/);
+ r=fresh();assert.throws(()=>start(r,'search','   ',[]),/emptyMessage/);assert.equal(r.conversation.messages.length,1);
+ console.log('PASS: case isolation, ID/version validation, message/event deduplication, one active run, sequence gaps, no late terminal events, C010 quote verification, cancellation, failure, interrupted reload, immutable artifacts, user clarification export, no implicit review, no demo on real files.');
+})().catch(error=>{console.error(error);process.exitCode=1;});

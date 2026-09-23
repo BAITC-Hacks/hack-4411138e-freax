@@ -6,33 +6,36 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
 (async () => {
   const browser = await chromium.launch({channel:'chrome',headless:true});
   const page = await browser.newPage({viewport:{width:1440,height:1000}});
+  const setTheme=async theme=>{if(await page.locator('html').getAttribute('data-theme')!==theme)await page.locator('[data-approved-theme]:visible').click();};
   const errors=[];
   page.on('pageerror',e=>errors.push(e.message));
   const output=path.resolve('output/playwright');fs.mkdirSync(output,{recursive:true});
   try {
     await page.goto(process.env.APP_URL || 'http://127.0.0.1:8765/');
-    await page.locator('#theme-select').selectOption('light');
+    await setTheme('light');
     assert.equal(await page.locator('#run').isEnabled(),false);
-    await page.locator('.editorial-hero a[href="#/app/new"]').click();
+    await page.locator('.hero a[href="#/app/new"]').click();
     await page.locator('#load-example').click();
     await page.locator('#batch-list .packet-name strong').first().waitFor();
     assert.equal(await page.locator('#batch-list .packet-file').count(),8);
     const filename=await page.locator('#batch-list .packet-name strong').first().innerText();
     for(const lang of ['kk','en','ru']){
-      await page.locator(`[data-lang="${lang}"]`).click();
+      await page.locator('#workspace-controls [data-approved-language]').selectOption(lang);
       assert.equal(await page.locator('html').getAttribute('lang'),lang);
       assert.equal(await page.locator('#batch-list .packet-name strong').first().innerText(),filename);
     }
     await page.locator('#run').click();
-    await page.locator('#results').waitFor({state:'visible',timeout:90000});
+    await page.locator('#case-title').waitFor({state:'visible',timeout:90000});
+    await page.locator('[data-case-tab="results"]').click();
+    await page.locator('#results').waitFor({state:'visible'});
     await page.locator('#tab-departments').click();
     assert.match(await page.locator('#findings').innerText(),/цифрового развития/);
     assert.match(await page.locator('#run-method').innerText(),/без ИИ/);
     await page.locator('#finding-search').fill('цифрового развития');
-    await page.locator('[data-lang="kk"]').click();
+    await page.locator('#workspace-controls [data-approved-language]').selectOption('kk');
     assert.equal(await page.locator('#finding-search').inputValue(),'цифрового развития');
     assert.equal(await page.locator('#findings [data-finding]').count(),1);
-    await page.locator('[data-lang="ru"]').click();
+    await page.locator('#workspace-controls [data-approved-language]').selectOption('ru');
     await page.locator('#finding-search').fill('');
     await page.screenshot({path:path.join(output,'desktop-light.png')});
     await page.locator('#findings [data-finding="f2"]').click();
@@ -64,24 +67,24 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
     const markdown=fs.readFileSync(path.join(output,'conclusion.md'),'utf8');
     assert.match(markdown,/SHA-256/);assert.match(markdown,/Комментарий аналитика: Проверено по пункту 3.4./);
     await page.locator('#tab-departments').click();
-    await page.locator('#theme-select').selectOption('dark');
+    await setTheme('dark');
     await page.screenshot({path:path.join(output,'desktop-dark.png')});
     for(const width of [360,390,768,1024,1440]){
       await page.setViewportSize({width,height:900});
       for(const theme of ['light','dark']){
-        await page.locator('#theme-select').selectOption(theme);
+        await setTheme(theme);
         assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),`Overflow at ${width}/${theme}`);
       }
     }
     await page.setViewportSize({width:390,height:844});
-    await page.locator('#theme-select').selectOption('light');
+    await setTheme('light');
     await page.screenshot({path:path.join(output,'mobile-light.png')});
-    await page.locator('#theme-select').selectOption('dark');
+    await setTheme('dark');
     await page.locator('#findings [data-finding="f1"]').click();
     assert.match(await page.locator('#left-notice').innerText(),/Связанных абзацев/);
     await page.screenshot({path:path.join(output,'mobile-dark.png')});
     await page.locator('#evidence-close').click();
-    await page.locator('[data-lang="en"]').click();
+    await page.locator('#workspace-controls [data-approved-language]').selectOption('en');
     await page.reload();
     assert.equal(await page.locator('html').getAttribute('lang'),'en');
     assert.equal(await page.locator('html').getAttribute('data-theme'),'dark');

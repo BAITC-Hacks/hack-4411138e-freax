@@ -21,13 +21,16 @@ from time import perf_counter
 
 ROOT = Path(__file__).resolve().parent
 STATIC = {'index.html','analyze.html','styles.css','analyze.css','app.js','analysis.js','cases.js','sources.js'}
+# User-supplied public design assets and local licensed font subsets only.
+for folder,extensions in [('distingt-assets',{'.svg','.png','.json','.pdf'}),('fonts',{'.woff2'})]:
+    STATIC.update(p.relative_to(ROOT).as_posix() for p in (ROOT/folder).rglob('*') if p.is_file() and p.suffix in extensions)
 RESEARCH_ROOT=ROOT/'output'/'research'
 ACTIVE_RESEARCH=set()
 RESEARCH_LOCK=threading.Lock()
 # Explicit frontend asset allowlist; private files remain inaccessible.
 STATIC.update({
     'assets/kazakhtelecom-logo.svg',
-    'i18n.js', 'ayqyn.js', 'ayqyn.css', 'demo-sources.js', 'demo.js','report.js',
+    'i18n.js', 'ayqyn.js', 'ayqyn.css', 'demo-sources.js', 'demo.js','report.js','workspace.js','workspace.css','distingt-approved.css','distingt-integration.css','case-store.js','agent-model.js','demo-agent.js',
     'assets/ayqyn-mark.svg', 'assets/c010/demo.json',
     'assets/c010/inputs/C010/before/org.pdf', 'assets/c010/inputs/C010/before/functions.pdf',
     'assets/c010/inputs/C010/after/org.pdf', 'assets/c010/inputs/C010/after/functions.pdf',
