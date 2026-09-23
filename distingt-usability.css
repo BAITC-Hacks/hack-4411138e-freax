@@ -1,4 +1,17 @@
 /* Operational refinements, scoped to Distingt. Original approved tokens remain intact. */
+.distingt-demo .upload-receipts{list-style:none;display:grid;gap:8px;margin:12px 0 0;padding:0;min-width:0}
+.distingt-demo .upload-receipts:empty{display:none}
+.distingt-demo .upload-receipt{display:grid;grid-template-columns:24px minmax(0,1fr) 40px;gap:10px;align-items:center;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.distingt-demo .upload-receipt>div{min-width:0}
+.distingt-demo .upload-receipt-icon{color:var(--blue)}
+.distingt-demo :is(.upload-receipt,.packet-name) .upload-file-name{display:flex;min-width:0;max-width:100%;font-size:12px;line-height:1.6}
+.distingt-demo .upload-file-name>span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.distingt-demo .upload-file-name>span:last-child{flex-shrink:0}
+.distingt-demo .upload-receipt small{display:block;color:var(--muted);font-size:11px;margin:4px 0}
+.distingt-demo .upload-ready{display:flex;align-items:center;gap:5px;color:var(--green);font-size:11px;line-height:1.5;margin-top:5px}
+.distingt-demo .upload-ready .icon{width:14px;height:14px;flex-basis:14px}
+.distingt-demo #upload-selection-note{margin:14px 0;line-height:1.7;color:var(--muted);font-size:12px}
+.distingt-demo .upload-receipt .icon-button{width:40px;height:40px;padding:8px}
 html{scrollbar-gutter:stable;scrollbar-width:thin;scrollbar-color:#8095b870 transparent}
 .distingt-demo{--scroll-thumb:#8095b84d;--scroll-hover:#8095b899}
 .distingt-demo.light{--scroll-thumb:#42648c4d;--scroll-hover:#42648c99}
