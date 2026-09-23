@@ -1,6 +1,6 @@
 # Совместный запуск TeleDoc / AYQYN
 
-Интеграционная ветка `codex/fullstack-integration` объединяет frontend `origin/main` (1de0fb4), backend snapshot (c287a1e) и backend чата (7aa675f). История объединяется merge-коммитами. Публикация, push и merge в main не выполнялись.
+Интеграционная ветка `codex/fullstack-integration` объединяет frontend `origin/main` (c3caf8a), backend snapshot (c287a1e) и backend чата (7aa675f). История объединяется merge-коммитами. Публикуется интеграционная ветка; merge в main не выполнялся.
 
 ## Запуск
 
