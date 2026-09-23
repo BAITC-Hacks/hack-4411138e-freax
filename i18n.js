@@ -63,6 +63,434 @@ traceRules:['Кандидатов по текстовым правилам: {cou
 traceModel:['Приняты предложения модели: {count}','Модель ұсыныстары қабылданды: {count}','Model proposals accepted: {count}'],
 traceSources:['Ссылок на существующие абзацы: {count}','Бар абзацтарға сілтемелер: {count}','References to existing paragraphs: {count}']
 });
+Object.assign(entries,{
+ "home": [
+  "Главная",
+  "Басты бет",
+  "Home"
+ ],
+ "guide": [
+  "Как работать",
+  "Нұсқаулық",
+  "Guide"
+ ],
+ "about": [
+  "О проекте",
+  "Жоба туралы",
+  "About"
+ ],
+ "dataPolicy": [
+  "О данных",
+  "Деректер туралы",
+  "Data policy"
+ ],
+ "capabilities": [
+  "Возможности",
+  "Мүмкіндіктер",
+  "Capabilities"
+ ],
+ "openWorkspace": [
+  "Рабочая область",
+  "Жұмыс кеңістігі",
+  "Workspace"
+ ],
+ "emptyWorkspace": [
+  "Здесь начнётся ваш анализ",
+  "Талдауыңыз осы жерден басталады",
+  "Your analysis starts here"
+ ],
+ "emptyWorkspaceText": [
+  "Добавьте два комплекта документов или изучите учебный пример.",
+  "Құжаттардың екі жинағын қосыңыз немесе оқу мысалын қараңыз.",
+  "Add two document sets or explore the example."
+ ],
+ "viewExample": [
+  "Посмотреть пример",
+  "Мысалды көру",
+  "View example"
+ ],
+ "versionContents": [
+  "Структуры, положения, инструкции, приказы и приложения",
+  "Құрылымдар, ережелер, нұсқаулықтар, бұйрықтар мен қосымшалар",
+  "Structures, regulations, job descriptions, orders and appendices"
+ ],
+ "mixedDrop": [
+  "Или добавьте обе версии вместе — определим автоматически",
+  "Немесе екі нұсқаны бірге қосыңыз — автоматты түрде анықтаймыз",
+  "Or add both versions together — assign automatically"
+ ],
+ "demoLabel": [
+  "Учебный пример",
+  "Оқу мысалы",
+  "Synthetic example"
+ ],
+ "demoDisclosure": [
+  "Синтетические документы. Это демонстрация, а не результат анализа ваших файлов. Выводы требуют проверки аналитиком.",
+  "Синтетикалық құжаттар. Бұл сіздің файлдарыңызды талдау нәтижесі емес, көрсету мысалы. Қорытындыларды талдаушы тексеруі керек.",
+  "Synthetic documents. This is a demonstration, not an analysis of your files. Findings require analyst review."
+ ],
+ "analyzeOwn": [
+  "Загрузить свои документы",
+  "Өз құжаттарыңызды жүктеу",
+  "Upload your documents"
+ ],
+ "overview": [
+  "Обзор",
+  "Шолу",
+  "Overview"
+ ],
+ "teamTrack": [
+  "Проект команды freax для трека Казахтелекома",
+  "Қазақтелеком бағытына арналған freax командасының жобасы",
+  "A freax team project for the Kazakhtelecom track"
+ ],
+ "footerNav": [
+  "Навигация в футере",
+  "Төменгі навигация",
+  "Footer navigation"
+ ],
+ "openOriginal": [
+  "Открыть исходный файл",
+  "Бастапқы файлды ашу",
+  "Open original file"
+ ],
+ "editorialKicker": [
+  "Анализ структуры и функций",
+  "Құрылым мен функцияларды талдау",
+  "Structure & responsibility analysis"
+ ],
+ "editorialTitle": [
+  "Структура меняется.",
+  "Құрылым өзгереді.",
+  "Structures change."
+ ],
+ "editorialTitleAccent": [
+  "А ответственность?",
+  "Ал жауапкершілік ше?",
+  "What about responsibility?"
+ ],
+ "editorialIntro": [
+  "Сопоставьте документы до и после реорганизации. Найдите изменения функций — и проверьте каждое по первоисточнику.",
+  "Қайта ұйымдастыруға дейінгі және кейінгі құжаттарды салыстырыңыз. Функция өзгерістерін тауып, әрқайсысын дереккөзден тексеріңіз.",
+  "Compare documents before and after reorganization. Find changes in responsibilities, then check the original evidence."
+ ],
+ "previewDocument": [
+  "Функции подразделений",
+  "Бөлімшелердің функциялары",
+  "Department responsibilities"
+ ],
+ "pageOne": [
+  "стр. 1",
+  "1-бет",
+  "page 1"
+ ],
+ "originalQuote": [
+  "Дословная цитата · исходный язык",
+  "Дәл дәйексөз · түпнұсқа тілі",
+  "Exact quotation · original language"
+ ],
+ "preliminary": [
+  "Предварительный вывод",
+  "Алдын ала қорытынды",
+  "Preliminary finding"
+ ],
+ "previewTransfer": [
+  "Функция сохранена. Ответственный изменился.",
+  "Функция сақталған. Жауапты бөлімше өзгерген.",
+  "The function remains. Its owner has changed."
+ ],
+ "previewTransferText": [
+  "Закупочные решения перешли от отдела закупок к внутреннему аудиту. Следующий шаг — проверить совместимость полномочий.",
+  "Сатып алу шешімдері сатып алу бөлімінен ішкі аудитке берілген. Келесі қадам — өкілеттіктердің үйлесімділігін тексеру.",
+  "Purchasing decisions moved from Procurement to Internal Audit. Next, check whether the responsibilities are compatible."
+ ],
+ "reviewExample": [
+  "Проверить пример",
+  "Мысалды тексеру",
+  "Inspect example"
+ ],
+ "previewDisclosure": [
+  "Пример C010 из синтетического набора. Ссылки ведут к учебным документам; наличие цитаты не подтверждает вывод.",
+  "Синтетикалық жинақтағы C010 мысалы. Сілтемелер оқу құжаттарына апарады; дәйексөздің болуы қорытындыны растамайды.",
+  "C010 from the synthetic dataset. Links lead to training documents; a citation does not establish a conclusion."
+ ],
+ "studyTitle": [
+  "Одна передача. Два несовместимых полномочия?",
+  "Бір функция берілді. Өкілеттіктер үйлесе ме?",
+  "One transfer. Two incompatible responsibilities?"
+ ],
+ "studyIntro": [
+  "Название отдела — только начало. Важно увидеть, кто выполняет действие и кто затем проверяет его результат.",
+  "Бөлім атауы — бастамасы ғана. Әрекетті кім орындайтынын және оның нәтижесін кім тексеретінін көру маңызды.",
+  "The department name is only a starting point. See who performs an action and who later checks its outcome."
+ ],
+ "studyVerdict": [
+  "Возможный конфликт интересов",
+  "Ықтимал мүдделер қақтығысы",
+  "Potential conflict of interest"
+ ],
+ "studyVerdictText": [
+  "В примере одна служба выбирает поставщиков и проверяет закупки. Для решения нужны контекст и оценка сотрудника.",
+  "Мысалда бір қызмет жеткізушіні таңдайды әрі сатып алуды тексереді. Шешім үшін контекст пен қызметкер бағасы қажет.",
+  "In this example, one service selects vendors and audits purchases. Context and human judgment are needed."
+ ],
+ "studySource": [
+  "Учебный пример · C010_after_functions · стр. 1, пп. 2.4–2.5",
+  "Оқу мысалы · C010_after_functions · 1-бет, 2.4–2.5 тармақтар",
+  "Synthetic example · C010_after_functions · page 1, clauses 2.4–2.5"
+ ],
+ "changesTitle": [
+  "Не просто разница в тексте.",
+  "Тек мәтін айырмасы емес.",
+  "Beyond changed wording."
+ ],
+ "changesIntro": [
+  "AYQYN группирует предварительные выводы, чтобы вы могли проверить смысл изменений.",
+  "AYQYN өзгерістердің мағынасын тексеру үшін алдын ала қорытындыларды топтайды.",
+  "AYQYN groups preliminary findings so you can examine what changed in practice."
+ ],
+ "changeUnits": [
+  "Создание, сохранение и преобразование подразделений — с привязкой к упоминаниям в документах.",
+  "Бөлімшелердің құрылуы, сақталуы мен өзгеруі — құжаттағы деректерге сілтемемен.",
+  "Created, retained and reorganized units, linked to their mentions in documents."
+ ],
+ "changeTransfer": [
+  "Сопоставление обязанностей между версиями. Изменение названия не обязательно означает потерю функции.",
+  "Нұсқалар арасындағы міндеттерді салыстыру. Атаудың өзгеруі функцияның жоғалғанын білдірмейді.",
+  "Compare duties across versions. A renamed unit does not necessarily mean a lost function."
+ ],
+ "changeRisks": [
+  "Потенциальные потери, дублирование и конфликты. Каждый кандидат остаётся открытым до проверки.",
+  "Ықтимал жоғалу, қайталану және қайшылықтар. Әр болжам тексерілгенше ашық қалады.",
+  "Potential losses, duplication and conflicts. Every candidate remains open until reviewed."
+ ],
+ "journeyTitle": [
+  "От двух комплектов — к проверяемому заключению.",
+  "Екі жинақтан тексерілетін қорытындыға.",
+  "From two document sets to a reviewable conclusion."
+ ],
+ "journeyUpload": [
+  "Добавьте комплекты «До» и «После». В каждом могут быть структуры, положения, инструкции и приложения. Либо загрузите всё вместе и проверьте назначенные версии.",
+  "«Дейін» және «Кейін» жинақтарын қосыңыз. Әрқайсысында құрылымдар, ережелер, нұсқаулықтар мен қосымшалар болуы мүмкін. Немесе бәрін бірге жүктеп, белгіленген нұсқаларды тексеріңіз.",
+  "Add Before and After sets, each with structures, regulations, job descriptions and appendices. Or upload them together and check assigned versions."
+ ],
+ "journeyCompare": [
+  "Запустите доступный режим. Реальные этапы и состав обработанного пакета появятся в результате.",
+  "Қолжетімді режимді іске қосыңыз. Нақты кезеңдер мен өңделген жинақ құрамы нәтижеде көрсетіледі.",
+  "Run the available mode. Actual processing steps and the packet manifest appear with the result."
+ ],
+ "journeyReview": [
+  "Откройте источник рядом с выводом. Проверьте цитату и контекст, затем укажите своё решение и комментарий.",
+  "Қорытындының жанынан дереккөзді ашыңыз. Дәйексөз бен контексті тексеріп, шешім мен түсініктеме қосыңыз.",
+  "Open the source beside the finding. Check the quote and context, then record your decision and note."
+ ],
+ "journeyReport": [
+  "Скачайте Markdown с выводами, источниками и вашими отметками проверки.",
+  "Қорытындылар, дереккөздер және тексеру белгілері бар Markdown жүктеп алыңыз.",
+  "Download Markdown with findings, sources and your review decisions."
+ ],
+ "boundaries": [
+  "Границы анализа",
+  "Талдау шектері",
+  "Analysis boundaries"
+ ],
+ "faqTitle": [
+  "Перед началом работы.",
+  "Жұмысты бастамас бұрын.",
+  "Before you begin."
+ ],
+ "faqIntro": [
+  "Полнота исходных данных и проверка сотрудником важнее красивого отчёта.",
+  "Бастапқы деректердің толықтығы мен қызметкердің тексеруі әдемі есептен маңыздырақ.",
+  "Complete source material and human review matter more than a polished report."
+ ],
+ "faqFiles": [
+  "Какие файлы можно загрузить?",
+  "Қандай файлдарды жүктеуге болады?",
+  "Which files can I upload?"
+ ],
+ "faqFilesAnswer": [
+  "Рабочий экран принимает 2–20 DOCX, до 10 МБ каждый и 20 МБ суммарно. PDF доступен в отдельном серверном исследовательском API, но ещё не подключён к этой форме. OCR и Excel не поддерживаются.",
+  "Жұмыс экраны 2–20 DOCX қабылдайды: әрқайсысы 10 МБ, барлығы 20 МБ дейін. PDF бөлек серверлік зерттеу API-де бар, бірақ бұл формаға қосылмаған. OCR және Excel қолдау таппайды.",
+  "The workspace accepts 2–20 DOCX, up to 10 MB each and 20 MB total. PDF reading exists in the separate research API but is not connected to this form. OCR and Excel are unsupported."
+ ],
+ "faqLoss": [
+  "Отсутствие совпадения означает потерю функции?",
+  "Сәйкестіктің болмауы функция жоғалды деген сөз бе?",
+  "Does a missing match prove a lost function?"
+ ],
+ "faqLossAnswer": [
+  "Нет. Это повод проверить область поиска, приложения, переформулировки и правопреемство. Вывод относится к предоставленному комплекту, а не ко всей организации.",
+  "Жоқ. Іздеу аясын, қосымшаларды, өзгерген тұжырымдарды және құқықтық мирасқорлықты тексеру қажет. Қорытынды бүкіл ұйымға емес, берілген жинаққа қатысты.",
+  "No. Check the search scope, appendices, rewording and succession. The finding concerns the supplied packet, not the entire organization."
+ ],
+ "faqData": [
+  "Куда отправляются документы?",
+  "Құжаттар қайда жіберіледі?",
+  "Where do documents go?"
+ ],
+ "faqDataAnswer": [
+  "Файлы отправляются серверу AYQYN. При включённом ИИ текст передаётся настроенному провайдеру; материалы AI-запуска сохраняются на диске сервера. Подробнее — на странице о данных.",
+  "Файлдар AYQYN серверіне жіберіледі. ЖИ қосылғанда мәтін бапталған провайдерге беріледі; ЖИ сеансының материалдары сервер дискісінде сақталады. Толығырақ — деректер бетінде.",
+  "Files go to the AYQYN server. When AI is enabled, text goes to the configured provider; AI run materials are saved on the server disk. See the data policy."
+ ],
+ "faqDecision": [
+  "Кто принимает окончательное решение?",
+  "Соңғы шешімді кім қабылдайды?",
+  "Who makes the final decision?"
+ ],
+ "faqDecisionAnswer": [
+  "Ответственный сотрудник. Система предлагает кандидатов, а не юридическое или кадровое решение. Цитата подтверждает происхождение текста, но не правильность интерпретации.",
+  "Жауапты қызметкер. Жүйе құқықтық не кадрлық шешім емес, болжамдар ұсынады. Дәйексөз мәтіннің шығу тегін көрсетеді, бірақ түсіндірудің дұрыстығын растамайды.",
+  "The responsible employee. The system proposes candidates, not legal or staffing decisions. A citation verifies the origin of text, not its interpretation."
+ ],
+ "finalTitle": [
+  "Начните с документов.",
+  "Құжаттардан бастаңыз.",
+  "Start with the documents."
+ ],
+ "finalText": [
+  "Две версии. Полный контекст. Решение — за вами.",
+  "Екі нұсқа. Толық контекст. Шешім — сізде.",
+  "Two versions. Full context. You make the decision."
+ ],
+ "guidePrepare": [
+  "Подготовьте комплекты",
+  "Жинақтарды дайындаңыз",
+  "Prepare both sets"
+ ],
+ "guideRun": [
+  "Запустите обработку",
+  "Өңдеуді бастаңыз",
+  "Run the analysis"
+ ],
+ "guideRunText": [
+  "Без ИИ работают текстовые правила. С ИИ запрос идёт настроенной модели. При ошибке модели интерфейс явно показывает резервный режим. Анимация означает ожидание, а не процент готовности.",
+  "ЖИ жоқ кезде мәтін ережелері жұмыс істейді. ЖИ қосылғанда сұрау бапталған модельге жіберіледі. Модель қатесі болса, интерфейс резервтік режимді көрсетеді. Анимация дайындық пайызын емес, күтуді білдіреді.",
+  "Without AI, text rules run. With AI, the configured model receives the request. Model failures are explicitly labeled as fallback mode. Animation indicates waiting, not completion percentage."
+ ],
+ "guideExportText": [
+  "Отметки и комментарии хранятся в памяти вкладки: выгрузите Markdown до обновления страницы. Ссылки на исходные пункты и пометка деморежима сохраняются в заключении.",
+  "Белгілер мен түсініктемелер қойынды жадында сақталады: бетті жаңартпас бұрын Markdown жүктеңіз. Түпнұсқа тармақ сілтемелері мен демо белгісі қорытындыда сақталады.",
+  "Reviews and notes live in tab memory: export Markdown before refreshing. Source references and the demo label remain in the conclusion."
+ ],
+ "aboutText": [
+  "AYQYN — рабочее место для сопоставления организационной структуры и функций до и после реорганизации. Команда freax соединяет анализ документов с проверкой по первоисточнику.",
+  "AYQYN — қайта ұйымдастыруға дейінгі және кейінгі құрылым мен функцияларды салыстыруға арналған жұмыс орны. freax командасы құжат талдауын түпнұсқадан тексерумен біріктіреді.",
+  "AYQYN is a workspace for comparing organizational structure and responsibilities before and after reorganization. The freax team connects document analysis with source review."
+ ],
+ "aboutLimits": [
+  "Это хакатонный продукт. Качество смыслового анализа ещё требует проверки; полнота обнаружения изменений не гарантируется. Агентное исследование доступно через отдельный API и ещё не встроено в рабочий экран.",
+  "Бұл — хакатон өнімі. Мағыналық талдау сапасы әлі тексеруді қажет етеді; барлық өзгерістерді табуға кепілдік жоқ. Агенттік зерттеу бөлек API арқылы қолжетімді, жұмыс экранына әлі қосылмаған.",
+  "This is a hackathon product. Semantic analysis still needs validation; complete detection is not guaranteed. Agentic research is available through a separate API and is not integrated into this workspace."
+ ],
+ "dataUpload": [
+  "Передача файлов",
+  "Файлдарды жіберу",
+  "File transmission"
+ ],
+ "dataUploadText": [
+  "После запуска файлы DOCX передаются серверу AYQYN через /api/analyze. В режиме правил сервер извлекает текст и сравнивает его без обращения к модели.",
+  "Іске қосылғаннан кейін DOCX файлдары /api/analyze арқылы AYQYN серверіне жіберіледі. Ереже режимінде сервер мәтінді шығарып, модельсіз салыстырады.",
+  "On submission, DOCX files are sent to the AYQYN server through /api/analyze. Rules mode extracts and compares text without calling a model."
+ ],
+ "dataProvider": [
+  "Обращение к модели",
+  "Модельге сұрау",
+  "Model requests"
+ ],
+ "dataProviderText": [
+  "Если включён ИИ, текст документов отправляется по указанному Base URL. Адрес и модель видны в настройках. Условия обработки зависят от выбранного провайдера.",
+  "ЖИ қосылса, құжат мәтіні көрсетілген Base URL мекенжайына жіберіледі. Мекенжай мен модель баптауларда көрінеді. Өңдеу шарттары таңдалған провайдерге байланысты.",
+  "With AI enabled, document text is sent to the configured Base URL. The address and model are visible in settings. Processing terms depend on that provider."
+ ],
+ "dataStorage": [
+  "Сохранение на сервере",
+  "Серверде сақтау",
+  "Server storage"
+ ],
+ "dataStorageText": [
+  "Материалы AI-сравнения — документы, запросы и ответы — сохраняются в output/runs. Отдельное исследовательское API сохраняет пакеты и состояние в output/research. Автоматическое удаление и управление сроками хранения в интерфейсе не реализованы.",
+  "ЖИ салыстыру материалдары — құжаттар, сұраулар мен жауаптар — output/runs ішінде сақталады. Бөлек зерттеу API жинақтар мен күйді output/research ішінде сақтайды. Интерфейсте автоматты жою мен сақтау мерзімін басқару іске асырылмаған.",
+  "AI comparison documents, requests and responses are saved in output/runs. The separate research API saves packets and state in output/research. Automatic deletion and retention controls are not implemented in the UI."
+ ],
+ "dataReview": [
+  "Ваши настройки и решения",
+  "Баптаулар мен шешімдеріңіз",
+  "Your preferences and decisions"
+ ],
+ "dataReviewText": [
+  "Язык и тема сохраняются в браузере. Ключ из формы, решения аналитика и комментарии остаются в памяти вкладки; после обновления они теряются. Экспорт сохраняет решения в скачиваемый Markdown.",
+  "Тіл мен тақырып браузерде сақталады. Формадағы кілт, талдаушы шешімдері мен түсініктемелер қойынды жадында қалады; жаңартқанда жоғалады. Экспорт шешімдерді Markdown файлына сақтайды.",
+  "Language and theme persist in your browser. A form-entered API key, analyst decisions and notes remain in tab memory and are lost on refresh. Export includes decisions in the downloaded Markdown."
+ ],
+ "demoPolicyText": [
+  "C010 загружается из статического синтетического набора, без запуска модели. Его PDF — учебные исходники. Демо не использует выбранные вами файлы и не выдаётся за их анализ.",
+  "C010 модельсіз статикалық синтетикалық жинақтан жүктеледі. PDF файлдары — оқу дереккөздері. Демо таңдаған файлдарыңызды пайдаланбайды және оларды талдау ретінде көрсетілмейді.",
+  "C010 loads from a static synthetic dataset without calling a model. Its PDFs are training sources. The demo does not use or analyze your selected files."
+ ],
+ "class_demo": [
+  "Учебный источник",
+  "Оқу дереккөзі",
+  "Training source"
+ ],
+ "demoMode": [
+  "Подготовленное демо C010",
+  "Дайын C010 демосы",
+  "Prepared C010 demo"
+ ],
+ "demoMethod": [
+  "Синтетический пример",
+  "Синтетикалық мысал",
+  "Synthetic example"
+ ],
+ "staticExample": [
+  "C010 · подготовленный пример, без запуска backend",
+  "C010 · backend іске қосылмайтын дайын мысал",
+  "C010 · prepared example, no backend run"
+ ],
+ "searchScope": [
+  "Область сравнения «После»",
+  "«Кейін» салыстыру аясы",
+  "After comparison scope"
+ ],
+ "lossCaution": [
+  "Совпадение не найдено в доступных документах. Это не доказательство утраты функции во всей организации.",
+  "Қолжетімді құжаттарда сәйкестік табылмады. Бұл бүкіл ұйымдағы функция жоғалғанының дәлелі емес.",
+  "No match was found in the available documents. This does not prove the function was lost across the organization."
+ ],
+ "pageNumber": [
+  "Страница {page}",
+  "{page}-бет",
+  "Page {page}"
+ ],
+ "pageUnavailable": [
+  "Страница не определена парсером",
+  "Бет нөмірін талдағыш анықтамады",
+  "Page not supplied by parser"
+ ],
+ "overviewTitle": [
+  "Сначала проверьте контекст.",
+  "Алдымен контексті тексеріңіз.",
+  "Check the context first."
+ ],
+ "overviewText": [
+  "Ниже — состав сравнения и предварительные выводы. Откройте источник, чтобы подтвердить или отклонить интерпретацию.",
+  "Төменде салыстыру құрамы мен алдын ала қорытындылар бар. Түсіндіруді растау не қабылдамау үшін дереккөзді ашыңыз.",
+  "Below are the comparison scope and preliminary findings. Open a source to confirm or reject the interpretation."
+ ],
+ "localHint": [
+  "Файлы обрабатывает сервер. С ИИ текст передаётся провайдеру; материалы запуска сохраняются на сервере.",
+  "Файлдарды сервер өңдейді. ЖИ қосылса, мәтін провайдерге беріледі; сеанс материалдары серверде сақталады.",
+  "Files are processed by the server. With AI, text goes to the provider and run materials are saved on the server."
+ ],
+ "backendLimit": [
+  "Эта форма принимает DOCX. PDF доступен только в отдельном исследовательском API. OCR и Excel не подключены. Лимит: 1 500 абзацев и 250 000 символов на сторону.",
+  "Бұл форма DOCX қабылдайды. PDF тек бөлек зерттеу API-де бар. OCR және Excel қосылмаған. Шек: әр кезеңге 1 500 абзац және 250 000 таңба.",
+  "This form accepts DOCX. PDF is available only in the separate research API. OCR and Excel are not connected. Limit: 1,500 paragraphs and 250,000 characters per side."
+ ]
+});
+Object.assign(entries,{fileTypeError:['Эта форма принимает только DOCX.','Бұл форма тек DOCX қабылдайды.','This form accepts DOCX only.']});
 const enumEntries={
 'department_added':['Добавлено в перечень','Тізімге қосылды','Added to the list'], 'department_removed':['Убрано из перечня','Тізімнен алынды','Removed from the list'], 'department_retained':['Сохранено в перечне','Тізімде сақталды','Retained in the list'], 'reorganization':['Преобразование','Қайта ұйымдастыру','Reorganization'], 'function_loss':['Потенциальная потеря','Ықтимал жоғалу','Potential loss'], 'function_transfer':['Передача функции','Функцияны беру','Function transfer'], 'duplication':['Возможное дублирование','Ықтимал қайталану','Potential duplication'], 'conflict':['Конфликт интересов','Мүдделер қақтығысы','Conflict of interest'], 'contradiction':['Противоречие формулировок','Тұжырымдар қайшылығы','Conflicting wording'], 'unknown':['Недостаточно данных','Деректер жеткіліксіз','Insufficient information'], 'risk':['Возможный риск','Ықтимал тәуекел','Potential risk'], 'confirmed':['Подтверждено аналитиком','Талдаушы растады','Confirmed by analyst'], 'dismissed':['Отклонено аналитиком','Талдаушы қабылдамады','Dismissed by analyst']};
 Object.assign(entries,enumEntries);

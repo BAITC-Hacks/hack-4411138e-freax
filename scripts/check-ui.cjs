@@ -13,6 +13,7 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
     await page.goto(process.env.APP_URL || 'http://127.0.0.1:8765/');
     await page.locator('#theme-select').selectOption('light');
     assert.equal(await page.locator('#run').isEnabled(),false);
+    await page.locator('.editorial-hero a[href="#/app/new"]').click();
     await page.locator('#load-example').click();
     await page.locator('#batch-list .packet-name strong').first().waitFor();
     assert.equal(await page.locator('#batch-list .packet-file').count(),8);
@@ -24,6 +25,7 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
     }
     await page.locator('#run').click();
     await page.locator('#results').waitFor({state:'visible',timeout:90000});
+    await page.locator('#tab-departments').click();
     assert.match(await page.locator('#findings').innerText(),/цифрового развития/);
     assert.match(await page.locator('#run-method').innerText(),/без ИИ/);
     await page.locator('#finding-search').fill('цифрового развития');
