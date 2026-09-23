@@ -1,5 +1,7 @@
 # Distingt: integrated workspace and approved design
 
+**Latest refinement:** [Distingt usability update](DISTINGT_USABILITY.md) supersedes the initial archive-matching description below. The hero now uses a source-backed C010 example, navigation uses the official Kazakhtelecom logo, and advanced processing settings moved to Data processing. The old raster is no longer displayed in the hero. Reading position and context persistence have been extended.
+
 ## Current implementation
 
 The Python/vanilla JS application remains the canonical product. `/api/analyze`, `/api/packet/read` and the research APIs retain their existing contracts. The server change is limited to public static asset allowlists. No React dependency or bundler was added to the production app.

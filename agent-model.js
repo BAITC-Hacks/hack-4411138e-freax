@@ -50,3 +50,20 @@ export function artifactMarkdown(record,base,words){
  const clarification=record.conversation.messages.filter(m=>m.role==='user'&&record.conversation.runs.find(r=>r.clientMessageId===m.id)?.operation!=='draft').map(m=>m.parts.filter(p=>p.type==='text').map(p=>p.text).join(' '));
  return base+'\n\n## '+words.artifactVersions+' · V'+(record.artifacts.length+1)+'\n\n'+words.analysisVersion.replace('{version}',String(record.analysisVersion))+(clarification.length?'\n\n## '+words.userClarification+'\n\n'+clarification.map(text=>text.split('\n').map(line=>'> '+line).join('\n')).join('\n\n'):'');
 }
+
+// Store the visible message and its offset, not a percentage of a changing thread.
+export function captureReadingPosition({scrollTop,scrollHeight,clientHeight,messages},previous={}){
+ if(!(clientHeight>0))return previous;
+ const top=Math.max(0,scrollTop),anchor=messages.find(message=>message.top+message.height>top)||messages.at(-1);
+ return {...previous,atBottom:scrollHeight-clientHeight-top<=40,scrollTop:top,messageId:anchor?.id||null,offset:anchor?top-anchor.top:0};
+}
+export function restoreReadingPosition(reading,{scrollHeight,clientHeight,messages}){
+ const maximum=Math.max(0,scrollHeight-clientHeight);
+ if(!reading||reading.atBottom)return maximum;
+ const anchor=messages.find(message=>message.id===reading.messageId);
+ return Math.min(maximum,Math.max(0,anchor?anchor.top+(reading.offset||0):(reading.scrollTop||0)));
+}
+export function splitFilename(value){
+ const name=String(value??''),index=name.lastIndexOf('.');
+ return index>0&&name.length-index<=12?{stem:name.slice(0,index),extension:name.slice(index)}:{stem:name,extension:''};
+}

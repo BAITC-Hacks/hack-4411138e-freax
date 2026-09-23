@@ -4,6 +4,20 @@ const assert=require('node:assert/strict'),fs=require('node:fs');
  const modelUrl=url('agent-model.js'),M=await import(modelUrl),{adaptDemo}=await import(url('demo.js'));
  const {executeDemo}=await import('data:text/javascript;charset=utf-8,'+encodeURIComponent(fs.readFileSync('demo-agent.js','utf8').replace("'./agent-model.js'",JSON.stringify(modelUrl))));
  const fixture=JSON.parse(fs.readFileSync('assets/c010/demo.json','utf8'));
+ // Reader state must follow a stable message across reflow/new answers, and survive hidden tabs.
+ const metrics={scrollTop:350,scrollHeight:1500,clientHeight:400,messages:[{id:'summary',top:0,height:250},{id:'question',top:280,height:100},{id:'answer',top:410,height:800}]};
+ const reading=M.captureReadingPosition(metrics,{unread:true,openDetails:['answer:0']});
+ assert.equal(reading.messageId,'question');assert.equal(reading.offset,70);assert.equal(reading.atBottom,false);assert.equal(reading.unread,true);
+ const reflow={...metrics,scrollHeight:2000,messages:[{id:'summary',top:0,height:500},{id:'question',top:530,height:100},{id:'answer',top:660,height:900},{id:'new-answer',top:1600,height:200}]};
+ assert.equal(M.restoreReadingPosition(reading,reflow),600,'Reader retains the same message offset after prior content grows.');
+ assert.equal(M.restoreReadingPosition({...reading,atBottom:true},reflow),1600,'Only an at-bottom reader follows incoming content.');
+ assert.strictEqual(M.captureReadingPosition({...metrics,clientHeight:0,scrollTop:0},reading),reading,'Hidden tabs cannot replace the saved position.');
+ assert.equal(M.restoreReadingPosition(reading,{...metrics,messages:[]}),350,'Missing anchor falls back to bounded absolute position.');
+ assert.equal(M.restoreReadingPosition(reading,{...metrics,scrollHeight:450}),50,'Shortened content clamps without a negative or overflowing offset.');
+ const restored=structuredClone(reading);assert.deepEqual(restored.openDetails,['answer:0']);assert.equal(M.restoreReadingPosition(restored,reflow),600);
+ assert.deepEqual(M.splitFilename('Очень длинное.название.Құжат.pdf'),{stem:'Очень длинное.название.Құжат',extension:'.pdf'});
+ assert.deepEqual(M.splitFilename('Положение'),{stem:'Положение',extension:''});assert.deepEqual(M.splitFilename('.hidden'),{stem:'.hidden',extension:''});
+
  const fresh=()=>M.makeCase(adaptDemo(structuredClone(fixture)),[],'Test','case-test');
  const finding=r=>({type:'finding',id:r.snapshot.findings.find(f=>f.type==='duplication').id,versionId:r.analysisVersionId});
  const start=(r,op='recheck',text='Почему реестр дублируется?',refs=[finding(r)],id=crypto.randomUUID())=>M.beginRun(r,{clientMessageId:id,text,contextRefs:refs,operation:op,locale:'ru'});
@@ -24,5 +38,5 @@ const assert=require('node:assert/strict'),fs=require('node:fs');
  r=fresh();start(r);M.interruptUnfinished(r);assert.equal(r.conversation.runs[0].status,'interrupted');assert.equal(r.conversation.messages.length,3);M.interruptUnfinished(r);assert.equal(r.conversation.messages.length,3);
  r=fresh();r.kind='analysis';await assert.rejects(executeDemo(r,start(r).run,{emit:emitter(r),signal:new AbortController().signal}),/agentUnavailable/);
  r=fresh();assert.throws(()=>start(r,'search','   ',[]),/emptyMessage/);assert.equal(r.conversation.messages.length,1);
- console.log('PASS: case isolation, ID/version validation, message/event deduplication, one active run, sequence gaps, no late terminal events, C010 quote verification, cancellation, failure, interrupted reload, immutable artifacts, user clarification export, no implicit review, no demo on real files.');
+ console.log('PASS: anchored reader restoration, hidden-tab preservation, reflow/new-answer following, filename extensions; case isolation, ID/version validation, message/event deduplication, one active run, sequence gaps, no late terminal events, C010 quote verification, cancellation, failure, interrupted reload, immutable artifacts, user clarification export, no implicit review, no demo on real files.');
 })().catch(error=>{console.error(error);process.exitCode=1;});
