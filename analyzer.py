@@ -51,11 +51,47 @@ def _paragraph_text(element):
     return "".join(parts).strip()
 
 
+def _source_parent(stack, paragraph_id, number, level, introduction, default=None):
+    """Maintain structural ancestry within one body or table cell, not ownership."""
+    for index, anchor in enumerate(stack):
+        if number and anchor["number"] and not number.startswith(anchor["number"] + "."):
+            del stack[index:]
+            break
+        if level and ((anchor["level"] and anchor["level"] >= level)
+                      or (not anchor["level"] and not (
+                          number and anchor["number"] and number.startswith(anchor["number"] + ".")))):
+            del stack[index:]
+            break
+    if introduction and not number and not level:
+        for index, anchor in enumerate(stack):
+            if anchor["introduction"]:
+                del stack[index:]
+                break
+    parent = stack[-1]["id"] if stack else default
+    if number or level or introduction:
+        stack.append({"id": paragraph_id, "number": number, "level": level,
+                      "introduction": introduction and not number and not level})
+    return parent
+
+
 def parse_docx(data: bytes, filename: str) -> dict:
     """Извлекает текущий текст основного документа, включая ячейки таблиц.
 
     Номера Word, заданные автоматической нумерацией, не выдумываются.
     Колонтитулы, комментарии и удаленные исправления не включаются.
+
+    Source metadata contract (all linked IDs are document-local):
+    block_type is heading, clause, paragraph, or table_cell; heading_level is
+    the known Word outline level (1-9) or None. parent_id, previous_id, next_id
+    reference pN or None. Parents describe structure, not proven ownership.
+    Table cells add table_id=tN, row_id=tN:rN, zero-based row_index and
+    column_index (XML cell ordinal, NOT a merged-cell grid coordinate),
+    is_header (explicit enabled w:tblHeader only), row_fragment_ids,
+    header_row_ids, header_fragment_ids, and first_row_fragment_ids.
+    The first row is context, never an inferred header. Lists contain only
+    emitted paragraphs of the nearest table, excluding nested-table content.
+    Packet assembly must prefix all *_id and *_ids links above with its
+    document ID, leaving None and empty lists unchanged.
     """
     if not isinstance(data, bytes) or not data:
         raise ValueError("Передайте непустой файл DOCX.")
@@ -127,16 +163,38 @@ def parse_docx(data: bytes, filename: str) -> dict:
     if body is None:
         raise ValueError("В DOCX отсутствует содержимое документа.")
 
-    def visible_paragraphs(node):
+    tables = []
+    body_stack = []
+
+    def visible_paragraphs(node, stack, default=None, table=None, row=None, column=None):
         if node.tag in {W + "del", W + "moveFrom"}:
             return
+        if node.tag == W + "tbl":
+            table = {"id": "t" + str(len(tables) + 1), "rows": [], "warnings": []}
+            tables.append(table)
+            default = stack[-1]["id"] if stack else default
+            row, column = None, None
+        elif node.tag == W + "tr" and table is not None:
+            header = node.find(W + "trPr/" + W + "tblHeader")
+            row = {"index": len(table["rows"]), "cells": 0, "paragraphs": [],
+                   "is_header": header is not None and header.get(W + "val", "true").lower()
+                   in {"true", "1", "on"}}
+            table["rows"].append(row)
+            if any(node.find(W + "trPr/" + W + key) is not None for key in ("gridBefore", "gridAfter")):
+                table["warnings"].append("Omitted table grid cells; column_index is only an XML cell ordinal.")
+        elif node.tag == W + "tc" and row is not None:
+            column = row["cells"]
+            row["cells"] += 1
+            stack = []
+            if any(node.find(W + "tcPr/" + W + key) is not None for key in ("gridSpan", "vMerge", "hMerge")):
+                table["warnings"].append("Table merge markup present; merged-cell geometry and ownership are not inferred.")
         if node.tag == W + "p":
-            yield node
+            yield node, stack, default, table, row, column
             return
         for child in node:
-            yield from visible_paragraphs(child)
+            yield from visible_paragraphs(child, stack, default, table, row, column)
 
-    for element in visible_paragraphs(body):
+    for element, stack, default, table, row, column in visible_paragraphs(body, body_stack):
         text = _paragraph_text(element)
         if not text:
             continue
@@ -156,14 +214,48 @@ def parse_docx(data: bytes, filename: str) -> dict:
             section = (top or chapter).group(1)
         elif level:
             section = text
-        paragraphs.append({"id": "p" + str(len(paragraphs) + 1),
-                           "text": text, "section": section})
+        paragraph_id = "p" + str(len(paragraphs) + 1)
+        marker = numbered or standalone or top or chapter
+        number = marker.group(1) if marker else None
+        block_type = "heading" if level or top or chapter else "clause" if number else "paragraph"
+        paragraph = {"id": paragraph_id, "text": text, "section": section,
+                     "block_type": block_type, "heading_level": level,
+                     "parent_id": _source_parent(stack, paragraph_id, number,
+                                                 level or (1 if top or chapter else None),
+                                                 text.endswith(":"), default),
+                     "previous_id": paragraphs[-1]["id"] if paragraphs else None,
+                     "next_id": None}
+        if paragraphs:
+            paragraphs[-1]["next_id"] = paragraph_id
+        if table is not None and row is not None and column is not None:
+            paragraph.update(block_type="table_cell", table_id=table["id"],
+                             row_id=f'{table["id"]}:r{row["index"]}',
+                             row_index=row["index"], column_index=column,
+                             is_header=row["is_header"])
+            row["paragraphs"].append(paragraph)
+        paragraphs.append(paragraph)
         if len(paragraphs) > MAX_PARAGRAPHS:
             raise ValueError("В документе слишком много абзацев.")
     if not paragraphs:
         raise ValueError("В DOCX не найден доступный текст.")
+    layout_warnings = []
+    for table in tables:
+        headers = [row for row in table["rows"] if row["is_header"]]
+        header_ids = [p["id"] for row in headers for p in row["paragraphs"]]
+        first_ids = [p["id"] for p in table["rows"][0]["paragraphs"]] if table["rows"] else []
+        warnings = list(dict.fromkeys(table["warnings"]))
+        layout_warnings.extend(f'{table["id"]}: {warning}' for warning in warnings)
+        for row in table["rows"]:
+            row_ids = [p["id"] for p in row["paragraphs"]]
+            for paragraph in row["paragraphs"]:
+                paragraph.update(row_fragment_ids=list(row_ids),
+                                 header_row_ids=[f'{table["id"]}:r{header["index"]}' for header in headers],
+                                 header_fragment_ids=list(header_ids),
+                                 first_row_fragment_ids=list(first_ids),
+                                 layout_warnings=list(warnings))
     return {"name": str(filename), "paragraphs": paragraphs,
-            "sha256": hashlib.sha256(data).hexdigest()}
+            "sha256": hashlib.sha256(data).hexdigest(),
+            "warnings": layout_warnings, "layout_warnings": layout_warnings}
 
 
 _DEPARTMENT = re.compile(

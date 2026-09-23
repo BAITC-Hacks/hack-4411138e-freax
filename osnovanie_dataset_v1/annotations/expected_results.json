@@ -1,0 +1,678 @@
+[
+  {
+    "case_id": "C001",
+    "scenario": "Без изменений",
+    "completeness": "complete",
+    "expected_findings": [
+      {
+        "type": "preserved",
+        "explanation": "Все четыре подразделения и шесть пунктов функций сохранены.",
+        "evidence": [
+          {
+            "version": "before",
+            "document_type": "org",
+            "clause": "1.1",
+            "document_id": "C001_before_org",
+            "fragment_id": "C001_before_org:1.1",
+            "file": "inputs/C001/before/org.pdf",
+            "page": 1,
+            "quote": "Отдел эксплуатации сети подчиняется техническому директору."
+          },
+          {
+            "version": "after",
+            "document_type": "org",
+            "clause": "1.1",
+            "document_id": "C001_after_org",
+            "fragment_id": "C001_after_org:1.1",
+            "file": "inputs/C001/after/org.pdf",
+            "page": 1,
+            "quote": "Отдел эксплуатации сети подчиняется техническому директору."
+          }
+        ],
+        "review_status": "reference_label",
+        "id": "C001-F01"
+      }
+    ],
+    "forbidden_types": [
+      "potential_loss",
+      "potential_duplication",
+      "potential_conflict"
+    ],
+    "annotation_status": "synthetic_author_labels_not_independently_reviewed"
+  },
+  {
+    "case_id": "C002",
+    "scenario": "Переименование и перенумерация",
+    "completeness": "complete",
+    "expected_findings": [
+      {
+        "type": "reorganized",
+        "explanation": "Отдел переименован в Центр; обязанности сохранены, пункты перенумерованы.",
+        "evidence": [
+          {
+            "version": "before",
+            "document_type": "org",
+            "clause": "1.1",
+            "document_id": "C002_before_org",
+            "fragment_id": "C002_before_org:1.1",
+            "file": "inputs/C002/before/org.pdf",
+            "page": 1,
+            "quote": "Отдел эксплуатации сети подчиняется техническому директору."
+          },
+          {
+            "version": "after",
+            "document_type": "org",
+            "clause": "1.1",
+            "document_id": "C002_after_org",
+            "fragment_id": "C002_after_org:1.1",
+            "file": "inputs/C002/after/org.pdf",
+            "page": 1,
+            "quote": "Центр эксплуатации сети подчиняется техническому директору; это новое наименование Отдела эксплуатации сети, правопреемство полное."
+          },
+          {
+            "version": "before",
+            "document_type": "functions",
+            "clause": "2.1",
+            "document_id": "C002_before_functions",
+            "fragment_id": "C002_before_functions:2.1",
+            "file": "inputs/C002/before/functions.pdf",
+            "page": 1,
+            "quote": "Отдел эксплуатации сети ежемесячно проверяет резервное питание всех узлов сети и оформляет протокол проверки."
+          },
+          {
+            "version": "after",
+            "document_type": "functions",
+            "clause": "5.1",
+            "document_id": "C002_after_functions",
+            "fragment_id": "C002_after_functions:5.1",
+            "file": "inputs/C002/after/functions.pdf",
+            "page": 1,
+            "quote": "Центр эксплуатации сети ежемесячно проверяет резервное питание всех узлов сети и оформляет протокол проверки."
+          }
+        ],
+        "review_status": "reference_label",
+        "id": "C002-F01"
+      }
+    ],
+    "forbidden_types": [
+      "potential_loss",
+      "potential_duplication",
+      "created"
+    ],
+    "annotation_status": "synthetic_author_labels_not_independently_reviewed"
+  },
+  {
+    "case_id": "C003",
+    "scenario": "Передача функции существующему подразделению",
+    "completeness": "complete",
+    "expected_findings": [
+      {
+        "type": "transferred",
+        "explanation": "Ведение реестра аварий передано из эксплуатации в информационную безопасность.",
+        "evidence": [
+          {
+            "version": "before",
+            "document_type": "functions",
+            "clause": "2.2",
+            "document_id": "C003_before_functions",
+            "fragment_id": "C003_before_functions:2.2",
+            "file": "inputs/C003/before/functions.pdf",
+            "page": 1,
+            "quote": "Отдел эксплуатации сети ведет единый реестр аварий сети и ежемесячно направляет сводку техническому директору."
+          },
+          {
+            "version": "after",
+            "document_type": "functions",
+            "clause": "2.2",
+            "document_id": "C003_after_functions",
+            "fragment_id": "C003_after_functions:2.2",
+            "file": "inputs/C003/after/functions.pdf",
+            "page": 1,
+            "quote": "Отдел информационной безопасности ведет единый реестр аварий сети и ежемесячно направляет сводку техническому директору."
+          }
+        ],
+        "review_status": "reference_label",
+        "id": "C003-F01"
+      }
+    ],
+    "forbidden_types": [
+      "potential_loss",
+      "potential_duplication"
+    ],
+    "annotation_status": "synthetic_author_labels_not_independently_reviewed"
+  },
+  {
+    "case_id": "C004",
+    "scenario": "Потенциальная потеря функции",
+    "completeness": "complete",
+    "expected_findings": [
+      {
+        "type": "potential_loss",
+        "explanation": "Проверка резервного питания есть до изменений и не обнаруживается во всем полном комплекте после изменений.",
+        "evidence": [
+          {
+            "version": "before",
+            "document_type": "functions",
+            "clause": "2.1",
+            "document_id": "C004_before_functions",
+            "fragment_id": "C004_before_functions:2.1",
+            "file": "inputs/C004/before/functions.pdf",
+            "page": 1,
+            "quote": "Отдел эксплуатации сети ежемесячно проверяет резервное питание всех узлов сети и оформляет протокол проверки."
+          }
+        ],
+        "review_status": "requires_review",
+        "search_scope": [
+          "C004_after_org",
+          "C004_after_functions"
+        ],
+        "id": "C004-F01"
+      }
+    ],
+    "forbidden_types": [
+      "transferred"
+    ],
+    "annotation_status": "synthetic_author_labels_not_independently_reviewed"
+  },
+  {
+    "case_id": "C005",
+    "scenario": "Дублирование ответственности",
+    "completeness": "complete",
+    "expected_findings": [
+      {
+        "type": "potential_duplication",
+        "explanation": "Два подразделения обязаны вести один и тот же единый реестр аварий без разделения ответственности.",
+        "evidence": [
+          {
+            "version": "after",
+            "document_type": "functions",
+            "clause": "2.2",
+            "document_id": "C005_after_functions",
+            "fragment_id": "C005_after_functions:2.2",
+            "file": "inputs/C005/after/functions.pdf",
+            "page": 1,
+            "quote": "Отдел эксплуатации сети ведет единый реестр аварий сети и ежемесячно направляет сводку техническому директору."
+          },
+          {
+            "version": "after",
+            "document_type": "functions",
+            "clause": "2.7",
+            "document_id": "C005_after_functions",
+            "fragment_id": "C005_after_functions:2.7",
+            "file": "inputs/C005/after/functions.pdf",
+            "page": 1,
+            "quote": "Отдел информационной безопасности ведет единый реестр аварий сети и ежемесячно направляет сводку техническому директору."
+          }
+        ],
+        "review_status": "requires_review",
+        "id": "C005-F01"
+      }
+    ],
+    "forbidden_types": [
+      "potential_loss"
+    ],
+    "annotation_status": "synthetic_author_labels_not_independently_reviewed"
+  },
+  {
+    "case_id": "C006",
+    "scenario": "Самопроверка закупок",
+    "completeness": "complete",
+    "expected_findings": [
+      {
+        "type": "transferred",
+        "explanation": "Выбор поставщиков и заключение договоров переданы службе аудита.",
+        "evidence": [
+          {
+            "version": "before",
+            "document_type": "functions",
+            "clause": "2.5",
+            "document_id": "C006_before_functions",
+            "fragment_id": "C006_before_functions:2.5",
+            "file": "inputs/C006/before/functions.pdf",
+            "page": 1,
+            "quote": "Отдел закупок выбирает поставщиков и заключает договоры закупки оборудования."
+          },
+          {
+            "version": "after",
+            "document_type": "functions",
+            "clause": "2.5",
+            "document_id": "C006_after_functions",
+            "fragment_id": "C006_after_functions:2.5",
+            "file": "inputs/C006/after/functions.pdf",
+            "page": 1,
+            "quote": "Служба внутреннего аудита выбирает поставщиков и заключает договоры закупки оборудования."
+          }
+        ],
+        "review_status": "reference_label",
+        "id": "C006-F01"
+      },
+      {
+        "type": "potential_conflict",
+        "explanation": "Служба аудита принимает и проверяет собственные закупочные решения, что противоречит пункту 2.6.",
+        "evidence": [
+          {
+            "version": "after",
+            "document_type": "functions",
+            "clause": "2.4",
+            "document_id": "C006_after_functions",
+            "fragment_id": "C006_after_functions:2.4",
+            "file": "inputs/C006/after/functions.pdf",
+            "page": 1,
+            "quote": "Служба внутреннего аудита ежегодно проводит независимую проверку закупок оборудования."
+          },
+          {
+            "version": "after",
+            "document_type": "functions",
+            "clause": "2.5",
+            "document_id": "C006_after_functions",
+            "fragment_id": "C006_after_functions:2.5",
+            "file": "inputs/C006/after/functions.pdf",
+            "page": 1,
+            "quote": "Служба внутреннего аудита выбирает поставщиков и заключает договоры закупки оборудования."
+          },
+          {
+            "version": "after",
+            "document_type": "functions",
+            "clause": "2.6",
+            "document_id": "C006_after_functions",
+            "fragment_id": "C006_after_functions:2.6",
+            "file": "inputs/C006/after/functions.pdf",
+            "page": 1,
+            "quote": "Служба внутреннего аудита не участвует в выборе поставщиков и заключении договоров; подразделение не вправе независимо проверять собственные закупочные решения."
+          }
+        ],
+        "review_status": "requires_review",
+        "id": "C006-F02"
+      }
+    ],
+    "forbidden_types": [
+      "potential_loss"
+    ],
+    "annotation_status": "synthetic_author_labels_not_independently_reviewed"
+  },
+  {
+    "case_id": "C007",
+    "scenario": "Разделение подразделения",
+    "completeness": "complete",
+    "expected_findings": [
+      {
+        "type": "reorganized",
+        "explanation": "Эксплуатация разделена на мониторинг и техническое обслуживание.",
+        "evidence": [
+          {
+            "version": "before",
+            "document_type": "org",
+            "clause": "1.1",
+            "document_id": "C007_before_org",
+            "fragment_id": "C007_before_org:1.1",
+            "file": "inputs/C007/before/org.pdf",
+            "page": 1,
+            "quote": "Отдел эксплуатации сети подчиняется техническому директору."
+          },
+          {
+            "version": "after",
+            "document_type": "org",
+            "clause": "1.1",
+            "document_id": "C007_after_org",
+            "fragment_id": "C007_after_org:1.1",
+            "file": "inputs/C007/after/org.pdf",
+            "page": 1,
+            "quote": "Отдел эксплуатации сети реорганизован путем разделения на Центр мониторинга и Отдел технического обслуживания. Оба подчиняются техническому директору."
+          }
+        ],
+        "review_status": "reference_label",
+        "id": "C007-F01"
+      },
+      {
+        "type": "created",
+        "explanation": "Создан Отдел аналитики с новой функцией прогнозирования.",
+        "evidence": [
+          {
+            "version": "after",
+            "document_type": "org",
+            "clause": "1.5",
+            "document_id": "C007_after_org",
+            "fragment_id": "C007_after_org:1.5",
+            "file": "inputs/C007/after/org.pdf",
+            "page": 1,
+            "quote": "Создан Отдел аналитики, подчиненный техническому директору."
+          },
+          {
+            "version": "after",
+            "document_type": "functions",
+            "clause": "2.7",
+            "document_id": "C007_after_functions",
+            "fragment_id": "C007_after_functions:2.7",
+            "file": "inputs/C007/after/functions.pdf",
+            "page": 1,
+            "quote": "Отдел аналитики ежеквартально прогнозирует потребность в пропускной способности сети."
+          }
+        ],
+        "review_status": "reference_label",
+        "id": "C007-F02"
+      },
+      {
+        "type": "transferred",
+        "explanation": "Функция распределена между правопреемниками без потери.",
+        "evidence": [
+          {
+            "version": "before",
+            "document_type": "functions",
+            "clause": "2.1",
+            "document_id": "C007_before_functions",
+            "fragment_id": "C007_before_functions:2.1",
+            "file": "inputs/C007/before/functions.pdf",
+            "page": 1,
+            "quote": "Отдел эксплуатации сети ежемесячно проверяет резервное питание всех узлов сети и оформляет протокол проверки."
+          },
+          {
+            "version": "after",
+            "document_type": "functions",
+            "clause": "2.1",
+            "document_id": "C007_after_functions",
+            "fragment_id": "C007_after_functions:2.1",
+            "file": "inputs/C007/after/functions.pdf",
+            "page": 1,
+            "quote": "Отдел технического обслуживания ежемесячно проверяет резервное питание всех узлов сети и оформляет протокол проверки."
+          }
+        ],
+        "review_status": "reference_label",
+        "id": "C007-F03"
+      },
+      {
+        "type": "transferred",
+        "explanation": "Функция распределена между правопреемниками без потери.",
+        "evidence": [
+          {
+            "version": "before",
+            "document_type": "functions",
+            "clause": "2.2",
+            "document_id": "C007_before_functions",
+            "fragment_id": "C007_before_functions:2.2",
+            "file": "inputs/C007/before/functions.pdf",
+            "page": 1,
+            "quote": "Отдел эксплуатации сети ведет единый реестр аварий сети и ежемесячно направляет сводку техническому директору."
+          },
+          {
+            "version": "after",
+            "document_type": "functions",
+            "clause": "2.2",
+            "document_id": "C007_after_functions",
+            "fragment_id": "C007_after_functions:2.2",
+            "file": "inputs/C007/after/functions.pdf",
+            "page": 1,
+            "quote": "Центр мониторинга ведет единый реестр аварий сети и ежемесячно направляет сводку техническому директору."
+          }
+        ],
+        "review_status": "reference_label",
+        "id": "C007-F04"
+      }
+    ],
+    "forbidden_types": [
+      "potential_loss",
+      "potential_duplication"
+    ],
+    "annotation_status": "synthetic_author_labels_not_independently_reviewed"
+  },
+  {
+    "case_id": "C008",
+    "scenario": "Похожие функции с разными объектами",
+    "completeness": "complete",
+    "expected_findings": [
+      {
+        "type": "preserved",
+        "explanation": "Ведение двух реестров не является дублированием: объекты и границы ответственности явно различаются.",
+        "evidence": [
+          {
+            "version": "after",
+            "document_type": "functions",
+            "clause": "2.2",
+            "document_id": "C008_after_functions",
+            "fragment_id": "C008_after_functions:2.2",
+            "file": "inputs/C008/after/functions.pdf",
+            "page": 1,
+            "quote": "Отдел эксплуатации сети ведет реестр аварий физической сети связи. Инциденты информационной безопасности в этот реестр не входят."
+          },
+          {
+            "version": "after",
+            "document_type": "functions",
+            "clause": "2.7",
+            "document_id": "C008_after_functions",
+            "fragment_id": "C008_after_functions:2.7",
+            "file": "inputs/C008/after/functions.pdf",
+            "page": 1,
+            "quote": "Отдел информационной безопасности ведет реестр инцидентов информационной безопасности. Аварии физической сети связи в этот реестр не входят."
+          }
+        ],
+        "review_status": "reference_label",
+        "id": "C008-F01"
+      }
+    ],
+    "forbidden_types": [
+      "potential_duplication",
+      "potential_loss"
+    ],
+    "annotation_status": "synthetic_author_labels_not_independently_reviewed"
+  },
+  {
+    "case_id": "C009",
+    "scenario": "Неполный комплект после",
+    "completeness": "incomplete",
+    "expected_findings": [
+      {
+        "type": "insufficient_data",
+        "explanation": "Нельзя установить сохранение или потерю функций эксплуатации: нужен полный текст положения.",
+        "evidence": [
+          {
+            "version": "after",
+            "document_type": "functions",
+            "clause": "0.1",
+            "document_id": "C009_after_functions",
+            "fragment_id": "C009_after_functions:0.1",
+            "file": "inputs/C009/after/functions.pdf",
+            "page": 1,
+            "quote": "Предоставлено только извлечение из положения. Разделы о функциях Отдела эксплуатации сети в комплект не включены. Отсутствие пункта в этом извлечении не означает отмену обязанности."
+          },
+          {
+            "version": "before",
+            "document_type": "functions",
+            "clause": "2.1",
+            "document_id": "C009_before_functions",
+            "fragment_id": "C009_before_functions:2.1",
+            "file": "inputs/C009/before/functions.pdf",
+            "page": 1,
+            "quote": "Отдел эксплуатации сети ежемесячно проверяет резервное питание всех узлов сети и оформляет протокол проверки."
+          },
+          {
+            "version": "before",
+            "document_type": "functions",
+            "clause": "2.2",
+            "document_id": "C009_before_functions",
+            "fragment_id": "C009_before_functions:2.2",
+            "file": "inputs/C009/before/functions.pdf",
+            "page": 1,
+            "quote": "Отдел эксплуатации сети ведет единый реестр аварий сети и ежемесячно направляет сводку техническому директору."
+          }
+        ],
+        "review_status": "requires_review",
+        "id": "C009-F01"
+      }
+    ],
+    "forbidden_types": [
+      "potential_loss",
+      "confirmed_loss"
+    ],
+    "annotation_status": "synthetic_author_labels_not_independently_reviewed"
+  },
+  {
+    "case_id": "C010",
+    "scenario": "Смешанный демонстрационный сценарий",
+    "completeness": "complete",
+    "expected_findings": [
+      {
+        "type": "reorganized",
+        "explanation": "Эксплуатация переименована в Центр.",
+        "evidence": [
+          {
+            "version": "before",
+            "document_type": "org",
+            "clause": "1.1",
+            "document_id": "C010_before_org",
+            "fragment_id": "C010_before_org:1.1",
+            "file": "inputs/C010/before/org.pdf",
+            "page": 1,
+            "quote": "Отдел эксплуатации сети подчиняется техническому директору."
+          },
+          {
+            "version": "after",
+            "document_type": "org",
+            "clause": "1.1",
+            "document_id": "C010_after_org",
+            "fragment_id": "C010_after_org:1.1",
+            "file": "inputs/C010/after/org.pdf",
+            "page": 1,
+            "quote": "Центр эксплуатации сети является правопреемником переименованного Отдела эксплуатации сети и подчиняется техническому директору."
+          }
+        ],
+        "review_status": "reference_label",
+        "id": "C010-F01"
+      },
+      {
+        "type": "created",
+        "explanation": "Создан Отдел аналитики.",
+        "evidence": [
+          {
+            "version": "after",
+            "document_type": "org",
+            "clause": "1.5",
+            "document_id": "C010_after_org",
+            "fragment_id": "C010_after_org:1.5",
+            "file": "inputs/C010/after/org.pdf",
+            "page": 1,
+            "quote": "Создан Отдел аналитики, подчиненный техническому директору."
+          }
+        ],
+        "review_status": "reference_label",
+        "id": "C010-F02"
+      },
+      {
+        "type": "potential_loss",
+        "explanation": "Не найдена обязанность проверять резервное питание в полном комплекте после.",
+        "evidence": [
+          {
+            "version": "before",
+            "document_type": "functions",
+            "clause": "2.1",
+            "document_id": "C010_before_functions",
+            "fragment_id": "C010_before_functions:2.1",
+            "file": "inputs/C010/before/functions.pdf",
+            "page": 1,
+            "quote": "Отдел эксплуатации сети ежемесячно проверяет резервное питание всех узлов сети и оформляет протокол проверки."
+          }
+        ],
+        "review_status": "requires_review",
+        "search_scope": [
+          "C010_after_org",
+          "C010_after_functions"
+        ],
+        "id": "C010-F03"
+      },
+      {
+        "type": "potential_duplication",
+        "explanation": "Центр эксплуатации и Отдел аналитики ведут один единый реестр аварий.",
+        "evidence": [
+          {
+            "version": "after",
+            "document_type": "functions",
+            "clause": "2.2",
+            "document_id": "C010_after_functions",
+            "fragment_id": "C010_after_functions:2.2",
+            "file": "inputs/C010/after/functions.pdf",
+            "page": 1,
+            "quote": "Центр эксплуатации сети ведет единый реестр аварий сети и ежемесячно направляет сводку техническому директору."
+          },
+          {
+            "version": "after",
+            "document_type": "functions",
+            "clause": "2.7",
+            "document_id": "C010_after_functions",
+            "fragment_id": "C010_after_functions:2.7",
+            "file": "inputs/C010/after/functions.pdf",
+            "page": 1,
+            "quote": "Отдел аналитики ведет единый реестр аварий сети и ежемесячно направляет сводку техническому директору."
+          }
+        ],
+        "review_status": "requires_review",
+        "id": "C010-F04"
+      },
+      {
+        "type": "transferred",
+        "explanation": "Закупочные решения переданы от закупок аудиту.",
+        "evidence": [
+          {
+            "version": "before",
+            "document_type": "functions",
+            "clause": "2.5",
+            "document_id": "C010_before_functions",
+            "fragment_id": "C010_before_functions:2.5",
+            "file": "inputs/C010/before/functions.pdf",
+            "page": 1,
+            "quote": "Отдел закупок выбирает поставщиков и заключает договоры закупки оборудования."
+          },
+          {
+            "version": "after",
+            "document_type": "functions",
+            "clause": "2.5",
+            "document_id": "C010_after_functions",
+            "fragment_id": "C010_after_functions:2.5",
+            "file": "inputs/C010/after/functions.pdf",
+            "page": 1,
+            "quote": "Служба внутреннего аудита выбирает поставщиков и заключает договоры закупки оборудования."
+          }
+        ],
+        "review_status": "reference_label",
+        "id": "C010-F05"
+      },
+      {
+        "type": "potential_conflict",
+        "explanation": "Служба аудита проверяет собственные закупки вопреки требованию независимости.",
+        "evidence": [
+          {
+            "version": "after",
+            "document_type": "functions",
+            "clause": "2.4",
+            "document_id": "C010_after_functions",
+            "fragment_id": "C010_after_functions:2.4",
+            "file": "inputs/C010/after/functions.pdf",
+            "page": 1,
+            "quote": "Служба внутреннего аудита ежегодно проводит независимую проверку закупок оборудования."
+          },
+          {
+            "version": "after",
+            "document_type": "functions",
+            "clause": "2.5",
+            "document_id": "C010_after_functions",
+            "fragment_id": "C010_after_functions:2.5",
+            "file": "inputs/C010/after/functions.pdf",
+            "page": 1,
+            "quote": "Служба внутреннего аудита выбирает поставщиков и заключает договоры закупки оборудования."
+          },
+          {
+            "version": "after",
+            "document_type": "functions",
+            "clause": "2.6",
+            "document_id": "C010_after_functions",
+            "fragment_id": "C010_after_functions:2.6",
+            "file": "inputs/C010/after/functions.pdf",
+            "page": 1,
+            "quote": "Служба внутреннего аудита не участвует в выборе поставщиков и заключении договоров; подразделение не вправе независимо проверять собственные закупочные решения."
+          }
+        ],
+        "review_status": "requires_review",
+        "id": "C010-F06"
+      }
+    ],
+    "forbidden_types": [],
+    "annotation_status": "synthetic_author_labels_not_independently_reviewed"
+  }
+]

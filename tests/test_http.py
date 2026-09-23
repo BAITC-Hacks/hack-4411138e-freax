@@ -8,6 +8,7 @@ from urllib.error import HTTPError
 from http.server import ThreadingHTTPServer
 from server import Handler
 from test_analyzer import docx, para
+from test_packets import pdfs
 
 
 class HttpTests(unittest.TestCase):
@@ -77,6 +78,25 @@ class HttpTests(unittest.TestCase):
         for path in ['/server.py','/.env','/.git/config']:
             with self.subTest(path=path),self.assertRaises(HTTPError) as raised:urlopen(self.base+path)
             self.assertEqual(raised.exception.code,404)
+
+    def test_packet_endpoint_reads_four_actual_pdfs_without_model(self):
+        request=Request(self.base+'/api/packet/read',data=json.dumps({'documents':pdfs('C010'),'mode':'auto'}).encode(),
+                        headers={'Content-Type':'application/json'})
+        with patch('server.compare_with_model') as model, urlopen(request,timeout=10) as response:
+            result=json.load(response)
+        model.assert_not_called()
+        self.assertTrue(result['ready'])
+        self.assertEqual(result['unique_count'],4)
+        self.assertTrue(all(d['format']=='pdf' for d in result['documents']))
+
+    def test_packet_endpoint_retains_unread_sources(self):
+        documents=pdfs('C010')+[{'name':'budget.xlsx','data':base64.b64encode(b'xlsx').decode()}]
+        request=Request(self.base+'/api/packet/read',data=json.dumps({'documents':documents}).encode(),
+                        headers={'Content-Type':'application/json'})
+        with urlopen(request,timeout=10) as response:
+            result=json.load(response)
+        self.assertFalse(result['ready'])
+        self.assertEqual(result['documents'][-1]['read_status'],'error')
 
 
 if __name__=='__main__':unittest.main()
