@@ -145,6 +145,32 @@ html[data-theme=dark] .distingt-demo img[src="assets/kazakhtelecom-logo.svg"]{co
 .distingt-demo .source-button,.distingt-demo .finding-title a{text-decoration:none}
 .distingt-demo .finding-title a{color:inherit;text-underline-offset:4px}
 .distingt-demo .finding-title a:hover{text-decoration:underline;color:var(--blue)}
+/* The composer is one surface; focus must not draw a second textarea frame. */
+.distingt-demo #case-workspace #agent-input:is(:focus,:focus-visible){outline:none;box-shadow:none;border-color:var(--border)}
+.distingt-demo #composer:has(#agent-input:focus-visible) .composer-bottom{border-bottom-color:var(--blue)}
+
+/* Stable public chrome; the chat toolbar remains intentionally compact. */
+.distingt-demo :is(#landing-view,#info-view)>.public-header{height:88px;min-height:88px;max-height:88px;flex:0 0 88px;box-sizing:border-box;padding-block:0;margin-block:0}
+.distingt-demo :is(#landing-view,#info-view)>.public-footer{flex-shrink:0;box-sizing:border-box;padding-block:32px;min-height:160px;font-size:11px;line-height:1.7}
+.distingt-demo .topbar{height:76px;min-height:76px;max-height:76px;flex-shrink:0;box-sizing:border-box}
+.distingt-demo .product-footer{box-sizing:border-box;flex-shrink:0;min-height:142px;padding-block:24px;font-size:11px;line-height:1.7}
+.distingt-demo .product-footer>div{padding-top:0}
+.distingt-demo .agent-active~.product-footer{min-height:64px;padding-block:12px;font-size:10px;line-height:1.7}
+@media(max-width:750px){
+ .distingt-demo :is(#landing-view,#info-view)>.public-header{height:76px;min-height:76px;max-height:76px;flex-basis:76px}
+ .distingt-demo .topbar{height:70px;min-height:70px;max-height:70px}
+ .distingt-demo :is(#landing-view,#info-view)>.public-footer{min-height:0;padding-block:28px;gap:22px}
+ .distingt-demo .product-footer{min-height:0;padding-block:24px}
+}
+.distingt-demo:has(#case-workspace.agent-active:not([hidden])) .topbar{max-height:56px}
+@media(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference){
+ .distingt-demo :is(.btn,.primary,.secondary,.text-button,.iconbtn,.icon-button,.source-button,.suggestion,.language-toggle){transition:transform 180ms ease,background-color 180ms ease,border-color 180ms ease,box-shadow 180ms ease,color 180ms ease}
+ .distingt-demo :is(.btn,.primary,.secondary,.text-button,.source-button,.suggestion):not(:disabled):not(.new-answer):hover{transform:translateY(-2px);box-shadow:0 6px 18px color-mix(in srgb,var(--blue) 18%,transparent)}
+ .distingt-demo :is(.iconbtn,.icon-button,.language-toggle):not(:disabled):hover{transform:scale(1.06);border-color:var(--blue)}
+ .distingt-demo :is(.btn,.primary,.secondary,.text-button,.iconbtn,.icon-button,.source-button,.suggestion):not(:disabled):not(.new-answer):active{transform:translateY(0) scale(.98)}
+ .distingt-demo :is(.btn,.primary,.source-button)>.icon:last-child{transition:translate 180ms ease}
+ .distingt-demo :is(.btn,.primary,.source-button):not(:disabled):hover>.icon:last-child{translate:3px 0}
+}
 @media(max-width:1050px){.distingt-demo .hero .hero-stack{max-width:700px;width:100%;justify-self:center;min-height:0}.distingt-demo #evidence .drawer-header{flex-direction:column}.distingt-demo #evidence .finding-back{order:-1}}
 @media(max-width:750px){
  .distingt-demo:has(#case-workspace.agent-active:not([hidden])) .topbar{padding:6px 16px}

@@ -2,7 +2,7 @@ import {t} from './i18n.js';
 import {api} from './research-client.js';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const activeStates=new Set(['queued','preparing','answering']);
-export function createLiveChat(root,getConfig,openSettings=()=>{}){
+export function createLiveChat(root,getConfig){
  let snapshot=null,history=null,timer=null,generation=0,loading=false,sending=false,findingIds=[],draft='',error='',pending=null;
  let sourceOpener=null;
  const draftKey=()=>snapshot?.analysis_id?'ayqyn.chatDraft.'+snapshot.analysis_id:null;
@@ -21,7 +21,7 @@ export function createLiveChat(root,getConfig,openSettings=()=>{}){
   root.hidden=false;
   root.setAttribute('aria-label',t('chatTitle'));
   const active=history?.active_turn;
-  root.innerHTML=`<div class="live-chat-heading"><h2>${tx('chatTitle')}</h2><button type="button" class="text-button" data-live-settings>${tx('settings')}</button><button type="button" class="text-button" data-live-refresh>${tx('chatRefresh')}</button></div><p class="helper">${tx('chatSnapshotNote')}</p>${!snapshot.analysis_id?`<p class="notice">${tx('chatNoSnapshot')}</p>`:`<div class="live-history">${(history?.messages||[]).map(messageMarkup).join('')}</div><p role="status" aria-live="polite">${loading?tx('chatLoading'):active?esc(t('chatStatus_'+active.status)):''}</p>${error?`<p class="file-error" role="alert">${esc(error)}</p>`:''}<form data-live-form><div class="live-context">${findingIds.map(id=>`<span class="context-chip">${esc(snapshot.findings.find(f=>f.id===id)?.title||id)}<button type="button" class="text-button" data-live-remove="${esc(id)}" aria-label="${tx('removeContext')}">×</button></span>`).join('')}</div><label for="live-chat-input">${tx('chatQuestion')}</label><textarea id="live-chat-input" rows="3" maxlength="4000" ${sending?'disabled':''}>${esc(draft)}</textarea><div class="live-chat-actions"><button class="primary" type="submit" ${!canSend()||!draft.trim()?'disabled':''}>${tx('chatSend')}</button>${pending?`<button type="button" class="secondary" data-live-retry>${tx('chatRetryRequest')}</button>`:''}</div><p class="helper">${tx('chatProviderNote')}</p></form>`}`;
+  root.innerHTML=`<div class="live-chat-heading"><h2>${tx('chatTitle')}</h2><button type="button" class="text-button" data-live-refresh>${tx('chatRefresh')}</button></div><p class="helper">${tx('chatSnapshotNote')}</p>${!snapshot.analysis_id?`<p class="notice">${tx('chatNoSnapshot')}</p>`:`<div class="live-history">${(history?.messages||[]).map(messageMarkup).join('')}</div><p role="status" aria-live="polite">${loading?tx('chatLoading'):active?esc(t('chatStatus_'+active.status)):''}</p>${error?`<p class="file-error" role="alert">${esc(error)}</p>`:''}<form data-live-form><div class="live-context">${findingIds.map(id=>`<span class="context-chip">${esc(snapshot.findings.find(f=>f.id===id)?.title||id)}<button type="button" class="text-button" data-live-remove="${esc(id)}" aria-label="${tx('removeContext')}">×</button></span>`).join('')}</div><label for="live-chat-input">${tx('chatQuestion')}</label><textarea id="live-chat-input" rows="3" maxlength="4000" ${sending?'disabled':''}>${esc(draft)}</textarea><div class="live-chat-actions"><button class="primary" type="submit" ${!canSend()||!draft.trim()?'disabled':''}>${tx('chatSend')}</button>${pending?`<button type="button" class="secondary" data-live-retry>${tx('chatRetryRequest')}</button>`:''}</div><p class="helper">${tx('chatProviderNote')}</p></form>`}`;
  }
  async function refresh(){
   if(!snapshot?.analysis_id||snapshot.mode==='demo')return;
@@ -45,7 +45,7 @@ export function createLiveChat(root,getConfig,openSettings=()=>{}){
   if(!pending)return;
   sending=true;error='';render();
   try{await api(path+'/chat/messages',pending,45000);if(token!==generation)return;pending=null;draft='';saveDraft();findingIds=[];await refresh();}
-  catch(e){if(token!==generation)return;if(e.status){pending=null;error=e.message;if(e.status===409){await refresh();error=t('chatConflict');}}else error=t('chatDisconnected');}
+  catch(e){if(token!==generation)return;if(e.status){pending=null;error=e.status===422?t('chatSetupRequired'):e.message;if(e.status===409){await refresh();error=t('chatConflict');}}else error=t('chatDisconnected');}
   finally{if(token===generation){sending=false;render();}}
  }
  root.addEventListener('input',e=>{if(e.target.id==='live-chat-input'){draft=e.target.value;saveDraft();const button=root.querySelector('button[type=submit]');button.disabled=!canSend()||!draft.trim();}});
@@ -53,7 +53,6 @@ export function createLiveChat(root,getConfig,openSettings=()=>{}){
  root.addEventListener('keydown',e=>{if(e.target.id==='live-chat-input'&&e.key==='Enter'&&!e.shiftKey&&!e.isComposing){e.preventDefault();if(draft.trim())send();}});
  root.addEventListener('click',async e=>{
   const button=e.target.closest('button');if(!button)return;
-  if(button.hasAttribute('data-live-settings')){openSettings(button);return;}
   if(button.hasAttribute('data-live-refresh')){await refresh();return;}
   if(button.hasAttribute('data-live-retry')){send(true);return;}
   if(button.dataset.liveRemove){findingIds=findingIds.filter(id=>id!==button.dataset.liveRemove);render();return;}

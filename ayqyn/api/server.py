@@ -10,7 +10,7 @@ import threading
 from pathlib import Path
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import urlparse, unquote, parse_qs, quote
-from ayqyn.documents.analyzer import parse_docx, analyze_rules
+from ayqyn.documents.analyzer import parse_docx, analyze_rules, MAX_UPLOAD_BYTES
 from ayqyn.providers.llm import compare_with_model, classify_with_model
 from ayqyn.storage.runs import new_run_path
 from ayqyn.documents.packets import read_packet
@@ -20,6 +20,10 @@ from ayqyn.api.workspace import workspace_result,progress_result
 from ayqyn.api.chat import handle as handle_chat, analysis_features, research_features
 from ayqyn.analysis.batch import MAX_DOCUMENTS, classify_documents, combine_documents
 from time import perf_counter
+
+MAX_PACKET_BYTES = 2 * MAX_UPLOAD_BYTES
+MAX_ENCODED_FILE_BYTES = 4 * ((MAX_UPLOAD_BYTES + 2) // 3)
+MAX_ANALYZE_REQUEST_BYTES = 4 * ((MAX_PACKET_BYTES + 2) // 3) + 1_000_000
 
 from ayqyn.paths import ROOT
 from ayqyn.api.static import STATIC
@@ -38,10 +42,10 @@ def research_path(identifier):
 def decode_document(value):
     if not isinstance(value, dict) or not isinstance(value.get('name'),str) or not isinstance(value.get('data'),str):
         raise ValueError('Нужен DOCX с именем и данными файла.')
-    if len(value['data']) > 14_000_000: raise ValueError('Максимальный размер DOCX — 10 МБ.')
+    if len(value['data']) > MAX_ENCODED_FILE_BYTES: raise ValueError('Максимальный размер DOCX — 100 МБ.')
     try: data = base64.b64decode(value['data'], validate=True)
     except (ValueError,binascii.Error): raise ValueError('Повреждена загрузка файла.') from None
-    if len(data)>10_000_000: raise ValueError('Максимальный размер DOCX — 10 МБ.')
+    if len(data)>MAX_UPLOAD_BYTES: raise ValueError('Максимальный размер DOCX — 100 МБ.')
     return parse_docx(data, value['name'])
 
 
@@ -120,7 +124,7 @@ class Handler(BaseHTTPRequestHandler):
         try:
             if self.headers.get('Content-Type','').split(';')[0] != 'application/json': raise ValueError('Ожидается JSON.')
             length = int(self.headers.get('Content-Length','0'))
-            limit=56_000_000 if self.path in {'/api/packet/read','/api/research/prepare'} else 29_000_000
+            limit=MAX_ANALYZE_REQUEST_BYTES if self.path=='/api/analyze' else (56_000_000 if self.path in {'/api/packet/read','/api/research/prepare'} else 29_000_000)
             if not 0 < length <= limit: raise ValueError('Слишком большой или пустой запрос.')
             data = json.loads(self.rfile.read(length))
             if not isinstance(data,dict): raise ValueError('Некорректный запрос.')
@@ -163,8 +167,8 @@ class Handler(BaseHTTPRequestHandler):
                     raise ValueError('Загрузите от 2 до 20 документов DOCX.')
                 if any(not isinstance(item,dict) or not isinstance(item.get('data'),str) for item in packet):
                     raise ValueError('Некорректные данные документа в пакете.')
-                if sum(len(item['data'])*3//4 - (len(item['data'])-len(item['data'].rstrip('='))) for item in packet) > 20_000_000:
-                    raise ValueError('Общий размер пакета — до 20 МБ.')
+                if sum(len(item['data'])*3//4 - (len(item['data'])-len(item['data'].rstrip('='))) for item in packet) > MAX_PACKET_BYTES:
+                    raise ValueError('Общий размер пакета — до 200 МБ.')
                 documents = [decode_document(item) for item in packet]
                 event('traceExtract', len(documents))
                 classify_documents(documents, packet)
