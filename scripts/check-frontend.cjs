@@ -14,7 +14,7 @@ const vm=require('node:vm');
   assert(!i18n.t('shown',{count:1,total:7}).includes('{'));
  }
  i18n.setLanguage('invalid');assert.equal(i18n.language,'en');
- const html=fs.readFileSync('analyze.html','utf8'),js=['analysis.js','ayqyn.js','report.js'].map(file=>fs.readFileSync(file,'utf8')).join('\n');
+ const html=fs.readFileSync('analyze.html','utf8'),js=['analysis.js','report.js','workspace.js'].map(file=>fs.readFileSync(file,'utf8')).join('\n');
  for(const match of html.matchAll(/data-i18n(?:-placeholder|-aria-label|-title)?="([^"]+)"/g))assert(keys.includes(match[1]),`Missing label: ${match[1]}`);
  for(const match of js.matchAll(/\b(?:t|tx)\('([^']+)'/g))if(!match[1].endsWith('_'))assert(keys.includes(match[1]),`Missing message: ${match[1]}`);
  for(const suffix of ['filename','manual','version','unresolved','model'])assert(keys.includes('class_'+suffix));

@@ -1,11 +1,11 @@
 const entries = {
-brand:['Основание','Негіз','Osnovanie'], product:['Анализ структуры и функций','Құрылым мен функцияларды талдау','Structure & responsibility analysis'], workspace:['Рабочее пространство','Жұмыс кеңістігі','Workspace'], newAnalysis:['Новый анализ','Жаңа талдау','New analysis'], results:['Результаты','Нәтижелер','Results'], report:['Заключение','Қорытынды','Conclusion'], settings:['Подключение модели','Модельді қосу','Model connection'], localWorkspace:['Локальное рабочее место','Жергілікті жұмыс орны','Local workspace'], localHint:['Документы и оценки хранятся только в текущем сеансе.','Құжаттар мен бағалар тек ағымдағы сеанста сақталады.','Documents and reviews stay in this session only.'], navLabel:['Основная навигация','Негізгі навигация','Main navigation'], menu:['Открыть навигацию','Навигацияны ашу','Open navigation'], closeNav:['Закрыть навигацию','Навигацияны жабу','Close navigation'], language:['Язык интерфейса','Интерфейс тілі','Interface language'], theme:['Оформление','Безендіру','Appearance'], system:['Системная','Жүйелік','System'], light:['Светлая','Ашық','Light'], dark:['Тёмная','Қараңғы','Dark'], track:['ТРЕК КАЗАХТЕЛЕКОМА','ҚАЗАҚТЕЛЕКОМ ТРЕГІ','KAZAKHTELECOM TRACK'], title:['Анализ организационных изменений','Ұйымдық өзгерістерді талдау','Review organizational changes'], intro:['Сопоставьте структуру и обязанности до и после реорганизации. Проверьте каждый вывод по документам.','Қайта ұйымдастыруға дейінгі және кейінгі құрылым мен міндеттерді салыстырыңыз. Әр тұжырымды құжаттармен тексеріңіз.','Compare structures and responsibilities before and after reorganization. Verify every finding against its source.'], evidenceFirst:['От изменения — к источнику','Өзгерістен — дереккөзге','Every finding, connected to its source'], evidenceHint:['Подразделения, функции и потенциальные риски в одном рабочем пространстве.','Бөлімшелер, функциялар және ықтимал тәуекелдер бір жұмыс кеңістігінде.','Departments, functions and potential risks in one workspace.'], uploadStep:['Загрузите документы','Құжаттарды жүктеңіз','Add documents'], compareStep:['Сопоставьте изменения','Өзгерістерді салыстырыңыз','Compare changes'], reviewStep:['Проверьте заключение','Қорытындыны тексеріңіз','Review the conclusion'], documents:['Документы','Құжаттар','Documents'], before:['До реорганизации','Қайта ұйымдастыруға дейін','Before reorganization'], after:['После реорганизации','Қайта ұйымдастырудан кейін','After reorganization'], beforeShort:['До','Дейін','Before'], afterShort:['После','Кейін','After'], version:['Редакция','Редакция','Version'], originalVersion:['Исходная редакция','Бастапқы редакция','Original version'], newVersion:['Новая редакция','Жаңа редакция','Updated version'], dropTitle:['Перетащите документ сюда','Құжатты осында сүйреп әкеліңіз','Drop a document here'], orSelect:['или выберите файл','немесе файлды таңдаңыз','or choose a file'], fileLimit:['Один DOCX · до 10 МБ','Бір DOCX · 10 МБ дейін','One DOCX · up to 10 MB'], backendLimit:['Текущий анализатор принимает по одному DOCX с каждой стороны. Комплекты из нескольких файлов, PDF и Excel пока не поддерживаются.','Ағымдағы талдағыш әр тараптан бір DOCX қабылдайды. Бірнеше файлдан тұратын жинақтар, PDF және Excel әзірге қолдау көрсетілмейді.','The current analyzer accepts one DOCX per side. Multiple-file sets, PDF and Excel are not supported yet.'], ready:['Готов к анализу','Талдауға дайын','Ready for analysis'], removeFile:['Удалить файл {name}','{name} файлын жою','Remove {name}'], replaceFile:['Заменить документ','Құжатты ауыстыру','Replace document'], start:['Начать анализ','Талдауды бастау','Start analysis'], retry:['Повторить анализ','Талдауды қайталау','Retry analysis'], example:['Загрузить пример: редакции 8 и 9','Үлгіні жүктеу: 8 және 9 редакциялар','Load example: versions 8 and 9'], exampleLoaded:['Загружены реальные документы. Нажмите «Начать анализ».','Нақты құжаттар жүктелді. «Талдауды бастау» батырмасын басыңыз.','Real documents loaded. Select Start analysis.'], needFiles:['Добавьте документ «до» и документ «после», чтобы начать.','Бастау үшін «дейін» және «кейін» құжаттарын қосыңыз.','Add a before document and an after document to begin.'], aiToggle:['Использовать ИИ','ЖИ пайдалану','Use AI'], rulesHint:['Без ИИ: локальный поиск кандидатов по текстовым правилам.','ЖИ жоқ: мәтіндік ережелер бойынша жергілікті іздеу.','Without AI: local candidate search using text rules.'], aiHint:['Тексты будут отправлены модели {model} через {base}.','Мәтіндер {base} арқылы {model} моделіне жіберіледі.','Texts will be sent to {model} via {base}.'], aiAdvice:['Для поиска смысловых изменений подключите модель.','Мағыналық өзгерістерді іздеу үшін модельді қосыңыз.','Connect a model to identify semantic changes.'], progressTitle:['Анализ выполняется','Талдау орындалуда','Analysis in progress'], reading:['Читаем выбранные файлы…','Таңдалған файлдар оқылуда…','Reading selected files…'], processing:['Сервер обрабатывает документы и сопоставляет тексты…','Сервер құжаттарды өңдеп, мәтіндерді салыстыруда…','The server is processing documents and comparing text…'], processingAI:['Ожидаем анализ сервера и ответ модели…','Сервер талдауы мен модель жауабы күтілуде…','Waiting for server analysis and the model response…'], progressHint:['API не передаёт промежуточные этапы. При работе с ИИ ожидание может занять до двух минут.','API аралық кезеңдерді жібермейді. ЖИ пайдаланғанда күту екі минутқа дейін созылуы мүмкін.','The API does not report intermediate stages. AI analysis may take up to two minutes.'], errorTitle:['Не удалось завершить анализ','Талдауды аяқтау мүмкін болмады','Analysis could not be completed'], genericError:['Проверьте файлы и подключение, затем повторите попытку.','Файлдар мен қосылымды тексеріп, қайталап көріңіз.','Check your files and connection, then try again.'], serverUnavailable:['Сервер недоступен. Запустите локальный сервер и повторите попытку.','Сервер қолжетімсіз. Жергілікті серверді іске қосып, қайталаңыз.','Server unavailable. Start the local server and try again.'], timeout:['Время ожидания истекло. Повторите без ИИ или проверьте настройки модели.','Күту уақыты аяқталды. ЖИ-сіз қайталаңыз немесе модель параметрлерін тексеріңіз.','The request timed out. Retry without AI or check the model settings.'], fileTypeError:['Поддерживается только DOCX. PDF и Excel пока недоступны.','Тек DOCX қолдау көрсетіледі. PDF және Excel әзірге қолжетімсіз.','Only DOCX is supported. PDF and Excel are not available yet.'], fileSizeError:['Размер файла должен быть больше нуля и не превышать 10 МБ.','Файл өлшемі нөлден үлкен және 10 МБ-тан аспауы тиіс.','Files must be non-empty and no larger than 10 MB.'], fileCountError:['Можно выбрать только один DOCX с каждой стороны. Ни один файл из этого набора не добавлен.','Әр тарапқа тек бір DOCX таңдауға болады. Бұл жинақтан ешбір файл қосылмады.','Choose one DOCX per side. No files from this selection were added.'], readError:['Не удалось прочитать файл. Выберите его заново.','Файлды оқу мүмкін болмады. Оны қайта таңдаңыз.','The file could not be read. Select it again.'], exampleError:['Документы примера недоступны. Загрузите собственную пару DOCX.','Үлгі құжаттары қолжетімсіз. Өз DOCX жұбыңызды жүктеңіз.','Example documents are unavailable. Upload your own DOCX pair.'], technicalDetails:['Технические сведения сервера','Сервердің техникалық мәліметтері','Server diagnostics'], complete:['Анализ завершён','Талдау аяқталды','Analysis complete'], partial:['Частичный результат','Ішінара нәтиже','Partial result'], completedAt:['{date} · {seconds} с','{date} · {seconds} с','{date} · {seconds} s'], rulesMode:['Текстовые правила · без ИИ','Мәтіндік ережелер · ЖИ жоқ','Text rules · no AI'], aiMode:['ИИ и текстовые правила','ЖИ және мәтіндік ережелер','AI and text rules'], fallbackMode:['ИИ недоступен · результаты по правилам','ЖИ қолжетімсіз · ережелер нәтижесі','AI unavailable · rule-based results'], resultIntro:['Кандидаты изменений требуют проверки по источникам.','Өзгеріс нұсқаларын дереккөздер бойынша тексеру қажет.','Candidate changes require source verification.'], export:['Скачать заключение','Қорытындыны жүктеп алу','Download conclusion'], candidates:['Кандидаты изменений','Өзгеріс нұсқалары','Candidate changes'], departments:['Подразделения','Бөлімшелер','Departments'], functions:['Функции','Функциялар','Functions'], risks:['Риски','Тәуекелдер','Risks'], reviewed:['Проверено аналитиком','Талдаушы тексерді','Reviewed by analyst'], summaryNote:['Количество кандидатов не равно количеству нарушений.','Нұсқалар саны бұзушылықтар санына тең емес.','Candidate counts are not violation counts.'], tabLabel:['Разделы результатов','Нәтиже бөлімдері','Result sections'], search:['Поиск по изменениям и источникам','Өзгерістер мен дереккөздерден іздеу','Search changes and sources'], searchPlaceholder:['Найти подразделение или функцию…','Бөлімшені не функцияны іздеу…','Find a department or function…'], allTypes:['Все изменения','Барлық өзгерістер','All changes'], typeFilter:['Тип изменения','Өзгеріс түрі','Change type'], departmentFilter:['Подразделение','Бөлімше','Department'], allDepartments:['Все подразделения','Барлық бөлімшелер','All departments'], unassigned:['Подразделение не определено','Бөлімше анықталмаған','Department not identified'], unreviewed:['Только непроверенные','Тек тексерілмегендер','Unreviewed only'], shown:['Показано {count} из {total}','{total} ішінен {count} көрсетілді','Showing {count} of {total}'], emptyResults:['Кандидатов по этим условиям нет','Бұл шарттар бойынша нұсқалар жоқ','No matching candidates'], emptyResultsHint:['Измените фильтры. Отсутствие находок не доказывает отсутствие рисков.','Сүзгілерді өзгертіңіз. Табылымдардың болмауы тәуекелдердің жоқтығын дәлелдемейді.','Try other filters. No findings does not prove there are no risks.'], clearFilters:['Сбросить фильтры','Сүзгілерді тазарту','Clear filters'], change:['Изменение','Өзгеріс','Change'], function:['Функция / формулировка','Функция / тұжырым','Function / wording'], beforeDept:['Подразделение до','Бұрынғы бөлімше','Department before'], afterDept:['Подразделение после','Кейінгі бөлімше','Department after'], sources:['Источники','Дереккөздер','Sources'], showSources:['Показать источники','Дереккөздерді көрсету','Show sources'], evidenceTitle:['Проверка источников','Дереккөздерді тексеру','Source review'], ruleMethod:['Текстовое правило','Мәтіндік ереже','Text rule'], modelMethod:['Предложение модели','Модель ұсынысы','Model proposal'], notReviewed:['Не проверено','Тексерілмеген','Not reviewed'], reviewLabel:['Решение аналитика','Талдаушы шешімі','Analyst decision'], chooseReview:['Дать оценку','Бағалау','Give a decision'], noteLabel:['Комментарий к решению','Шешімге түсініктеме','Review note'], notePlaceholder:['Что проверено и что нужно уточнить…','Не тексерілді және нені нақтылау қажет…','What was verified and what needs clarification…'], savedSession:['Включено в заключение · до перезагрузки','Қорытындыға енгізілді · бет жаңартылғанға дейін','Included in report · until reload'], advisory:['Выводы ИИ носят рекомендательный характер и требуют проверки ответственным сотрудником.','ЖИ тұжырымдары ұсынымдық сипатта және жауапты қызметкердің тексеруін қажет етеді.','AI findings are advisory and require verification by a responsible employee.'], limitations:['Ограничения анализа','Талдау шектеулері','Analysis limitations'], limitsText:['Полнота обнаружения потерь, дублирования и конфликтов не гарантируется. Ссылка на абзац подтверждает происхождение, но не обоснованность вывода.','Функциялардың жоғалуын, қайталануын және қайшылықтарды толық анықтауға кепілдік берілмейді. Абзацқа сілтеме тұжырымның негізділігін емес, шығу тегін растайды.','Detection of losses, duplication and conflicts is not guaranteed to be complete. A paragraph reference establishes provenance, not validity.'], reportTitle:['Предварительное аналитическое заключение','Алдын ала талдамалық қорытынды','Preliminary analytical conclusion'], reportPair:['Сопоставлены документы «{before}» и «{after}».','«{before}» және «{after}» құжаттары салыстырылды.','Compared “{before}” and “{after}”.'], reportCounts:['Кандидатов: {total}. Проверено: {reviewed}. Подтверждено аналитиком: {confirmed}.','Нұсқалар: {total}. Тексерілгені: {reviewed}. Талдаушы растағаны: {confirmed}.','Candidates: {total}. Reviewed: {reviewed}. Confirmed by analyst: {confirmed}.'], questions:['Вопросы для проверки','Тексерілетін сұрақтар','Items for review'], recommendations:['Рекомендации','Ұсынымдар','Recommendations'], recommendationText:['Сверьте каждый кандидат с обеими редакциями, проверьте полномочия и исключения, зафиксируйте решение. Сохраните заключение до обновления страницы.','Әр нұсқаны екі редакциямен салыстырып, өкілеттіктер мен ерекшеліктерді тексеріңіз және шешімді тіркеңіз. Бетті жаңартпас бұрын қорытындыны сақтаңыз.','Check each candidate against both versions, verify responsibilities and exceptions, and record a decision. Export the conclusion before reloading.'], close:['Закрыть','Жабу','Close'], sourceLeft:['Документ и редакция слева','Сол жақ құжат пен редакция','Left document and version'], sourceRight:['Документ и редакция справа','Оң жақ құжат пен редакция','Right document and version'], leftPanel:['Левая панель','Сол жақ панель','Left panel'], rightPanel:['Правая панель','Оң жақ панель','Right panel'], swap:['Поменять панели местами','Панельдерді ауыстыру','Swap panels'], relatedOnly:['Только связанные пункты','Тек байланысты тармақтар','Related paragraphs only'], allText:['Показать полный текст','Толық мәтінді көрсету','Show full text'], noSource:['Источник не указан. Вывод с этой стороны не подтверждён; отсутствие функции не доказано.','Дереккөз көрсетілмеген. Бұл тарапта тұжырым расталмаған; функцияның жоқтығы дәлелденбеген.','No source was cited. This side does not substantiate the finding; absence of a function is not proven.'], linkedCount:['Связанных абзацев: {count}','Байланысты абзацтар: {count}','Linked paragraphs: {count}'], paragraph:['Пункт {section} · {id}','{section} тармақ · {id}','Section {section} · {id}'], noNumber:['без номера','нөмірсіз','unnumbered'], paragraphCount:['Абзацев: {count}','Абзацтар: {count}','Paragraphs: {count}'], downloadOriginal:['Скачать оригинал DOCX','DOCX түпнұсқасын жүктеу','Download original DOCX'], sourceText:['Текст документа','Құжат мәтіні','Document text'], paneWidth:['Ширина панелей источников','Дереккөз панельдерінің ені','Source panel width'], noEvidenceText:['Для проверки откройте полный текст.','Тексеру үшін толық мәтінді ашыңыз.','Open the full text to investigate.'], previous:['Предыдущее замечание','Алдыңғы ескерту','Previous finding'], next:['Следующее замечание','Келесі ескерту','Next finding'], of:['{index} из {total}','{total} ішінен {index}','{index} of {total}'], provider:['Провайдер','Провайдер','Provider'], localModel:['Локальная модель','Жергілікті модель','Local model'], compatible:['OpenAI / совместимый API','OpenAI / үйлесімді API','OpenAI / compatible API'], baseUrl:['Базовый адрес API','API негізгі мекенжайы','API base URL'], model:['Модель','Модель','Model'], modelPlaceholder:['Имя модели у провайдера','Провайдердегі модель атауы','Provider model identifier'], key:['API-ключ','API кілті','API key'], keyPlaceholder:['Только для этого сеанса','Тек осы сеанс үшін','This session only'], keyHint:['Ключ не сохраняется на диск. При ИИ-анализе текст документов отправляется выбранному провайдеру.','Кілт дискіге сақталмайды. ЖИ талдауы кезінде құжат мәтіні таңдалған провайдерге жіберіледі.','The key is not saved to disk. AI analysis sends document text to the selected provider.'], serverKey:['Ключ настроен на сервере. Пустое поле использует его только для настроенного провайдера.','Кілт серверде бапталған. Бос өріс оны тек бапталған провайдер үшін пайдаланады.','A server key is configured. An empty field uses it only for the configured provider.'], apply:['Применить','Қолдану','Apply'], sessionOnly:['Сеанс без сохранения','Сақталмайтын сеанс','Session only'], skip:['Перейти к содержимому','Мазмұнға өту','Skip to content'], dataLanguage:['Текст ответа сервера сохранён на исходном языке. Цитаты не переводятся.','Сервер жауабы бастапқы тілінде сақталды. Дәйексөздер аударылмайды.','Server-generated content remains in its original language. Source quotations are not translated.'], sameFiles:['Загружены одинаковые файлы. Внутренние пересечения всё ещё возможны.','Бірдей файлдар жүктелді. Ішкі қайталанулар болуы мүмкін.','The same file was uploaded on both sides. Internal overlaps may still exist.'], rejected:['Отброшено выводов с некорректными ссылками: {count}.','Қате сілтемелері бар тұжырымдар алынып тасталды: {count}.','Findings with invalid references rejected: {count}.'], noModelFindings:['Модель не вернула допустимых находок. Это не доказывает отсутствие рисков.','Модель жарамды табылымдар қайтармады. Бұл тәуекелдердің жоқтығын дәлелдемейді.','The model returned no valid findings. This does not prove there are no risks.'], fallbackWarning:['ИИ-анализ не завершён. Доступны только кандидаты по текстовым правилам.','ЖИ талдауы аяқталмады. Тек мәтіндік ережелер нұсқалары қолжетімді.','AI analysis did not complete. Only text-rule candidates are available.'], notice:['Обратите внимание','Назар аударыңыз','Please note'], availableAfter:['Раздел появится после анализа','Бөлім талдаудан кейін ашылады','Available after analysis'], sourceCount:['Фрагментов: {count}','Үзінділер: {count}','Excerpts: {count}'], unknownOwner:['Владелец не указан','Иесі көрсетілмеген','Owner not specified'], unitFilterHint:['Фильтр использует явные названия из находок по подразделениям и совпадения в источниках; это не назначение владельца функции.','Сүзгі бөлімше табылымдарындағы нақты атауларды және дереккөз сәйкестіктерін пайдаланады; бұл функция иесін тағайындау емес.','This filter uses explicit department names and source matches; it does not assign ownership of a function.'], fileReadyNote:['Файл выбран локально; на сервер отправится при запуске анализа.','Файл жергілікті таңдалды; талдау басталғанда серверге жіберіледі.','Selected locally; sent to the server when analysis starts.'], exportDone:['Файл заключения подготовлен для скачивания.','Қорытынды файлы жүктеп алуға дайын.','Conclusion file prepared for download.'], modelSettingsSaved:['Настройки модели применены.','Модель параметрлері қолданылды.','Model settings applied.'], loadingExample:['Загружаем документы примера…','Үлгі құжаттары жүктелуде…','Loading example documents…'], workflow:['Как проходит проверка','Тексеру қалай өтеді','Review workflow'], unsupported:['Ограничения текущей версии','Ағымдағы нұсқа шектеулері','Current version limits'], noFindings:['Анализ завершён без кандидатов. Это не подтверждает отсутствие рисков.','Талдау нұсқаларсыз аяқталды. Бұл тәуекелдердің жоқтығын растамайды.','Analysis completed with no candidates. This does not establish that there are no risks.'], all:['Все','Барлығы','All'], status:['Статус','Мәртебе','Status'], note:['Комментарий аналитика','Талдаушы түсініктемесі','Analyst note'], method:['Метод','Әдіс','Method'], warning:['Ограничение','Шектеу','Limitation'], reportLanguage:['Язык интерфейса и заголовков отчёта меняется; язык ответа модели задан сервером.','Интерфейс пен есеп тақырыптарының тілі өзгереді; модель жауабының тілін сервер белгілейді.','Interface and report headings are localized; the server controls the model response language.'], candidate:['Кандидат','Нұсқа','Candidate'], noReport:['Сначала выполните анализ документов.','Алдымен құжаттарды талдаңыз.','Analyze documents first.']
+brand:['Distingt','Distingt','Distingt'], product:['Анализ структуры и функций','Құрылым мен функцияларды талдау','Structure & responsibility analysis'], workspace:['Рабочее пространство','Жұмыс кеңістігі','Workspace'], newAnalysis:['Новый анализ','Жаңа талдау','New analysis'], results:['Результаты','Нәтижелер','Results'], report:['Заключение','Қорытынды','Conclusion'], settings:['Подключение модели','Модельді қосу','Model connection'], localWorkspace:['Локальное рабочее место','Жергілікті жұмыс орны','Local workspace'], localHint:['Документы и оценки хранятся только в текущем сеансе.','Құжаттар мен бағалар тек ағымдағы сеанста сақталады.','Documents and reviews stay in this session only.'], navLabel:['Основная навигация','Негізгі навигация','Main navigation'], menu:['Открыть навигацию','Навигацияны ашу','Open navigation'], closeNav:['Закрыть навигацию','Навигацияны жабу','Close navigation'], language:['Язык интерфейса','Интерфейс тілі','Interface language'], theme:['Оформление','Безендіру','Appearance'], system:['Системная','Жүйелік','System'], light:['Светлая','Ашық','Light'], dark:['Тёмная','Қараңғы','Dark'], track:['ТРЕК КАЗАХТЕЛЕКОМА','ҚАЗАҚТЕЛЕКОМ ТРЕГІ','KAZAKHTELECOM TRACK'], title:['Анализ организационных изменений','Ұйымдық өзгерістерді талдау','Review organizational changes'], intro:['Сопоставьте структуру и обязанности до и после реорганизации. Проверьте каждый вывод по документам.','Қайта ұйымдастыруға дейінгі және кейінгі құрылым мен міндеттерді салыстырыңыз. Әр тұжырымды құжаттармен тексеріңіз.','Compare structures and responsibilities before and after reorganization. Verify every finding against its source.'], evidenceFirst:['От изменения — к источнику','Өзгерістен — дереккөзге','Every finding, connected to its source'], evidenceHint:['Подразделения, функции и потенциальные риски в одном рабочем пространстве.','Бөлімшелер, функциялар және ықтимал тәуекелдер бір жұмыс кеңістігінде.','Departments, functions and potential risks in one workspace.'], uploadStep:['Загрузите документы','Құжаттарды жүктеңіз','Add documents'], compareStep:['Сопоставьте изменения','Өзгерістерді салыстырыңыз','Compare changes'], reviewStep:['Проверьте заключение','Қорытындыны тексеріңіз','Review the conclusion'], documents:['Документы','Құжаттар','Documents'], before:['До реорганизации','Қайта ұйымдастыруға дейін','Before reorganization'], after:['После реорганизации','Қайта ұйымдастырудан кейін','After reorganization'], beforeShort:['До','Дейін','Before'], afterShort:['После','Кейін','After'], version:['Редакция','Редакция','Version'], originalVersion:['Исходная редакция','Бастапқы редакция','Original version'], newVersion:['Новая редакция','Жаңа редакция','Updated version'], dropTitle:['Перетащите документ сюда','Құжатты осында сүйреп әкеліңіз','Drop a document here'], orSelect:['или выберите файл','немесе файлды таңдаңыз','or choose a file'], fileLimit:['Один DOCX · до 10 МБ','Бір DOCX · 10 МБ дейін','One DOCX · up to 10 MB'], backendLimit:['Текущий анализатор принимает по одному DOCX с каждой стороны. Комплекты из нескольких файлов, PDF и Excel пока не поддерживаются.','Ағымдағы талдағыш әр тараптан бір DOCX қабылдайды. Бірнеше файлдан тұратын жинақтар, PDF және Excel әзірге қолдау көрсетілмейді.','The current analyzer accepts one DOCX per side. Multiple-file sets, PDF and Excel are not supported yet.'], ready:['Готов к анализу','Талдауға дайын','Ready for analysis'], removeFile:['Удалить файл {name}','{name} файлын жою','Remove {name}'], replaceFile:['Заменить документ','Құжатты ауыстыру','Replace document'], start:['Начать анализ','Талдауды бастау','Start analysis'], retry:['Повторить анализ','Талдауды қайталау','Retry analysis'], example:['Загрузить пример: редакции 8 и 9','Үлгіні жүктеу: 8 және 9 редакциялар','Load example: versions 8 and 9'], exampleLoaded:['Загружены реальные документы. Нажмите «Начать анализ».','Нақты құжаттар жүктелді. «Талдауды бастау» батырмасын басыңыз.','Real documents loaded. Select Start analysis.'], needFiles:['Добавьте документ «до» и документ «после», чтобы начать.','Бастау үшін «дейін» және «кейін» құжаттарын қосыңыз.','Add a before document and an after document to begin.'], aiToggle:['Использовать ИИ','ЖИ пайдалану','Use AI'], rulesHint:['Без ИИ: локальный поиск кандидатов по текстовым правилам.','ЖИ жоқ: мәтіндік ережелер бойынша жергілікті іздеу.','Without AI: local candidate search using text rules.'], aiHint:['Тексты будут отправлены модели {model} через {base}.','Мәтіндер {base} арқылы {model} моделіне жіберіледі.','Texts will be sent to {model} via {base}.'], aiAdvice:['Для поиска смысловых изменений подключите модель.','Мағыналық өзгерістерді іздеу үшін модельді қосыңыз.','Connect a model to identify semantic changes.'], progressTitle:['Анализ выполняется','Талдау орындалуда','Analysis in progress'], reading:['Читаем выбранные файлы…','Таңдалған файлдар оқылуда…','Reading selected files…'], processing:['Сервер обрабатывает документы и сопоставляет тексты…','Сервер құжаттарды өңдеп, мәтіндерді салыстыруда…','The server is processing documents and comparing text…'], processingAI:['Ожидаем анализ сервера и ответ модели…','Сервер талдауы мен модель жауабы күтілуде…','Waiting for server analysis and the model response…'], progressHint:['API не передаёт промежуточные этапы. При работе с ИИ ожидание может занять до двух минут.','API аралық кезеңдерді жібермейді. ЖИ пайдаланғанда күту екі минутқа дейін созылуы мүмкін.','The API does not report intermediate stages. AI analysis may take up to two minutes.'], errorTitle:['Не удалось завершить анализ','Талдауды аяқтау мүмкін болмады','Analysis could not be completed'], genericError:['Проверьте файлы и подключение, затем повторите попытку.','Файлдар мен қосылымды тексеріп, қайталап көріңіз.','Check your files and connection, then try again.'], serverUnavailable:['Сервер недоступен. Запустите локальный сервер и повторите попытку.','Сервер қолжетімсіз. Жергілікті серверді іске қосып, қайталаңыз.','Server unavailable. Start the local server and try again.'], timeout:['Время ожидания истекло. Повторите без ИИ или проверьте настройки модели.','Күту уақыты аяқталды. ЖИ-сіз қайталаңыз немесе модель параметрлерін тексеріңіз.','The request timed out. Retry without AI or check the model settings.'], fileTypeError:['Поддерживается только DOCX. PDF и Excel пока недоступны.','Тек DOCX қолдау көрсетіледі. PDF және Excel әзірге қолжетімсіз.','Only DOCX is supported. PDF and Excel are not available yet.'], fileSizeError:['Размер файла должен быть больше нуля и не превышать 10 МБ.','Файл өлшемі нөлден үлкен және 10 МБ-тан аспауы тиіс.','Files must be non-empty and no larger than 10 MB.'], fileCountError:['Можно выбрать только один DOCX с каждой стороны. Ни один файл из этого набора не добавлен.','Әр тарапқа тек бір DOCX таңдауға болады. Бұл жинақтан ешбір файл қосылмады.','Choose one DOCX per side. No files from this selection were added.'], readError:['Не удалось прочитать файл. Выберите его заново.','Файлды оқу мүмкін болмады. Оны қайта таңдаңыз.','The file could not be read. Select it again.'], exampleError:['Документы примера недоступны. Загрузите собственную пару DOCX.','Үлгі құжаттары қолжетімсіз. Өз DOCX жұбыңызды жүктеңіз.','Example documents are unavailable. Upload your own DOCX pair.'], technicalDetails:['Технические сведения сервера','Сервердің техникалық мәліметтері','Server diagnostics'], complete:['Анализ завершён','Талдау аяқталды','Analysis complete'], partial:['Частичный результат','Ішінара нәтиже','Partial result'], completedAt:['{date} · {seconds} с','{date} · {seconds} с','{date} · {seconds} s'], rulesMode:['Текстовые правила · без ИИ','Мәтіндік ережелер · ЖИ жоқ','Text rules · no AI'], aiMode:['ИИ и текстовые правила','ЖИ және мәтіндік ережелер','AI and text rules'], fallbackMode:['ИИ недоступен · результаты по правилам','ЖИ қолжетімсіз · ережелер нәтижесі','AI unavailable · rule-based results'], resultIntro:['Кандидаты изменений требуют проверки по источникам.','Өзгеріс нұсқаларын дереккөздер бойынша тексеру қажет.','Candidate changes require source verification.'], export:['Скачать заключение','Қорытындыны жүктеп алу','Download conclusion'], candidates:['Кандидаты изменений','Өзгеріс нұсқалары','Candidate changes'], departments:['Подразделения','Бөлімшелер','Departments'], functions:['Функции','Функциялар','Functions'], risks:['Риски','Тәуекелдер','Risks'], reviewed:['Проверено аналитиком','Талдаушы тексерді','Reviewed by analyst'], summaryNote:['Количество кандидатов не равно количеству нарушений.','Нұсқалар саны бұзушылықтар санына тең емес.','Candidate counts are not violation counts.'], tabLabel:['Разделы результатов','Нәтиже бөлімдері','Result sections'], search:['Поиск по изменениям и источникам','Өзгерістер мен дереккөздерден іздеу','Search changes and sources'], searchPlaceholder:['Найти подразделение или функцию…','Бөлімшені не функцияны іздеу…','Find a department or function…'], allTypes:['Все изменения','Барлық өзгерістер','All changes'], typeFilter:['Тип изменения','Өзгеріс түрі','Change type'], departmentFilter:['Подразделение','Бөлімше','Department'], allDepartments:['Все подразделения','Барлық бөлімшелер','All departments'], unassigned:['Подразделение не определено','Бөлімше анықталмаған','Department not identified'], unreviewed:['Только непроверенные','Тек тексерілмегендер','Unreviewed only'], shown:['Показано {count} из {total}','{total} ішінен {count} көрсетілді','Showing {count} of {total}'], emptyResults:['Кандидатов по этим условиям нет','Бұл шарттар бойынша нұсқалар жоқ','No matching candidates'], emptyResultsHint:['Измените фильтры. Отсутствие находок не доказывает отсутствие рисков.','Сүзгілерді өзгертіңіз. Табылымдардың болмауы тәуекелдердің жоқтығын дәлелдемейді.','Try other filters. No findings does not prove there are no risks.'], clearFilters:['Сбросить фильтры','Сүзгілерді тазарту','Clear filters'], change:['Изменение','Өзгеріс','Change'], function:['Функция / формулировка','Функция / тұжырым','Function / wording'], beforeDept:['Подразделение до','Бұрынғы бөлімше','Department before'], afterDept:['Подразделение после','Кейінгі бөлімше','Department after'], sources:['Источники','Дереккөздер','Sources'], showSources:['Показать источники','Дереккөздерді көрсету','Show sources'], evidenceTitle:['Проверка источников','Дереккөздерді тексеру','Source review'], ruleMethod:['Текстовое правило','Мәтіндік ереже','Text rule'], modelMethod:['Предложение модели','Модель ұсынысы','Model proposal'], notReviewed:['Не проверено','Тексерілмеген','Not reviewed'], reviewLabel:['Решение аналитика','Талдаушы шешімі','Analyst decision'], chooseReview:['Дать оценку','Бағалау','Give a decision'], noteLabel:['Комментарий к решению','Шешімге түсініктеме','Review note'], notePlaceholder:['Что проверено и что нужно уточнить…','Не тексерілді және нені нақтылау қажет…','What was verified and what needs clarification…'], savedSession:['Включено в заключение · до перезагрузки','Қорытындыға енгізілді · бет жаңартылғанға дейін','Included in report · until reload'], advisory:['Выводы ИИ носят рекомендательный характер и требуют проверки ответственным сотрудником.','ЖИ тұжырымдары ұсынымдық сипатта және жауапты қызметкердің тексеруін қажет етеді.','AI findings are advisory and require verification by a responsible employee.'], limitations:['Ограничения анализа','Талдау шектеулері','Analysis limitations'], limitsText:['Полнота обнаружения потерь, дублирования и конфликтов не гарантируется. Ссылка на абзац подтверждает происхождение, но не обоснованность вывода.','Функциялардың жоғалуын, қайталануын және қайшылықтарды толық анықтауға кепілдік берілмейді. Абзацқа сілтеме тұжырымның негізділігін емес, шығу тегін растайды.','Detection of losses, duplication and conflicts is not guaranteed to be complete. A paragraph reference establishes provenance, not validity.'], reportTitle:['Предварительное аналитическое заключение','Алдын ала талдамалық қорытынды','Preliminary analytical conclusion'], reportPair:['Сопоставлены документы «{before}» и «{after}».','«{before}» және «{after}» құжаттары салыстырылды.','Compared “{before}” and “{after}”.'], reportCounts:['Кандидатов: {total}. Проверено: {reviewed}. Подтверждено аналитиком: {confirmed}.','Нұсқалар: {total}. Тексерілгені: {reviewed}. Талдаушы растағаны: {confirmed}.','Candidates: {total}. Reviewed: {reviewed}. Confirmed by analyst: {confirmed}.'], questions:['Вопросы для проверки','Тексерілетін сұрақтар','Items for review'], recommendations:['Рекомендации','Ұсынымдар','Recommendations'], recommendationText:['Сверьте каждый кандидат с обеими редакциями, проверьте полномочия и исключения, зафиксируйте решение. История сохраняется в этом браузере; скачайте заключение для передачи сотруднику.','Әр нұсқаны екі редакциямен салыстырып, өкілеттіктер мен ерекшеліктерді тексеріңіз және шешімді тіркеңіз. Тарих осы браузерде сақталады; қызметкерге беру үшін қорытындыны жүктеңіз.','Check each candidate against both versions, verify responsibilities and exceptions, and record a decision. History is saved in this browser; export the conclusion to share with a reviewer.'], close:['Закрыть','Жабу','Close'], sourceLeft:['Документ и редакция слева','Сол жақ құжат пен редакция','Left document and version'], sourceRight:['Документ и редакция справа','Оң жақ құжат пен редакция','Right document and version'], leftPanel:['Левая панель','Сол жақ панель','Left panel'], rightPanel:['Правая панель','Оң жақ панель','Right panel'], swap:['Поменять панели местами','Панельдерді ауыстыру','Swap panels'], relatedOnly:['Только связанные пункты','Тек байланысты тармақтар','Related paragraphs only'], allText:['Показать полный текст','Толық мәтінді көрсету','Show full text'], noSource:['Источник не указан. Вывод с этой стороны не подтверждён; отсутствие функции не доказано.','Дереккөз көрсетілмеген. Бұл тарапта тұжырым расталмаған; функцияның жоқтығы дәлелденбеген.','No source was cited. This side does not substantiate the finding; absence of a function is not proven.'], linkedCount:['Связанных абзацев: {count}','Байланысты абзацтар: {count}','Linked paragraphs: {count}'], paragraph:['Пункт {section} · {id}','{section} тармақ · {id}','Section {section} · {id}'], noNumber:['без номера','нөмірсіз','unnumbered'], paragraphCount:['Абзацев: {count}','Абзацтар: {count}','Paragraphs: {count}'], downloadOriginal:['Скачать оригинал DOCX','DOCX түпнұсқасын жүктеу','Download original DOCX'], sourceText:['Текст документа','Құжат мәтіні','Document text'], paneWidth:['Ширина панелей источников','Дереккөз панельдерінің ені','Source panel width'], noEvidenceText:['Для проверки откройте полный текст.','Тексеру үшін толық мәтінді ашыңыз.','Open the full text to investigate.'], previous:['Предыдущее замечание','Алдыңғы ескерту','Previous finding'], next:['Следующее замечание','Келесі ескерту','Next finding'], of:['{index} из {total}','{total} ішінен {index}','{index} of {total}'], provider:['Провайдер','Провайдер','Provider'], localModel:['Локальная модель','Жергілікті модель','Local model'], compatible:['OpenAI / совместимый API','OpenAI / үйлесімді API','OpenAI / compatible API'], baseUrl:['Базовый адрес API','API негізгі мекенжайы','API base URL'], model:['Модель','Модель','Model'], modelPlaceholder:['Имя модели у провайдера','Провайдердегі модель атауы','Provider model identifier'], key:['API-ключ','API кілті','API key'], keyPlaceholder:['Только для этого сеанса','Тек осы сеанс үшін','This session only'], keyHint:['Ключ не сохраняется на диск. При ИИ-анализе текст документов отправляется выбранному провайдеру.','Кілт дискіге сақталмайды. ЖИ талдауы кезінде құжат мәтіні таңдалған провайдерге жіберіледі.','The key is not saved to disk. AI analysis sends document text to the selected provider.'], serverKey:['Ключ настроен на сервере. Пустое поле использует его только для настроенного провайдера.','Кілт серверде бапталған. Бос өріс оны тек бапталған провайдер үшін пайдаланады.','A server key is configured. An empty field uses it only for the configured provider.'], apply:['Применить','Қолдану','Apply'], sessionOnly:['Сеанс без сохранения','Сақталмайтын сеанс','Session only'], skip:['Перейти к содержимому','Мазмұнға өту','Skip to content'], dataLanguage:['Текст ответа сервера сохранён на исходном языке. Цитаты не переводятся.','Сервер жауабы бастапқы тілінде сақталды. Дәйексөздер аударылмайды.','Server-generated content remains in its original language. Source quotations are not translated.'], sameFiles:['Загружены одинаковые файлы. Внутренние пересечения всё ещё возможны.','Бірдей файлдар жүктелді. Ішкі қайталанулар болуы мүмкін.','The same file was uploaded on both sides. Internal overlaps may still exist.'], rejected:['Отброшено выводов с некорректными ссылками: {count}.','Қате сілтемелері бар тұжырымдар алынып тасталды: {count}.','Findings with invalid references rejected: {count}.'], noModelFindings:['Модель не вернула допустимых находок. Это не доказывает отсутствие рисков.','Модель жарамды табылымдар қайтармады. Бұл тәуекелдердің жоқтығын дәлелдемейді.','The model returned no valid findings. This does not prove there are no risks.'], fallbackWarning:['ИИ-анализ не завершён. Доступны только кандидаты по текстовым правилам.','ЖИ талдауы аяқталмады. Тек мәтіндік ережелер нұсқалары қолжетімді.','AI analysis did not complete. Only text-rule candidates are available.'], notice:['Обратите внимание','Назар аударыңыз','Please note'], availableAfter:['Раздел появится после анализа','Бөлім талдаудан кейін ашылады','Available after analysis'], sourceCount:['Фрагментов: {count}','Үзінділер: {count}','Excerpts: {count}'], unknownOwner:['Владелец не указан','Иесі көрсетілмеген','Owner not specified'], unitFilterHint:['Фильтр использует явные названия из находок по подразделениям и совпадения в источниках; это не назначение владельца функции.','Сүзгі бөлімше табылымдарындағы нақты атауларды және дереккөз сәйкестіктерін пайдаланады; бұл функция иесін тағайындау емес.','This filter uses explicit department names and source matches; it does not assign ownership of a function.'], fileReadyNote:['Файл выбран локально; на сервер отправится при запуске анализа.','Файл жергілікті таңдалды; талдау басталғанда серверге жіберіледі.','Selected locally; sent to the server when analysis starts.'], exportDone:['Файл заключения подготовлен для скачивания.','Қорытынды файлы жүктеп алуға дайын.','Conclusion file prepared for download.'], modelSettingsSaved:['Настройки модели применены.','Модель параметрлері қолданылды.','Model settings applied.'], loadingExample:['Загружаем документы примера…','Үлгі құжаттары жүктелуде…','Loading example documents…'], workflow:['Как проходит проверка','Тексеру қалай өтеді','Review workflow'], unsupported:['Ограничения текущей версии','Ағымдағы нұсқа шектеулері','Current version limits'], noFindings:['Анализ завершён без кандидатов. Это не подтверждает отсутствие рисков.','Талдау нұсқаларсыз аяқталды. Бұл тәуекелдердің жоқтығын растамайды.','Analysis completed with no candidates. This does not establish that there are no risks.'], all:['Все','Барлығы','All'], status:['Статус','Мәртебе','Status'], note:['Комментарий аналитика','Талдаушы түсініктемесі','Analyst note'], method:['Метод','Әдіс','Method'], warning:['Ограничение','Шектеу','Limitation'], reportLanguage:['Язык интерфейса и заголовков отчёта меняется; язык ответа модели задан сервером.','Интерфейс пен есеп тақырыптарының тілі өзгереді; модель жауабының тілін сервер белгілейді.','Interface and report headings are localized; the server controls the model response language.'], candidate:['Кандидат','Нұсқа','Candidate'], noReport:['Сначала выполните анализ документов.','Алдымен құжаттарды талдаңыз.','Analyze documents first.']
 };
 entries.settingsInvalid=['Укажите адрес HTTP(S) и имя модели.','HTTP(S) мекенжайы мен модель атауын көрсетіңіз.','Enter an HTTP(S) address and a model name.'];
 Object.assign(entries,{
 example:['Загрузить пример: 8 документов','Үлгіні жүктеу: 8 құжат','Load example: 8 documents'],
 exampleLoaded:['Загружен учебный пакет: 8 вымышленных документов. Нажмите «Начать анализ» для реальной обработки.','Оқу пакеті жүктелді: 8 ойдан шығарылған құжат. Нақты өңдеу үшін талдауды бастаңыз.','Example packet loaded: 8 fictional documents. Start analysis to process them.'],
-brand:['AYQYN','AYQYN','AYQYN'],
+brand:['Distingt','Distingt','Distingt'],
 otherDocumentSource:['Цитаты этого вывода находятся в другом документе. Выберите его в списке.','Бұл тұжырымның дәйексөздері басқа құжатта. Оны тізімнен таңдаңыз.','This finding cites another document. Select it from the list.'],
 heroKicker:['ЯСНОСТЬ В ИЗМЕНЕНИЯХ','ӨЗГЕРІСТЕРДІҢ АЙҚЫНДЫҒЫ','CLARITY THROUGH CHANGE'],
 heroTitle1:['Изменения в структуре.','Құрылым өзгереді.','Structures change.'],
@@ -245,9 +245,9 @@ Object.assign(entries,{
   "Beyond changed wording."
  ],
  "changesIntro": [
-  "AYQYN группирует предварительные выводы, чтобы вы могли проверить смысл изменений.",
-  "AYQYN өзгерістердің мағынасын тексеру үшін алдын ала қорытындыларды топтайды.",
-  "AYQYN groups preliminary findings so you can examine what changed in practice."
+  "Distingt группирует предварительные выводы, чтобы вы могли проверить смысл изменений.",
+  "Distingt өзгерістердің мағынасын тексеру үшін алдын ала қорытындыларды топтайды.",
+  "Distingt groups preliminary findings so you can examine what changed in practice."
  ],
  "changeUnits": [
   "Создание, сохранение и преобразование подразделений — с привязкой к упоминаниям в документах.",
@@ -330,9 +330,9 @@ Object.assign(entries,{
   "Where do documents go?"
  ],
  "faqDataAnswer": [
-  "Файлы отправляются серверу AYQYN. При включённом ИИ текст передаётся настроенному провайдеру; материалы AI-запуска сохраняются на диске сервера. Подробнее — на странице о данных.",
-  "Файлдар AYQYN серверіне жіберіледі. ЖИ қосылғанда мәтін бапталған провайдерге беріледі; ЖИ сеансының материалдары сервер дискісінде сақталады. Толығырақ — деректер бетінде.",
-  "Files go to the AYQYN server. When AI is enabled, text goes to the configured provider; AI run materials are saved on the server disk. See the data policy."
+  "Файлы отправляются серверу Distingt. При включённом ИИ текст передаётся настроенному провайдеру; материалы AI-запуска сохраняются на диске сервера. Подробнее — на странице о данных.",
+  "Файлдар Distingt серверіне жіберіледі. ЖИ қосылғанда мәтін бапталған провайдерге беріледі; ЖИ сеансының материалдары сервер дискісінде сақталады. Толығырақ — деректер бетінде.",
+  "Files go to the Distingt server. When AI is enabled, text goes to the configured provider; AI run materials are saved on the server disk. See the data policy."
  ],
  "faqDecision": [
   "Кто принимает окончательное решение?",
@@ -375,9 +375,9 @@ Object.assign(entries,{
   "Reviews and notes live in tab memory: export Markdown before refreshing. Source references and the demo label remain in the conclusion."
  ],
  "aboutText": [
-  "AYQYN — рабочее место для сопоставления организационной структуры и функций до и после реорганизации. Команда freax соединяет анализ документов с проверкой по первоисточнику.",
-  "AYQYN — қайта ұйымдастыруға дейінгі және кейінгі құрылым мен функцияларды салыстыруға арналған жұмыс орны. freax командасы құжат талдауын түпнұсқадан тексерумен біріктіреді.",
-  "AYQYN is a workspace for comparing organizational structure and responsibilities before and after reorganization. The freax team connects document analysis with source review."
+  "Distingt — рабочее место для сопоставления организационной структуры и функций до и после реорганизации. Команда freax соединяет анализ документов с проверкой по первоисточнику.",
+  "Distingt — қайта ұйымдастыруға дейінгі және кейінгі құрылым мен функцияларды салыстыруға арналған жұмыс орны. freax командасы құжат талдауын түпнұсқадан тексерумен біріктіреді.",
+  "Distingt is a workspace for comparing organizational structure and responsibilities before and after reorganization. The freax team connects document analysis with source review."
  ],
  "aboutLimits": [
   "Это хакатонный продукт. Качество смыслового анализа ещё требует проверки; полнота обнаружения изменений не гарантируется. Агентное исследование доступно через отдельный API и ещё не встроено в рабочий экран.",
@@ -390,9 +390,9 @@ Object.assign(entries,{
   "File transmission"
  ],
  "dataUploadText": [
-  "После запуска файлы DOCX передаются серверу AYQYN через /api/analyze. В режиме правил сервер извлекает текст и сравнивает его без обращения к модели.",
-  "Іске қосылғаннан кейін DOCX файлдары /api/analyze арқылы AYQYN серверіне жіберіледі. Ереже режимінде сервер мәтінді шығарып, модельсіз салыстырады.",
-  "On submission, DOCX files are sent to the AYQYN server through /api/analyze. Rules mode extracts and compares text without calling a model."
+  "После запуска файлы DOCX передаются серверу Distingt через /api/analyze. В режиме правил сервер извлекает текст и сравнивает его без обращения к модели.",
+  "Іске қосылғаннан кейін DOCX файлдары /api/analyze арқылы Distingt серверіне жіберіледі. Ереже режимінде сервер мәтінді шығарып, модельсіз салыстырады.",
+  "On submission, DOCX files are sent to the Distingt server through /api/analyze. Rules mode extracts and compares text without calling a model."
  ],
  "dataProvider": [
   "Обращение к модели",
@@ -491,6 +491,468 @@ Object.assign(entries,{
  ]
 });
 Object.assign(entries,{fileTypeError:['Эта форма принимает только DOCX.','Бұл форма тек DOCX қабылдайды.','This form accepts DOCX only.']});
+Object.assign(entries,{
+ "cases": [
+  "Дела",
+  "Істер",
+  "Cases"
+ ],
+ "collapseNav": [
+  "Свернуть навигацию",
+  "Навигацияны жинау",
+  "Collapse navigation"
+ ],
+ "caseName": [
+  "Название дела",
+  "Іс атауы",
+  "Case name"
+ ],
+ "caseNamePlaceholder": [
+  "Например, реорганизация технического блока",
+  "Мысалы, техникалық блокты қайта ұйымдастыру",
+  "For example, technical division reorganization"
+ ],
+ "caseDefault": [
+  "Проверка документов",
+  "Құжаттарды тексеру",
+  "Document review"
+ ],
+ "demoCaseName": [
+  "Реорганизация технического блока · C010",
+  "Техникалық блокты қайта ұйымдастыру · C010",
+  "Technical division reorganization · C010"
+ ],
+ "caseSections": [
+  "Разделы дела",
+  "Іс бөлімдері",
+  "Case sections"
+ ],
+ "agent": [
+  "Агент",
+  "Агент",
+  "Agent"
+ ],
+ "localCaseStorage": [
+  "История этого браузера · документы и решения сохраняются локально",
+  "Осы браузер тарихы · құжаттар мен шешімдер жергілікті сақталады",
+  "Browser history · documents and decisions saved locally"
+ ],
+ "savedAnalysis": [
+  "Сохранённый анализ",
+  "Сақталған талдау",
+  "Saved analysis"
+ ],
+ "caseSummary": [
+  "Документов: {documents} · кандидатов: {findings}",
+  "Құжаттар: {documents} · болжамдар: {findings}",
+  "Documents: {documents} · findings: {findings}"
+ ],
+ "noCases": [
+  "Пока нет сохранённых дел",
+  "Сақталған істер жоқ",
+  "No saved cases yet"
+ ],
+ "caseMissing": [
+  "Дело не найдено в этом браузере",
+  "Іс бұл браузерде табылмады",
+  "Case not found in this browser"
+ ],
+ "caseMissingText": [
+  "Локальная ссылка не предоставляет доступ на другом устройстве. Серверное хранение дел ещё не подключено.",
+  "Жергілікті сілтеме басқа құрылғыға қолжетімділік бермейді. Істерді серверде сақтау әлі қосылмаған.",
+  "A local link does not grant access on another device. Server case storage is not connected yet."
+ ],
+ "analysisVersion": [
+  "Версия анализа {version}",
+  "Талдау нұсқасы {version}",
+  "Analysis version {version}"
+ ],
+ "conversation": [
+  "Разговор по делу",
+  "Іс бойынша әңгіме",
+  "Case conversation"
+ ],
+ "agentQuestion": [
+  "Вопрос по документам",
+  "Құжаттар туралы сұрақ",
+  "Question about the documents"
+ ],
+ "agentPlaceholder": [
+  "Задайте вопрос или добавьте фрагмент из источника…",
+  "Сұрақ қойыңыз немесе дереккөзден үзінді қосыңыз…",
+  "Ask a question or add a source fragment…"
+ ],
+ "send": [
+  "Отправить",
+  "Жіберу",
+  "Send"
+ ],
+ "stop": [
+  "Остановить",
+  "Тоқтату",
+  "Stop"
+ ],
+ "stopping": [
+  "Останавливаем…",
+  "Тоқтатылуда…",
+  "Stopping…"
+ ],
+ "newAnswer": [
+  "Новый ответ ↓",
+  "Жаңа жауап ↓",
+  "New response ↓"
+ ],
+ "demoOperation": [
+  "Демо-действие",
+  "Демо әрекеті",
+  "Demo action"
+ ],
+ "searchDocuments": [
+  "Поиск по документам",
+  "Құжаттардан іздеу",
+  "Search documents"
+ ],
+ "recheckFinding": [
+  "Проверить выбранный вывод",
+  "Таңдалған қорытындыны тексеру",
+  "Recheck selected finding"
+ ],
+ "readFixture": [
+  "Читаю учебный комплект C010",
+  "C010 оқу жинағын оқу",
+  "Read C010 training packet"
+ ],
+ "readFragments": [
+  "Читаю исходные фрагменты",
+  "Бастапқы үзінділерді оқу",
+  "Read original fragments"
+ ],
+ "compareFragments": [
+  "Сопоставляю формулировки",
+  "Тұжырымдарды салыстыру",
+  "Compare wording"
+ ],
+ "draftConclusion": [
+  "Подготовить заключение",
+  "Қорытынды дайындау",
+  "Draft conclusion"
+ ],
+ "toolAction": [
+  "Действие",
+  "Әрекет",
+  "Action"
+ ],
+ "tool_running": [
+  "Выполняется",
+  "Орындалуда",
+  "Running"
+ ],
+ "tool_completed": [
+  "Выполнено",
+  "Орындалды",
+  "Completed"
+ ],
+ "tool_failed": [
+  "Ошибка",
+  "Қате",
+  "Failed"
+ ],
+ "tool_cancelled": [
+  "Отменено",
+  "Бас тартылды",
+  "Cancelled"
+ ],
+ "tool_pending": [
+  "Ожидает запуска",
+  "Іске қосуды күтуде",
+  "Pending"
+ ],
+ "toolItems": [
+  "Элементов в результате: {count}",
+  "Нәтижедегі элементтер: {count}",
+  "Result items: {count}"
+ ],
+ "localDemoExecution": [
+  "Локальное действие демонстрационного адаптера. Модель и серверный агент не вызываются.",
+  "Демо адаптердің жергілікті әрекеті. Модель мен сервер агенті шақырылмайды.",
+  "Local demo adapter operation. No model or server agent is called."
+ ],
+ "demoAgentDisclosure": [
+  "ДЕМО C010 · Локальный адаптер читает учебные данные. Это демонстрация интерфейса, не работа серверного агента.",
+  "C010 ДЕМО · Жергілікті адаптер оқу деректерін оқиды. Бұл сервер агентінің жұмысы емес, интерфейс көрсетілімі.",
+  "C010 DEMO · A local adapter reads training data. This demonstrates the interface, not a server agent."
+ ],
+ "agentUnavailable": [
+  "Чат с серверным агентом пока не подключён. Результаты, документы, проверка и экспорт доступны.",
+  "Сервер агентімен чат әлі қосылмаған. Нәтижелер, құжаттар, тексеру және экспорт қолжетімді.",
+  "Server agent chat is not connected yet. Results, documents, review and export remain available."
+ ],
+ "openDemoAgent": [
+  "Открыть демо чата",
+  "Чат демосын ашу",
+  "Open chat demo"
+ ],
+ "liveComposerHint": [
+  "Черновик сохраняется. Отправка станет доступна после подключения API разговоров и гостевой изоляции.",
+  "Нобай сақталады. Жіберу әңгіме API-і мен қонақ оқшаулауы қосылғаннан кейін қолжетімді болады.",
+  "Draft saved. Sending requires the conversation API and guest isolation."
+ ],
+ "demoComposerHint": [
+  "Enter — отправить · Shift+Enter — новая строка. Действие выбрано явно; свободный текст используется для буквального поиска.",
+  "Enter — жіберу · Shift+Enter — жаңа жол. Әрекет нақты таңдалады; еркін мәтін сөзбе-сөз іздеуге қолданылады.",
+  "Enter to send · Shift+Enter for a new line. Choose an action explicitly; free text uses literal search."
+ ],
+ "savedSummary": [
+  "Сводка сохранённого результата",
+  "Сақталған нәтиже түйіні",
+  "Saved result summary"
+ ],
+ "agentWelcome": [
+  "Разберём изменения по источникам.",
+  "Өзгерістерді дереккөздермен тексерейік.",
+  "Review changes against the evidence."
+ ],
+ "summaryCounts": [
+  "Обработано документов: {documents}. Кандидатов изменений: {findings}, из них потенциальных рисков: {risks}.",
+  "Өңделген құжаттар: {documents}. Өзгеріс болжамдары: {findings}, оның ішінде ықтимал тәуекелдер: {risks}.",
+  "Documents processed: {documents}. Candidate changes: {findings}, including {risks} potential risks."
+ ],
+ "summaryCaution": [
+  "Откройте вывод, сопоставьте цитаты и зафиксируйте своё решение. Наличие источника не означает подтверждение аналитиком.",
+  "Қорытындыны ашып, дәйексөздерді салыстырыңыз және шешіміңізді белгілеңіз. Дереккөздің болуы талдаушы растағанын білдірмейді.",
+  "Open a finding, compare quotations and record your decision. A source does not mean an analyst has confirmed the finding."
+ ],
+ "noRisksScoped": [
+  "По обработанным документам потенциальные отклонения не найдены. Это не гарантия отсутствия риска за пределами доступного комплекта.",
+  "Өңделген құжаттарда ықтимал ауытқулар табылмады. Бұл қолжетімді жинақтан тыс тәуекел жоқ деген кепілдік емес.",
+  "No potential deviations were found in the processed documents. This does not establish absence of risk beyond the available packet."
+ ],
+ "partialAgent": [
+  "Результат неполный: проверьте предупреждения анализа во вкладке «Результаты».",
+  "Нәтиже толық емес: «Нәтижелер» бөліміндегі ескертулерді тексеріңіз.",
+  "Partial result: check the analysis warnings under Results."
+ ],
+ "you": [
+  "Вы",
+  "Сіз",
+  "You"
+ ],
+ "userClarification": [
+  "Пояснение пользователя, не факт из документа",
+  "Пайдаланушы түсіндірмесі, құжаттағы факт емес",
+  "User statement, not a documented fact"
+ ],
+ "demoAdapter": [
+  "Демо-адаптер · без модели",
+  "Демо адаптер · модельсіз",
+  "Demo adapter · no model"
+ ],
+ "riskContext": [
+  "Вывод",
+  "Қорытынды",
+  "Finding"
+ ],
+ "removeContext": [
+  "Убрать контекст",
+  "Контексті алып тастау",
+  "Remove context"
+ ],
+ "discussAgent": [
+  "Обсудить с агентом",
+  "Агентпен талқылау",
+  "Discuss with agent"
+ ],
+ "askFragment": [
+  "Спросить о фрагменте",
+  "Үзінді туралы сұрау",
+  "Ask about fragment"
+ ],
+ "sourceTitle": [
+  "Первоисточник",
+  "Бастапқы дереккөз",
+  "Original source"
+ ],
+ "surroundingContext": [
+  "Соседние пункты",
+  "Көршілес тармақтар",
+  "Surrounding clauses"
+ ],
+ "documentsContext": [
+  "Исходные тексты текущей версии. Откройте пункт или добавьте его в контекст разговора.",
+  "Ағымдағы нұсқаның бастапқы мәтіндері. Тармақты ашыңыз немесе әңгіме контекстіне қосыңыз.",
+  "Original texts for this analysis version. Open a clause or add it to the conversation context."
+ ],
+ "questionFinding": [
+  "Проверь вывод «{type}» по исходным документам.",
+  "«{type}» қорытындысын бастапқы құжаттардан тексер.",
+  "Check the “{type}” finding against the original documents."
+ ],
+ "draftQuestion": [
+  "Подготовь заключение по текущей версии анализа.",
+  "Ағымдағы талдау нұсқасы бойынша қорытынды дайында.",
+  "Draft a conclusion for this analysis version."
+ ],
+ "commonWording": [
+  "Совпадающая формулировка в двух цитатах",
+  "Екі дәйексөздегі ортақ тұжырым",
+  "Shared wording in both quotations"
+ ],
+ "demoInterpretation": [
+  "Показана предварительная интерпретация учебного набора. Распределение ролей может уточняться в других документах. Пояснение пользователя само по себе не подтверждает изменение обязанности.",
+  "Оқу жинағының алдын ала түсіндіруі көрсетілген. Рөлдер басқа құжаттарда нақтылануы мүмкін. Пайдаланушы түсіндірмесі міндет өзгергенін өздігінен растамайды.",
+  "This is the training dataset’s preliminary interpretation. Other documents may clarify the roles. A user statement alone does not establish a changed duty."
+ ],
+ "demoFragmentRead": [
+  "Показан точный фрагмент учебного документа. Свободный вопрос сохранён, но модель для ответа на него не вызывалась.",
+  "Оқу құжатының дәл үзіндісі көрсетілді. Еркін сұрақ сақталды, бірақ жауап беру үшін модель шақырылған жоқ.",
+  "The exact training-document fragment is shown. Your question was saved, but no model was called to answer it."
+ ],
+ "demoSearchResults": [
+  "Совпадения буквального поиска в учебном комплекте. Это найденные фрагменты, а не вывод модели.",
+  "Оқу жинағындағы сөзбе-сөз іздеу сәйкестіктері. Бұлар модель қорытындысы емес, табылған үзінділер.",
+  "Literal search matches in the training packet. These are retrieved fragments, not model conclusions."
+ ],
+ "demoNoMatches": [
+  "Буквальный поиск в C010 не нашёл совпадений. Измените запрос или выберите конкретный вывод. Отсутствие совпадений не доказывает потерю функции.",
+  "C010 бойынша сөзбе-сөз іздеу сәйкестік таппады. Сұрауды өзгертіңіз немесе нақты қорытындыны таңдаңыз. Сәйкестіктің болмауы функция жоғалғанын дәлелдемейді.",
+  "Literal search found no C010 matches. Change the query or select a finding. Missing matches do not prove a lost function."
+ ],
+ "demoCancelled": [
+  "Локальное демо-действие остановлено. Завершённые действия сохранены. Серверная отмена не выполнялась.",
+  "Жергілікті демо әрекеті тоқтатылды. Аяқталған әрекеттер сақталды. Серверлік тоқтату орындалған жоқ.",
+  "Local demo action stopped. Completed actions were retained. No server cancellation was performed."
+ ],
+ "demoConnection": [
+  "Не удалось прочитать учебные данные. Частичные результаты сохранены; повторите нужное действие.",
+  "Оқу деректерін оқу мүмкін болмады. Ішінара нәтижелер сақталды; қажетті әрекетті қайталаңыз.",
+  "Could not read the training data. Partial results were retained; retry the needed action."
+ ],
+ "run_completed": [
+  "Действие завершено",
+  "Әрекет аяқталды",
+  "Action completed"
+ ],
+ "run_failed": [
+  "Действие не завершено. Уже полученные данные сохранены.",
+  "Әрекет аяқталмады. Алынған деректер сақталды.",
+  "The action did not complete. Available data was retained."
+ ],
+ "run_cancelled": [
+  "Действие отменено",
+  "Әрекет тоқтатылды",
+  "Action cancelled"
+ ],
+ "run_interrupted": [
+  "Сеанс прерван при закрытии или обновлении страницы. Автоматического повторного запуска не было.",
+  "Сеанс бет жабылғанда не жаңартылғанда үзілді. Автоматты қайта іске қосу болған жоқ.",
+  "The session was interrupted by closing or reloading the page. It was not automatically restarted."
+ ],
+ "retryOperation": [
+  "Вернуть запрос в черновик",
+  "Сұрауды нобайға қайтару",
+  "Restore request to draft"
+ ],
+ "runActive": [
+  "Дождитесь завершения или остановки текущего демо-действия.",
+  "Ағымдағы демо әрекетінің аяқталуын не тоқтауын күтіңіз.",
+  "Wait for the current demo action to finish or stop."
+ ],
+ "emptyMessage": [
+  "Введите вопрос перед отправкой.",
+  "Жібермес бұрын сұрақ енгізіңіз.",
+  "Enter a question before sending."
+ ],
+ "staleContext": [
+  "Контекст относится к другой версии или изменился. Выберите источник заново.",
+  "Контекст басқа нұсқаға қатысты немесе өзгерген. Дереккөзді қайта таңдаңыз.",
+  "The context belongs to another version or has changed. Select the source again."
+ ],
+ "sourceUnavailable": [
+  "Источник недоступен в этой версии дела.",
+  "Дереккөз бұл іс нұсқасында қолжетімсіз.",
+  "Source unavailable in this case version."
+ ],
+ "originalUnavailable": [
+  "Исходный файл отсутствует в локальной истории. Извлечённый текст доступен.",
+  "Бастапқы файл жергілікті тарихта жоқ. Алынған мәтін қолжетімді.",
+  "The original file is missing from local history. Extracted text remains available."
+ ],
+ "caseConflict": [
+  "Дело изменилось в другой вкладке. Обновите страницу; текущие изменения не перезаписали сохранённую версию.",
+  "Іс басқа қойындыда өзгерді. Бетті жаңартыңыз; ағымдағы өзгерістер сақталған нұсқаны қайта жазған жоқ.",
+  "The case changed in another tab. Reload; current edits did not overwrite the saved version."
+ ],
+ "storageUnavailable": [
+  "История браузера недоступна. Текущий результат останется только до обновления страницы — экспортируйте заключение.",
+  "Браузер тарихы қолжетімсіз. Ағымдағы нәтиже бет жаңартылғанша ғана сақталады — қорытындыны экспорттаңыз.",
+  "Browser storage is unavailable. The current result lasts only until reload — export the conclusion."
+ ],
+ "eventGap": [
+  "Не хватает событий. Нужна синхронизация состояния разговора.",
+  "Оқиғалар жетіспейді. Әңгіме күйін синхрондау қажет.",
+  "Events are missing. Conversation state needs synchronization."
+ ],
+ "analysisReady": [
+  "Анализ готов — открыть дело",
+  "Талдау дайын — істі ашу",
+  "Analysis ready — open case"
+ ],
+ "answerReady": [
+  "Демо-ответ готов — открыть дело",
+  "Демо жауап дайын — істі ашу",
+  "Demo response ready — open case"
+ ],
+ "artifactVersions": [
+  "Подготовленные версии заключения",
+  "Дайын қорытынды нұсқалары",
+  "Prepared conclusion versions"
+ ],
+ "artifactReady": [
+  "Готовый файл",
+  "Дайын файл",
+  "File ready"
+ ],
+ "artifactOutdated": [
+  "Оценки изменились после подготовки",
+  "Бағалар дайындалғаннан кейін өзгерді",
+  "Reviews changed after preparation"
+ ],
+ "artifactMissing": [
+  "Эта версия материала недоступна.",
+  "Материалдың бұл нұсқасы қолжетімсіз.",
+  "This artifact version is unavailable."
+ ],
+ "downloadVersion": [
+  "Скачать V{version}",
+  "V{version} жүктеу",
+  "Download V{version}"
+ ],
+ "localHint": [
+  "Дела сохраняются в этом браузере. ИИ-запросы отправляют текст провайдеру. Серверный чат ещё не подключён.",
+  "Істер осы браузерде сақталады. ЖИ сұраулары мәтінді провайдерге жібереді. Серверлік чат әлі қосылмаған.",
+  "Cases are saved in this browser. AI requests send text to the provider. Server chat is not connected yet."
+ ],
+ "dataReviewText": [
+  "Язык и тема сохраняются в браузере. Дела, исходные файлы, извлечённые тексты, результаты, решения и демопереписка хранятся в IndexedDB этого браузера. Ключ модели туда не записывается. Это локальное хранение, а не защищённый многопользовательский сервис; очистка данных сайта удалит историю.",
+  "Тіл мен тақырып браузерде сақталады. Істер, бастапқы файлдар, алынған мәтіндер, нәтижелер, шешімдер мен демо әңгімелер осы браузердің IndexedDB ішінде сақталады. Модель кілті сақталмайды. Бұл қорғалған көп пайдаланушы қызметі емес, жергілікті сақтау; сайт деректерін тазалау тарихты жояды.",
+  "Language and theme persist in your browser. Cases, original files, extracted text, results, reviews and demo conversations are stored in this browser’s IndexedDB. Model keys are never stored there. This is local storage, not a secure multi-user service; clearing site data removes the history."
+ ],
+ "guideExportText": [
+  "История дела сохраняется в этом браузере. Заключение можно скачать в Markdown; отдельные демоверсии содержат номер, источники и демометку. Старые материалы не переписываются при изменении оценки — они получают отметку об устаревании.",
+  "Іс тарихы осы браузерде сақталады. Қорытынды Markdown форматында жүктеледі; демо нұсқаларда нөмір, дереккөздер мен демо белгісі бар. Баға өзгергенде ескі материалдар қайта жазылмай, ескірген деп белгіленеді.",
+  "Case history is saved in this browser. Export Markdown; demo artifact versions include their number, sources and demo label. Review changes mark old artifacts outdated without rewriting them."
+ ],
+ "savedSession": [
+  "Сохранено в локальном деле",
+  "Жергілікті істе сақталды",
+  "Saved in local case"
+ ]
+});
+Object.assign(entries,{expandSource:['Развернуть источник','Дереккөзді кеңейту','Expand source'],restoreChat:['Вернуться к разговору','Әңгімеге оралу','Return to conversation']});
+Object.assign(entries,{packetTitle:['Начнём с документов.','Құжаттардан бастайық.','Start with your documents.'],packetIntro:['Два комплекта. Одна полная картина изменений.','Екі жинақ. Өзгерістердің толық көрінісі.','Two sets. One complete view of the changes.']});
+Object.assign(entries,{documentEditingUnavailable:['Предложения правок и создание рабочих версий документов ещё не подключены. Исходники доступны для чтения; отметки аналитика сохраняются локально.','Құжат түзетулерін ұсыну және жұмыс нұсқаларын жасау әлі қосылмаған. Түпнұсқалар оқуға қолжетімді; талдаушы белгілері жергілікті сақталады.','Document change proposals and working versions are not connected yet. Originals remain readable; analyst decisions are saved locally.']});
+Object.assign(entries,{previewArtifact:['Посмотреть эту версию','Осы нұсқаны көру','Preview this version']});
+Object.assign(entries,{sampleProcessed:['Учебные DOCX обработаны настоящим backend. Это синтетический комплект для проверки, а не подготовленный результат C010.','Оқу DOCX файлдарын нақты backend өңдеді. Бұл C010 дайын нәтижесі емес, тексеруге арналған синтетикалық жинақ.','Sample DOCX files were processed by the real backend. This is a synthetic test set, not the prepared C010 result.']});
 const enumEntries={
 'department_added':['Добавлено в перечень','Тізімге қосылды','Added to the list'], 'department_removed':['Убрано из перечня','Тізімнен алынды','Removed from the list'], 'department_retained':['Сохранено в перечне','Тізімде сақталды','Retained in the list'], 'reorganization':['Преобразование','Қайта ұйымдастыру','Reorganization'], 'function_loss':['Потенциальная потеря','Ықтимал жоғалу','Potential loss'], 'function_transfer':['Передача функции','Функцияны беру','Function transfer'], 'duplication':['Возможное дублирование','Ықтимал қайталану','Potential duplication'], 'conflict':['Конфликт интересов','Мүдделер қақтығысы','Conflict of interest'], 'contradiction':['Противоречие формулировок','Тұжырымдар қайшылығы','Conflicting wording'], 'unknown':['Недостаточно данных','Деректер жеткіліксіз','Insufficient information'], 'risk':['Возможный риск','Ықтимал тәуекел','Potential risk'], 'confirmed':['Подтверждено аналитиком','Талдаушы растады','Confirmed by analyst'], 'dismissed':['Отклонено аналитиком','Талдаушы қабылдамады','Dismissed by analyst']};
 Object.assign(entries,enumEntries);
