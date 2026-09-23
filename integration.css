@@ -1,0 +1,15 @@
+.live-chat {margin:32px 0 0;padding:clamp(18px,3vw,32px);border-top:1px solid var(--line);scroll-margin-top:20px}
+.live-chat-heading,.live-chat-actions {display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.live-chat label {display:block;margin:16px 0 8px;font-weight:600}
+.live-chat textarea {width:100%;resize:vertical;min-height:96px;max-height:320px}
+.live-chat-actions {justify-content:flex-start;margin:12px 0}
+.live-message {max-width:900px;margin:20px 0;padding:16px 0;border-bottom:1px solid var(--line);overflow-wrap:anywhere}
+.live-message p,.live-source blockquote {white-space:pre-wrap;line-height:1.65}
+.live-block {margin-top:18px}.live-block .citation-card{width:100%;text-align:left;margin-top:12px}
+.live-source {width:min(850px,94vw);max-height:90dvh;overflow:auto}.live-source h2{overflow-wrap:anywhere}
+.live-source blockquote {margin:20px 0;padding:16px;border-left:3px solid var(--accent,#0085cf)}
+.live-source pre {white-space:pre-wrap;overflow-wrap:anywhere;font:inherit}
+.research-options {margin:20px 0;padding:18px}.research-options label{display:block;margin:10px 0}
+.research-options textarea{width:100%;min-height:90px}.research-progress{overflow-wrap:anywhere}
+.live-context{display:flex;flex-wrap:wrap;gap:8px}.live-context .context-chip{max-width:100%;white-space:normal}
+@media(prefers-reduced-motion:reduce){.live-chat{scroll-behavior:auto}}

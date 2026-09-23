@@ -77,7 +77,8 @@ class HttpTests(unittest.TestCase):
     def test_frontend_and_api_share_one_server(self):
         with urlopen(self.base + '/api/health') as response:
             self.assertEqual(json.load(response), {'service':'AYQYN','status':'ok','frontend':True})
-        for path in ['/', '/analyze.html', '/analysis.js', '/workspace.js', '/distingt-approved.css']:
+        for path in ['/', '/analyze.html', '/analysis.js', '/workspace.js', '/distingt-approved.css',
+                     '/distingt-assets/mark.svg', '/fonts/manrope-cyrillic-wght-normal.woff2', '/live-chat.js']:
             with self.subTest(path=path), urlopen(self.base + path) as response:
                 self.assertEqual(response.status, 200)
                 self.assertTrue(response.read())

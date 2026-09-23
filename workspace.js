@@ -59,7 +59,7 @@ export function createWorkspace(hooks){
  async function create(snapshot,files=[],title='',id){
   await ready;
   if(id){const existing=records.find(c=>c.id===id)||await getCase(id).catch(()=>null);if(existing)return existing;}
-  const record=makeCase(structuredClone(snapshot),files.map(item=>({...item})),title,id);
+  const record=makeCase(structuredClone(snapshot),files.map(item=>({...item})),title,id);if(record.kind!=='demo')record.view='results';
   records.unshift(record);await persist(record).catch(()=>{});renderList();return record;
  }
  async function open(id,tab){
@@ -77,14 +77,15 @@ export function createWorkspace(hooks){
   if(record.source&&record.view==='agent')openSource(record.source,null,false);
   return true;
  }
- function showTab(tab){if(!active)return;captureReading();if(active.view!==tab){renderedCaseId=null;readingNeedsRestore=true;}active.view=tab;render();saveSoon();if(tab==='agent'&&active.source)openSource(active.source,null,false);}
+ function showTab(tab){if(!active)return;if(tab==='agent'&&active.kind!=='demo')tab='results';captureReading();if(active.view!==tab){renderedCaseId=null;readingNeedsRestore=true;}active.view=tab;render();saveSoon();if(tab==='agent'&&active.source)openSource(active.source,null,false);}
  function render(){
   if(!active)return;captureDocuments();
   $('case-title').textContent=name(active);$('page-title').textContent=t('cases');
-  $('case-meta').textContent=`${t(active.kind==='demo'?'demoLabel':'savedAnalysis')} · ${t('analysisVersion',{version:active.analysisVersion})} · ${t(active.snapshot.mode==='fallback'?'partial':'complete')}`;
+  $('case-meta').textContent=`${t(active.kind==='demo'?'demoLabel':'savedAnalysis')} · ${t('analysisVersion',{version:active.analysisVersion})} · ${t((active.snapshot.mode==='fallback'||(active.snapshot.research&&active.snapshot.research.status!=='completed'))?'partial':'complete')}`;
   $('case-storage').textContent=t('localCaseStorage');
+  if(active.kind!=='demo'&&active.view==='agent')active.view='results';
   const view=active.view;
-  document.querySelectorAll('[data-case-tab]').forEach(el=>{const selected=el.dataset.caseTab===view;el.setAttribute('aria-selected',String(selected));el.tabIndex=selected?0:-1;});
+  document.querySelectorAll('[data-case-tab]').forEach(el=>{el.hidden=el.dataset.caseTab==='agent'&&active.kind!=='demo';const selected=el.dataset.caseTab===view;el.setAttribute('aria-selected',String(selected));el.tabIndex=selected?0:-1;});
   $('agent-view').hidden=view!=='agent';$('case-documents').hidden=view!=='documents';$('results').hidden=!['results','report'].includes(view);$('case-artifacts').hidden=view!=='report';
   $('case-workspace').classList.toggle('agent-active',view==='agent');
   if(view!=='agent'&&$('chat-source').open)closeSource(false,false);
@@ -135,7 +136,7 @@ export function createWorkspace(hooks){
  function captureDocuments(){if(active&&renderedDocumentsCaseId===active.id&&!$('case-documents').hidden)active.documentOpenIds=[...$('case-documents').querySelectorAll('[data-case-document][open]')].map(el=>el.dataset.caseDocument);}
  function renderDocuments(){
   if(!active)return;
-  $('case-documents').innerHTML=`<div class="case-doc-header"><h2>${tx('documents')}</h2><p>${tx('documentsContext')}</p><p class="helper">${tx('documentEditingUnavailable')}</p></div><div class="case-document-sets">${['before','after'].map(side=>`<section><p class="eyebrow">${esc(t(side))}</p>${active.snapshot.documents.filter(d=>d.side===side).map(doc=>`<details class="case-document" data-case-document="${esc(doc.id)}" ${(active.documentOpenIds||[]).includes(doc.id)?'open':''}><summary>${icon('file-text')}<span>${esc(doc.name)}<small>${tx('paragraphCount',{count:doc.paragraphs.length})} · V${active.analysisVersion}</small></span></summary><div>${doc.paragraphs.map(p=>`<article><span class="mono">§ ${esc(p.section||p.id)}</span><p>${esc(p.text)}</p><div><button class="text-button" data-chat-source="${esc(p.id)}">${tx('showSources')}</button><button class="text-button" data-ask-fragment="${esc(p.id)}">${tx('askFragment')}</button></div></article>`).join('')}</div></details>`).join('')}</section>`).join('')}</div>`;renderedDocumentsCaseId=active.id;
+  $('case-documents').innerHTML=`<div class="case-doc-header"><h2>${tx('documents')}</h2><p>${tx('documentsContext')}</p><p class="helper">${tx('documentEditingUnavailable')}</p></div><div class="case-document-sets">${['before','after','common'].filter(side=>active.snapshot.documents.some(d=>d.side===side)).map(side=>`<section><p class="eyebrow">${esc(t(side))}</p>${active.snapshot.documents.filter(d=>d.side===side).map(doc=>`<details class="case-document" data-case-document="${esc(doc.id)}" ${(active.documentOpenIds||[]).includes(doc.id)?'open':''}><summary>${icon('file-text')}<span>${esc(doc.name)}<small>${tx('paragraphCount',{count:doc.paragraphs.length})} · V${active.analysisVersion}</small></span></summary><div>${doc.paragraphs.map(p=>`<article><span class="mono">§ ${esc(p.section||p.id)}</span><p>${esc(p.text)}</p><div><button class="text-button" data-chat-source="${esc(p.id)}">${tx('showSources')}</button><button class="text-button" data-ask-fragment="${esc(p.id)}">${tx('askFragment')}</button></div></article>`).join('')}</div></details>`).join('')}</section>`).join('')}</div>`;renderedDocumentsCaseId=active.id;
  }
  function renderArtifacts(){if(!active)return;$('case-artifacts').innerHTML=active.artifacts.length?`<h2>${tx('artifactVersions')}</h2>${active.artifacts.slice().reverse().map(artifactMarkup).join('')}`:'';}
  async function send({text=active?.draft,refs=active?.contextRefs,operation=active?.operation,clientMessageId=uid()}={}){
@@ -188,7 +189,7 @@ export function createWorkspace(hooks){
  $('chat-source').addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();closeSource();}if(e.key==='Tab'&&media.matches){const items=[...$('chat-source').querySelectorAll('button,summary,a[href]')].filter(el=>el.getClientRects().length&&!el.disabled);if(e.shiftKey&&document.activeElement===items[0]){e.preventDefault();items.at(-1).focus();}else if(!e.shiftKey&&document.activeElement===items.at(-1)){e.preventDefault();items[0].focus();}}});
  media.addEventListener('change',()=>{if($('chat-source').open&&active?.source){const ref=active.source;rememberSourceScroll();$('chat-source').close();openSource(ref,null,false);}});
  $('chat-source-ask').addEventListener('click',()=>{const ref=active?.source;if(!ref)return;closeSource();addContext(ref);});
- $('chat-source-original').addEventListener('click',()=>{if(!active?.source)return;const {doc}=resolveRef(active,active.source),index=active.snapshot.documents.indexOf(doc);if(doc.original_url){const a=document.createElement('a');a.href=doc.original_url;a.download=doc.id+'.pdf';a.click();}else{const file=active.files[index]?.file;if(file)hooks.download(file,file.name);else warn('originalUnavailable');}});
+ $('chat-source-original').addEventListener('click',()=>{if(!active?.source)return;const {doc}=resolveRef(active,active.source),index=active.snapshot.documents.indexOf(doc);if(doc.original_url){const a=document.createElement('a');a.href=doc.original_url;a.download=doc.name;a.click();}else{const file=active.files[index]?.file;if(file)hooks.download(file,file.name);else warn('originalUnavailable');}});
  $('composer').addEventListener('submit',e=>{e.preventDefault();send();});
  $('agent-input').addEventListener('input',e=>{if(active){captureReading();active.draft=e.target.value;try{sessionStorage.setItem('distingt.draft.'+active.id,active.draft);}catch{}saveSoon(true);renderComposer();}});
  $('agent-input').addEventListener('focus',fitChat);$('agent-input').addEventListener('blur',fitChat);
@@ -203,7 +204,9 @@ export function createWorkspace(hooks){
  document.addEventListener('click',e=>{
   const el=e.target.closest('[data-discuss],[data-ask-fragment],[data-chat-source],[data-remove-context],[data-quick-finding],[data-quick-draft],[data-artifact-download],[data-retry-run],[data-dismiss-ready]');if(!el)return;
   if(el.hasAttribute('data-dismiss-ready')){$('analysis-ready').hidden=true;return;}if(!active)return;
+  if(el.dataset.discuss&&active.kind!=='demo'){showTab('results');hooks.discuss(el.dataset.discuss);return;}
   if(el.dataset.discuss){addContext({type:'finding',id:el.dataset.discuss,versionId:active.analysisVersionId},el);return;}
+  if(el.dataset.askFragment&&active.kind!=='demo'){showTab('results');document.getElementById('live-analysis-chat').scrollIntoView({block:'start'});document.getElementById('live-chat-input')?.focus();return;}
   if(el.dataset.askFragment){const ref=refFor(el.dataset.askFragment);if(ref)addContext(ref,el);return;}
   if(el.dataset.chatSource){const ref=refFor(el.dataset.chatSource);if(ref)openSource(ref,el);else warn('sourceUnavailable');return;}
   if(el.dataset.removeContext!==undefined){const index=Number(el.dataset.removeContext);active.contextRefs.splice(index,1);renderComposer();saveSoon();const next=$('context-chips').querySelectorAll('[data-remove-context]');(next[Math.min(index,next.length-1)]||$('agent-input')).focus({preventScroll:true});return;}

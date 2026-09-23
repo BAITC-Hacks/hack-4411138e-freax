@@ -1,4 +1,5 @@
 """Explicit public frontend assets; never expose runtime data or package sources."""
+from ayqyn.paths import ROOT
 STATIC = {'index.html','analyze.html','styles.css','analyze.css','app.js','analysis.js','cases.js','sources.js'}
 STATIC.update({
     'assets/kazakhtelecom-logo.svg',
@@ -37,3 +38,9 @@ STATIC.update({
     'vendor/lucide/icons/upload.mjs',
     'vendor/lucide/icons/x.mjs',
 })
+
+STATIC.update({'distingt-public.css','distingt-usability.css','assets/favicon.svg','assets/favicon-16x16.png','assets/favicon-32x32.png','assets/apple-touch-icon.png','research-client.js','live-chat.js','integration.css'})
+# These directories contain only the supplied public artwork, samples and fonts.
+for folder, extensions in [('distingt-assets', {'.svg', '.png', '.json', '.pdf'}), ('fonts', {'.woff2'})]:
+    STATIC.update(p.relative_to(ROOT).as_posix() for p in (ROOT / folder).rglob('*')
+                  if p.is_file() and p.suffix in extensions)
