@@ -20,7 +20,7 @@ TeleDoc сравнивает документы до и после реорга�
 Node.js и Docker для запуска приложения не нужны.
 
 ```sh
-git clone --branch codex/fullstack-integration https://github.com/BAITC-Hacks/hack-4411138e-freax.git
+git clone https://github.com/BAITC-Hacks/hack-4411138e-freax.git
 cd hack-4411138e-freax
 ```
 
