@@ -2,8 +2,8 @@ import base64
 from pathlib import Path
 import unittest
 from unittest.mock import patch
-from packets import read_packet
-from document_store import DocumentStore
+from ayqyn.documents.packets import read_packet
+from ayqyn.documents.store import DocumentStore
 from test_analyzer import docx, para
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -78,13 +78,13 @@ class PacketTests(unittest.TestCase):
         self.assertFalse(packet['ready'])
 
     def test_partially_unread_pdf_does_not_count_as_complete(self):
-        from pdf_input import parse_pdf
+        from ayqyn.documents.pdf import parse_pdf
         values=pdfs('C010')
         def incomplete(raw,name):
             doc=parse_pdf(raw,name)
             doc['unread_pages']=[2]
             return doc
-        with patch('pdf_input.parse_pdf',side_effect=incomplete):
+        with patch('ayqyn.documents.pdf.parse_pdf',side_effect=incomplete):
             packet=read_packet(values)
         self.assertFalse(packet['complete_read'])
         self.assertTrue(all(d['read_status']=='partial' for d in packet['documents']))

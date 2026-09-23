@@ -7,9 +7,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from analyzer import parse_docx
-from llm import compare_with_model
-from run_record import new_run_path
+from ayqyn.documents.analyzer import parse_docx
+from ayqyn.providers.llm import compare_with_model
+from ayqyn.storage.runs import new_run_path
 
 
 def main():
@@ -25,7 +25,7 @@ def main():
     after = parse_docx(args.after.read_bytes(), args.after.name)
     path = new_run_path()
     if args.functions:
-        from function_analysis import analyze_functions
+        from ayqyn.analysis.functions import analyze_functions
         result = analyze_functions(before,after,{'model':args.model},run_root=path,only_sections=args.sections)
         print(json.dumps({'run_path':str(path),'status':result['status'],'accepted':len(result['findings']),
                           'rejected':result['rejected_count'],'failed_sections':result['failed_sections']},ensure_ascii=False))

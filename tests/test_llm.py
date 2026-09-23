@@ -1,7 +1,7 @@
 import json
 import unittest
 from unittest.mock import patch
-from llm import validate_findings, compare_with_model
+from ayqyn.providers.llm import validate_findings, compare_with_model
 
 BEFORE={'name':'before.docx','paragraphs':[{'id':'p1','text':'Function','section':'1'}]}
 AFTER={'name':'after.docx','paragraphs':[{'id':'p1','text':'Function A','section':'1'},{'id':'p2','text':'Function B','section':'2'}]}

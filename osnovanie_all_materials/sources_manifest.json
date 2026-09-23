@@ -1,0 +1,181 @@
+[
+  {
+    "group": "02_organizer",
+    "title": "Техническое задание",
+    "url": "https://docs.google.com/document/d/1m-r31DH6Q__9OcN4WiP453CE6drlTTQ8Px3xi3IiVHk/edit",
+    "note": "Текст ТЗ передан пользователем в чате; ссылка на оригинал. Текущая версия по ссылке не проверена.",
+    "local_copy": false
+  },
+  {
+    "group": "02_organizer",
+    "title": "Положение о внутреннем аудите: редакция 8, ДО",
+    "url": "https://docs.google.com/document/d/1X2tNOF9_ZF2ms0Fnx1mWrUaAoMLHabTu/edit",
+    "note": "Основная пара организатора. Название и версия из переданной переписки; содержимое не прочитано.",
+    "local_copy": false
+  },
+  {
+    "group": "02_organizer",
+    "title": "Положение о внутреннем аудите: редакция 9, ПОСЛЕ",
+    "url": "https://docs.google.com/document/d/1FUh7Ld40xk-gwXMdj5-_3-p-cYeIl2hu/edit",
+    "note": "Основная пара организатора. Название и версия из переданной переписки; содержимое не прочитано.",
+    "local_copy": false
+  },
+  {
+    "group": "02_organizer",
+    "title": "Правила участия",
+    "url": "https://drive.google.com/open?id=1GkZG7O9ME2N7BlTZUQ3Ih1l2kstCxbdN",
+    "note": "Ссылка из переписки; содержимое не проверено.",
+    "local_copy": false
+  },
+  {
+    "group": "02_organizer",
+    "title": "Инструкция для участников",
+    "url": "https://drive.google.com/file/d/105Rnhzg3Q5tKjfGZIddRqY13kmq_w4r_/view",
+    "note": "Ссылка из переписки; содержимое не проверено.",
+    "local_copy": false
+  },
+  {
+    "group": "02_organizer",
+    "title": "Инструкция OpenAI и NVIDIA",
+    "url": "https://drive.google.com/file/d/1UU1UFeiWkfKEhGHjOApHy6zSxi6_HQfb/view",
+    "note": "Ссылка из переписки; содержимое не проверено.",
+    "local_copy": false
+  },
+  {
+    "group": "02_organizer",
+    "title": "Требования к оборудованию",
+    "url": "https://drive.google.com/file/d/1_at59RgO_L01LGZ_5oE2O9HIu3H50-b6/view",
+    "note": "Ссылка из переписки; содержимое не проверено.",
+    "local_copy": false
+  },
+  {
+    "group": "02_organizer",
+    "title": "Требования по безопасности",
+    "url": "https://drive.google.com/file/d/1iq6W0b4wYYlhWEcqqbJ3TrRVuKuQ9d5S/view",
+    "note": "Ссылка из переписки; содержимое не проверено.",
+    "local_copy": false
+  },
+  {
+    "group": "02_organizer",
+    "title": "Материалы курса ASU",
+    "url": "https://drive.google.com/file/d/1tIyhzMgHAsQMLa2g66k1f4HXAWnc0I_1/view",
+    "note": "Ссылка из переписки; содержимое не проверено.",
+    "local_copy": false
+  },
+  {
+    "group": "03_real_sources",
+    "title": "Казахтелеком: управление рисками 2021",
+    "url": "https://ar2021.telecom.kz/ru/risk-management-system.html",
+    "note": "Прочитан официальный раздел; отдельно описаны служба рисков и служба внутренних контролей.",
+    "local_copy": false
+  },
+  {
+    "group": "03_real_sources",
+    "title": "Казахтелеком: управление рисками 2022",
+    "url": "https://ar2022.telecom.kz/ru/risk-management-and-internal-controls.html",
+    "note": "Прочитан официальный раздел; обязанности обеих служб описаны у одного департамента. Возможное объединение функций - вывод сопоставления, не подтверждение юридической реорганизации.",
+    "local_copy": false
+  },
+  {
+    "group": "03_real_sources",
+    "title": "Казахтелеком: PDF раздела о рисках 2021",
+    "url": "https://ar2021.telecom.kz/ru/download/risk-management-system.html",
+    "note": "Поисковый просмотр распознал PDF на 6 страницах. Расширение ссылки html, содержимое PDF.",
+    "local_copy": true,
+    "file": "03_real_sources/original_pdfs/risk_2021.pdf",
+    "pages": 6
+  },
+  {
+    "group": "03_real_sources",
+    "title": "Казахтелеком: годовой отчет 2022 PDF",
+    "url": "https://ar2022.telecom.kz/assets/files/KT2022_rus.pdf",
+    "note": "Скачан оригинальный PDF; открытие и извлечение текста проверены. Нужная структура на странице 121 файла.",
+    "local_copy": true,
+    "file": "03_real_sources/original_pdfs/report_2022.pdf",
+    "pages": 189
+  },
+  {
+    "group": "03_real_sources",
+    "title": "Казахтелеком: охрана окружающей среды 2022",
+    "url": "https://ar2022.telecom.kz/ru/environmental-protection.html",
+    "note": "Прочитан раздел о распределении ответственности.",
+    "local_copy": false
+  },
+  {
+    "group": "03_real_sources",
+    "title": "Казахтелеком: охрана окружающей среды 2023",
+    "url": "https://ar2023.telecom.kz/ru/environmental-protection.html",
+    "note": "Прямо указано сохранение структуры. Контрольный пример против ложных срабатываний.",
+    "local_copy": false
+  },
+  {
+    "group": "03_real_sources",
+    "title": "Казахтелеком: внутренний аудит 2021",
+    "url": "https://ar2021.telecom.kz/ru/internal-audit.html",
+    "note": "Описание подчиненности и деятельности службы. Не полный текст положения.",
+    "local_copy": false
+  },
+  {
+    "group": "03_real_sources",
+    "title": "Казахтелеком: внутренний аудит 2022",
+    "url": "https://ar2022.telecom.kz/ru/internal-audit.html",
+    "note": "Открыта страница соответствующего раздела. Детальная разметка изменений не выполнена.",
+    "local_copy": false
+  },
+  {
+    "group": "03_real_sources",
+    "title": "KEGOC: служба внутреннего аудита",
+    "url": "https://www.kegoc.kz/ru/corporate-governance/internal-audit-service/",
+    "note": "Официальные материалы по аудиту. Подтвержденной пары редакций не найдено.",
+    "local_copy": false
+  },
+  {
+    "group": "03_real_sources",
+    "title": "Алматы: реорганизация структурных подразделений",
+    "url": "https://www.gov.kz/memleket/entities/almaty-bostandyk/press/news/details/393114?lang=ru",
+    "note": "Официальное описание разделений и переименований 2022 года. Не полный комплект положений.",
+    "local_copy": false
+  },
+  {
+    "group": "03_real_sources",
+    "title": "Транстелеком: оргструктура 2022",
+    "url": "https://ttc.kz/reports/2022/ru/company_information",
+    "note": "Прочитана структура органов управления и филиалов. Для опционального сравнения операторов.",
+    "local_copy": false
+  },
+  {
+    "group": "04_public_dataset",
+    "title": "Public Org-Structure Database",
+    "url": "https://organizationdesign.github.io/homepage/",
+    "note": "612 компаний, 1993-2024 годы; CC BY-NC 4.0 по странице проекта. Руководящие роли и иерархия, не пары положений. Данные не скачаны.",
+    "local_copy": false
+  },
+  {
+    "group": "05_project_links",
+    "title": "Репозиторий команды",
+    "url": "https://github.com/BAITC-Hacks/hack-4411138e-freax",
+    "note": "Ссылка из переписки. В рамках этой сборки репозиторий не клонировался и не изменялся.",
+    "local_copy": false
+  },
+  {
+    "group": "05_project_links",
+    "title": "Spira: треки и сдача",
+    "url": "https://learn.spira.to/hackathons/df4743f5-c492-415c-b45a-1f13adb78e06?tab=tracks",
+    "note": "Ссылка из переписки.",
+    "local_copy": false
+  },
+  {
+    "group": "05_project_links",
+    "title": "HackAlem AI",
+    "url": "https://hackalem.ai/",
+    "note": "Ссылка из переписки.",
+    "local_copy": false
+  },
+  {
+    "group": "05_project_links",
+    "title": "Telegram HackAlem",
+    "url": "https://t.me/+u6HpmeKGOdVlNzMy",
+    "note": "Ссылка из переписки; актуальность приглашения не проверена.",
+    "local_copy": false
+  }
+]

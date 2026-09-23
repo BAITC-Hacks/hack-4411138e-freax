@@ -6,7 +6,7 @@ from unittest.mock import patch
 from urllib.request import Request, urlopen
 from urllib.error import HTTPError
 from http.server import ThreadingHTTPServer
-from server import Handler
+from ayqyn.api.server import Handler
 from test_analyzer import docx, para
 from test_packets import pdfs
 
@@ -49,7 +49,7 @@ class HttpTests(unittest.TestCase):
 
     def test_model_failure_is_explicit_fallback(self):
         data=self.payload();data['useAI']=True
-        with patch('server.compare_with_model',side_effect=ValueError('Модель вернула пустой ответ.')):
+        with patch('ayqyn.api.server.compare_with_model',side_effect=ValueError('Модель вернула пустой ответ.')):
             result=self.post(data)
         self.assertEqual(result['mode'],'fallback')
         self.assertTrue(result['warnings'])
@@ -59,7 +59,7 @@ class HttpTests(unittest.TestCase):
         data=self.payload();data['useAI']=True
         candidate={'id':'ai-1','type':'function_loss','title':'test','before_ids':['p3'],'after_ids':[],
                    'status':'risk','explanation':'test','method':'llm','reviewed':False}
-        with patch('server.compare_with_model',return_value=([candidate],0,{})):
+        with patch('ayqyn.api.server.compare_with_model',return_value=([candidate],0,{})):
             result=self.post(data)
         self.assertEqual(result['mode'],'ai')
         self.assertIn(candidate,result['findings'])
@@ -74,15 +74,18 @@ class HttpTests(unittest.TestCase):
         with self.assertRaises(HTTPError) as raised:self.post(self.payload(),'https://example.org')
         self.assertEqual(raised.exception.code,403)
 
-    def test_frontend_modules_and_original_logo_are_served(self):
-        from server import STATIC, ROOT
-        paths = [p for p in STATIC if p.endswith(('.mjs', '.svg'))]
-        paths += ['i18n.js', 'icons.js', 'preferences.js', 'analysis.js']
-        for path in paths:
-            with self.subTest(path=path), urlopen(self.base + '/' + path) as response:
+    def test_api_health_replaces_the_removed_frontend(self):
+        for path in ['/', '/api/health']:
+            with self.subTest(path=path), urlopen(self.base + path) as response:
                 self.assertEqual(response.status, 200)
-                self.assertEqual(response.read(), (ROOT / path).read_bytes())
-                self.assertNotIn('application/octet-stream', response.headers['Content-Type'])
+                self.assertEqual(json.load(response), {'service':'AYQYN','status':'ok','frontend':False})
+
+    def test_removed_frontend_and_package_sources_are_not_served(self):
+        for path in ['/analyze.html', '/index.html', '/analysis.js', '/ayqyn.css',
+                     '/ayqyn/api/server.py', '/docs/FRONTEND_HANDOFF.md']:
+            with self.subTest(path=path), self.assertRaises(HTTPError) as raised:
+                urlopen(self.base + path)
+            self.assertEqual(raised.exception.code, 404)
 
     def test_vendor_paths_cannot_escape_allowlist(self):
         for path in ['/vendor/lucide/../../server.py', '/vendor/README.md', '/assets/../.env']:
@@ -91,7 +94,7 @@ class HttpTests(unittest.TestCase):
             self.assertEqual(raised.exception.code, 404)
 
     def test_eight_document_packet_preserves_individual_sources(self):
-        from server import ROOT
+        from ayqyn.api.server import ROOT
         paths=sorted((ROOT/'sources').glob('AYQYN_ПРИМЕР_*.docx'))
         self.assertEqual(len(paths),8)
         packet=[{'name':p.name,'data':base64.b64encode(p.read_bytes()).decode()} for p in reversed(paths)]
@@ -122,7 +125,7 @@ class HttpTests(unittest.TestCase):
     def test_unresolved_ai_failure_does_not_guess(self):
         packet=list(self.payload().values())
         for item in packet:item['name']='unknown.docx'
-        with patch('server.classify_with_model',side_effect=ValueError('Model unavailable')):
+        with patch('ayqyn.api.server.classify_with_model',side_effect=ValueError('Model unavailable')):
             result=self.post({'documents':packet,'useAI':True})
         self.assertTrue(result['needs_review']);self.assertEqual(result['classification_warning'],'Model unavailable')
 
@@ -145,7 +148,7 @@ class HttpTests(unittest.TestCase):
     def test_packet_endpoint_reads_four_actual_pdfs_without_model(self):
         request=Request(self.base+'/api/packet/read',data=json.dumps({'documents':pdfs('C010'),'mode':'auto'}).encode(),
                         headers={'Content-Type':'application/json'})
-        with patch('server.compare_with_model') as model, urlopen(request,timeout=10) as response:
+        with patch('ayqyn.api.server.compare_with_model') as model, urlopen(request,timeout=10) as response:
             result=json.load(response)
         model.assert_not_called()
         self.assertTrue(result['ready'])

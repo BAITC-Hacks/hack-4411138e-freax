@@ -5,9 +5,7 @@ import zipfile
 from unittest.mock import patch
 from xml.sax.saxutils import escape
 
-import analyzer
-
-
+from ayqyn.documents import analyzer as analyzer
 NS = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
 
 

@@ -6,10 +6,10 @@ import tempfile
 import unittest
 from unittest.mock import Mock, patch
 
-from document_store import DocumentStore
-from analyzer import parse_docx
-from embeddings import BATCH_SIZE, MAX_INPUT_BYTES
-from hybrid_search import HybridIndex, _hash
+from ayqyn.documents.store import DocumentStore
+from ayqyn.documents.analyzer import parse_docx
+from ayqyn.providers.embeddings import BATCH_SIZE, MAX_INPUT_BYTES
+from ayqyn.retrieval.hybrid import HybridIndex, _hash
 from test_analyzer import docx, para
 
 
@@ -233,7 +233,7 @@ class HybridTests(unittest.TestCase):
     def test_injected_cache_cannot_be_used_by_real_provider(self):
         self.index().build()
         index = HybridIndex(self.store, self.path.parent, {'embedding_max_build_requests': 0})
-        with patch('embeddings.llm.request_json_api') as request, self.assertRaisesRegex(ValueError, 'budget'):
+        with patch('ayqyn.providers.embeddings.llm.request_json_api') as request, self.assertRaisesRegex(ValueError, 'budget'):
             index.build()
         request.assert_not_called()
 
@@ -270,7 +270,7 @@ class HybridTests(unittest.TestCase):
         prior_cache = self.path.read_bytes()
         self.store.fragments['a1']['text'] = 'changed'
         index = self.index()
-        with patch('hybrid_search.os.replace', side_effect=OSError('disk failure')), self.assertRaises(ValueError):
+        with patch('ayqyn.retrieval.hybrid.os.replace', side_effect=OSError('disk failure')), self.assertRaises(ValueError):
             index.build()
         self.assertEqual(self.path.read_bytes(), prior_cache)
         self.assertFalse(index.metadata['ready'])
@@ -315,7 +315,7 @@ class HybridTests(unittest.TestCase):
 
     def test_explicit_index_and_search_limits(self):
         for constant, value in (('MAX_SOURCE_BYTES', 5), ('MAX_CHUNKS', 1), ('MAX_FRAGMENTS', 1), ('MAX_DOCUMENTS', 0)):
-            with self.subTest(constant=constant), patch('hybrid_search.' + constant, value):
+            with self.subTest(constant=constant), patch('ayqyn.retrieval.hybrid.' + constant, value):
                 embedder = ControlledEmbedder()
                 with self.assertRaises(ValueError):
                     self.index(embedder=embedder).build()
@@ -336,7 +336,7 @@ class HybridTests(unittest.TestCase):
             return {'model': 'text-embedding-3-small',
                     'data': [{'index': i, 'embedding': [1, 0]} for i in range(len(body['input']))],
                     'usage': {'prompt_tokens': 10, 'total_tokens': 10}}
-        with patch('embeddings.llm.request_json_api', side_effect=provider) as request:
+        with patch('ayqyn.providers.embeddings.llm.request_json_api', side_effect=provider) as request:
             index.build()
             config['_embedding_timeout_seconds'] = .1
             index.search('incident')
@@ -351,7 +351,7 @@ class HybridTests(unittest.TestCase):
 
     def test_failed_provider_batch_accounts_reported_tokens_and_expired_deadline_sends_nothing(self):
         index = HybridIndex(self.store, self.path.parent, {'embedding_dimensions': 2})
-        with patch('embeddings.llm.request_json_api', return_value={
+        with patch('ayqyn.providers.embeddings.llm.request_json_api', return_value={
                 'data': [], 'usage': {'prompt_tokens': 13, 'total_tokens': 13}}):
             with self.assertRaises(ValueError):
                 index.build()
@@ -361,7 +361,7 @@ class HybridTests(unittest.TestCase):
         self.assertEqual(usage['total_tokens'], 13)
         self.assertFalse(self.path.exists())
         expired = HybridIndex(self.store, self.path.parent, {'_embedding_timeout_seconds': 0})
-        with patch('embeddings.llm.request_json_api') as request, self.assertRaises(ValueError):
+        with patch('ayqyn.providers.embeddings.llm.request_json_api') as request, self.assertRaises(ValueError):
             expired.build()
         request.assert_not_called()
         self.assertEqual(expired.metadata['usage']['build']['provider_requests'], 0)

@@ -1,6 +1,6 @@
 import copy
 import unittest
-from function_analysis import validate_functions, sections, text_signature, focus_batches, focus_validator
+from ayqyn.analysis.functions import validate_functions, sections, text_signature, focus_batches, focus_validator
 
 BEFORE={'name':'before.docx','paragraphs':[
     {'id':'p1','section':'5','text':'5. Обязанности'},

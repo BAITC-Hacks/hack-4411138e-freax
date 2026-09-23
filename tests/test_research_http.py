@@ -15,9 +15,9 @@ from unittest.mock import Mock, patch
 from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 
-import research_agent
-from research_state import ResearchState
-import server
+from ayqyn.agent import runner as research_agent
+from ayqyn.agent.state import ResearchState
+from ayqyn.api import server as server
 from test_packets import upload
 
 
@@ -69,17 +69,17 @@ class ResearchHttpTests(unittest.TestCase):
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
         self.indexes = []
-        self.start_patch("server.RESEARCH_ROOT", self.root / "output" / "research")
-        self.start_patch("research_agent.ROOT", self.root)
-        self.start_patch("server.ACTIVE_RESEARCH", set())
-        self.start_patch("research_agent.os.getenv", return_value="")
-        self.start_patch("hybrid_search.HybridIndex", side_effect=self.make_index)
+        self.start_patch("ayqyn.api.server.RESEARCH_ROOT", self.root / "output" / "research")
+        self.start_patch("ayqyn.agent.runner.ROOT", self.root)
+        self.start_patch("ayqyn.api.server.ACTIVE_RESEARCH", set())
+        self.start_patch("ayqyn.agent.runner.os.getenv", return_value="")
+        self.start_patch("ayqyn.retrieval.hybrid.HybridIndex", side_effect=self.make_index)
         self.transport = self.start_patch(
-            "llm.request_json_api",
+            "ayqyn.providers.llm.request_json_api",
             side_effect=AssertionError("Provider transport is forbidden in this suite."),
         )
         self.driver = self.start_patch(
-            "research_agent.agent_turn",
+            "ayqyn.agent.runner.agent_turn",
             return_value=tool_turn("submit_findings", partial_result()),
         )
 
@@ -149,7 +149,16 @@ class ResearchHttpTests(unittest.TestCase):
             "before_evidence": [{"fragment_id": old["id"], "quote": old["text"]}],
             "after_evidence": [{"fragment_id": new["id"], "quote": new["text"]}],
             "explanation": "The assigned team changed.",
+            "comparison": {
+                "before": {"action":"reviews","object":"supplier contracts","conditions":None,"stage":None},
+                "after": {"action":"reviews","object":"supplier contracts","conditions":None,"stage":None},
+                "changed_fields": ["owner"],
+            },
             "limitations": ["The text does not establish actual execution."],
+            "claim_checks": [
+                {"kind":"prior_assignment","evidence":[{"fragment_id":old["id"],"quote":old["text"]}],"result":"The supplied before clause assigns Alpha, not Beta; this does not prove exclusivity."},
+                {"kind":"retained_assignment","evidence":[{"fragment_id":new["id"],"quote":new["text"]}],"result":"The supplied after clause assigns Beta; this does not prove organizational completeness."},
+            ],
         }
 
     def script(self, actions):
@@ -164,11 +173,11 @@ class ResearchHttpTests(unittest.TestCase):
         identifier = self.prepare()
         self.driver.assert_not_called()
         self.script(self.read_actions(identifier) + [("submit_findings", {
-            "findings": [self.finding(identifier)], "outcome": "completed",
-            "gaps": [], "reason": "Both documents were read.",
+            "findings": [self.finding(identifier)], "outcome": "insufficient_data",
+            "gaps": ["Other source candidates were not assessed."], "reason": "Both documents were read, not all functions verified.",
         })])
         code, result = self.run_id(identifier)
-        self.assertEqual((code, result["status"]), (200, "completed"))
+        self.assertEqual((code, result["status"]), (200, "insufficient_data"))
         self.assertEqual(result["budget"]["model_calls_used"], 3)
         self.assertEqual(result["budget"]["tool_calls_used"], 3)
         self.assertEqual(result["findings"][0]["evidence_validation"], "exact_quotes_verified")
@@ -176,6 +185,41 @@ class ResearchHttpTests(unittest.TestCase):
         self.assertEqual(self.request("/api/research/" + identifier), (200, result))
         self.assertTrue(self.load_state(identifier).data["read_ids"])
         self.assertTrue({"messages", "pending_call", "packet", "config"}.isdisjoint(result))
+
+    def test_workspace_and_progress_project_same_run_without_calling_model(self):
+        identifier=self.prepare()
+        self.script(self.read_actions(identifier)+[("submit_findings",{
+            "findings":[self.finding(identifier)],"outcome":"insufficient_data",
+            "gaps":["Other candidates are unverified."],"reason":"Partial comparison."})])
+        self.run_id(identifier)
+        calls=self.driver.call_count
+        code,workspace=self.request('/api/research/'+identifier+'?view=workspace')
+        self.assertEqual(code,200)
+        self.assertTrue(workspace['saved'])
+        self.assertEqual(workspace['mode'],'agent')
+        self.assertEqual(workspace['findings'][0]['owner_before'],'Team Alpha')
+        self.assertEqual(workspace['findings'][0]['type'],'function_changed')
+        self.assertFalse(workspace['findings'][0]['reviewed'])
+        for side in ['before','after']:
+            sources={p['id']:p for p in workspace[side]['paragraphs']}
+            for evidence in workspace['findings'][0][side+'_evidence']:
+                self.assertIn(evidence['quote'],sources[evidence['fragment_id']]['text'])
+        code,progress=self.request('/api/research/'+identifier+'?view=progress')
+        self.assertEqual(code,200)
+        self.assertEqual(len(progress['actions']),3)
+        self.assertEqual(progress['inventory']['pending_count'],len(self.load_state(identifier).data['candidates']))
+        self.assertGreater(progress['inventory']['pending_count'],0)
+        self.assertTrue({'messages','packet','config','journal'}.isdisjoint(progress))
+        self.assertEqual(calls,self.driver.call_count)
+
+    def test_classify_only_never_runs_old_analysis(self):
+        with patch('ayqyn.api.server.compare_with_model') as model,patch('ayqyn.api.server.analyze_rules') as rules:
+            documents=[{**value,'side':value['role']} for value in self.payload()['documents']]
+            code,result=self.request('/api/analyze',{'documents':documents,'useAI':False,'classifyOnly':True})
+            self.assertEqual(code,200)
+            self.assertFalse(result['needs_review'])
+            self.assertEqual([d['side'] for d in result['documents']],['before','after'])
+            model.assert_not_called();rules.assert_not_called()
 
     def test_bad_quotes_are_rejected_and_repair_uses_read_sources(self):
         for defect in ("unread", "invented_quote", "foreign_fragment", "wrong_side"):
@@ -197,11 +241,11 @@ class ResearchHttpTests(unittest.TestCase):
                 })
                 actions = [bad_submit] + reads if defect == "unread" else reads + [bad_submit]
                 self.script(actions + [("submit_findings", {
-                    "findings": [finding], "outcome": "completed", "gaps": [],
+                    "findings": [finding], "outcome": "insufficient_data", "gaps": ["Other source candidates were not assessed."],
                     "reason": "Both sources were read and the evidence was corrected.",
                 })])
                 code, result = self.run_id(identifier)
-                self.assertEqual((code, result["status"]), (200, "completed"))
+                self.assertEqual((code, result["status"]), (200, "insufficient_data"))
                 submissions = [e["result"] for e in result["journal"]
                                if e.get("tool") == "submit_findings"]
                 self.assertEqual([r["accepted"] for r in submissions], [False, True])
@@ -248,7 +292,7 @@ class ResearchHttpTests(unittest.TestCase):
             return tool_turn("submit_findings", partial_result())
 
         self.driver.side_effect = late
-        self.start_patch("server.run_research", side_effect=lambda *a, **k:
+        self.start_patch("ayqyn.api.server.run_research", side_effect=lambda *a, **k:
                          research_agent.run_research(*a, **k, clock=clock))
         code, result = self.run_id(identifier)
         self.assertEqual((code, result["status"]), (200, "budget_exhausted"))
@@ -297,7 +341,7 @@ class ResearchHttpTests(unittest.TestCase):
             index.search.side_effect = OSError("Simulated tool interruption.")
             return index
 
-        self.start_patch("hybrid_search.HybridIndex", side_effect=interrupting_index)
+        self.start_patch("ayqyn.retrieval.hybrid.HybridIndex", side_effect=interrupting_index)
         self.driver.return_value = tool_turn("search", {
             "query": "contracts", "role": "after", "document_id": None, "limit": 2,
         })
@@ -339,11 +383,11 @@ class ResearchHttpTests(unittest.TestCase):
         self.assertTrue(self.load_state(identifier).data["read_ids"])
         self.driver.side_effect = None
         self.driver.return_value = tool_turn("submit_findings", {
-            "findings": [self.finding(identifier)], "outcome": "completed",
-            "gaps": [], "reason": "Previously read evidence survives resume.",
+            "findings": [self.finding(identifier)], "outcome": "insufficient_data",
+            "gaps": ["Other source candidates were not assessed."], "reason": "Previously read evidence survives resume.",
         }, "call-4")
         code, result = self.run_id(identifier)
-        self.assertEqual((code, result["status"]), (200, "completed"))
+        self.assertEqual((code, result["status"]), (200, "insufficient_data"))
         self.assertEqual(result["budget"]["model_calls_used"], 4)
         self.assertEqual(result["budget"]["tool_calls_used"], 3)
         self.assertEqual(result["validation_errors"], [])

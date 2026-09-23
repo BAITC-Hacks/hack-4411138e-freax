@@ -1,8 +1,8 @@
 import copy
 import unittest
 from unittest.mock import patch
-from batch import classify_documents, combine_documents
-from llm import classify_with_model
+from ayqyn.analysis.batch import classify_documents, combine_documents
+from ayqyn.providers.llm import classify_with_model
 
 
 def document(name, text='Функция отдела: подготовка отчета.'):
@@ -33,14 +33,14 @@ class PacketTests(unittest.TestCase):
     def test_model_assignment_requires_real_quote_and_unique_assignment(self):
         docs=classify_documents([document('one.docx','Редакция до реорганизации'),document('two.docx','Редакция после реорганизации')],[{},{}])
         payload={'assignments':[{'id':'d1','side':'before','quote':'Редакция до реорганизации','reason':'Явно указано до.'}, {'id':'d2','side':'after','quote':'придуманная цитата','reason':'test'}]}
-        with patch('llm.request_json',return_value=(payload,{})): classify_with_model(docs,{})
+        with patch('ayqyn.providers.llm.request_json',return_value=(payload,{})): classify_with_model(docs,{})
         self.assertEqual(docs[0]['side'],'before');self.assertIsNone(docs[1]['side'])
         self.assertEqual(docs[0]['classification_quote'],'Редакция до реорганизации')
         payload['assignments']=[{'id':'d2','side':side,'quote':'Редакция после реорганизации','reason':'test'} for side in ['before','after']]
-        with patch('llm.request_json',return_value=(payload,{})): classify_with_model(docs,{})
+        with patch('ayqyn.providers.llm.request_json',return_value=(payload,{})): classify_with_model(docs,{})
         self.assertIsNone(docs[1]['side'])
 
     def test_model_cannot_override_existing_assignment(self):
         docs=classify_documents([document('до.docx')],[{}]);before=copy.deepcopy(docs)
-        with patch('llm.request_json',return_value=({'assignments':[{'id':'d1','side':'after','quote':'до.docx','reason':'bad'}]},{})):classify_with_model(docs,{})
+        with patch('ayqyn.providers.llm.request_json',return_value=({'assignments':[{'id':'d1','side':'after','quote':'до.docx','reason':'bad'}]},{})):classify_with_model(docs,{})
         self.assertEqual(docs,before)
