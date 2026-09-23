@@ -86,8 +86,14 @@ class DocumentStore:
 
     def list_documents(self):
         return [{k:d.get(k) for k in ['id','name','format','role','role_reason','version','organization',
-                                      'read_status','error','warnings','sha256','synthetic','page_count']}
+                                      'read_status','error','warnings','sha256','synthetic','page_count','sheet_count']}
                 for d in self.documents.values()]
+
+    def refresh_sources(self):
+        """Reindex appended derived sources without marking them read."""
+        self.fragments={p['id']:p for d in self.documents.values() for p in d['paragraphs']}
+        self._parents={}; self._children={}; self._sections={}; self._fragment_sections={}
+        for doc in self.documents.values(): self._index_context(doc)
 
     def search_fragments(self, query, role=None, document_id=None, limit=8):
         if not isinstance(query,str) or not query.strip() or len(query)>500:
@@ -114,6 +120,8 @@ class DocumentStore:
                     hits.append({'id':p['id'],'document_id':doc['id'],'document_name':doc['name'],
                                  'role':doc['role'],'section':p['section'],'page':p.get('page'),
                                  'snippet':p['text'][:450],'score':score})
+                    if p.get('source')=='ocr':
+                        hits[-1].update(source='ocr',verified=False,ocr_id=p['ocr_id'])
         hits.sort(key=lambda h:(-h['score'],h['id']))
         result={'method':'lexical','query':query,'hits':hits[:limit],'matched_count':len(hits),
                 'searched_document_ids':searched,'truncated':len(hits)>limit,
@@ -173,6 +181,10 @@ class DocumentStore:
         header_ids={p['id'] for p in paragraphs if p.get('table_id') in tables and p.get('is_header') is True}
         first_ids={p['id'] for p in paragraphs if p.get('table_id') in tables and p.get('row_index') == 0}
         returned_ids=section_ids | parent_ids | neighbor_ids | row_ids | header_ids | first_ids
+        related_ids={key for p in paragraphs if p['id'] in section_ids
+                     for key in p.get('context_fragment_ids',[])
+                     if key in self.fragments and self.fragments[key]['document_id']==doc['id']}
+        returned_ids |= related_ids
         if scope == 'document':
             returned_ids={p['id'] for p in paragraphs}
         def ordered(ids):
@@ -183,6 +195,7 @@ class DocumentStore:
                 'section_fragment_ids':ordered(section_ids), 'parent_fragment_ids':ordered(parent_ids),
                 'neighbor_fragment_ids':ordered(neighbor_ids), 'table_row_fragment_ids':ordered(row_ids),
                 'table_header_fragment_ids':ordered(header_ids), 'table_first_row_fragment_ids':ordered(first_ids),
+                'related_fragment_ids':ordered(related_ids),
                 'warnings':doc.get('warnings',[]), 'layout_warnings':doc.get('layout_warnings',[]),
                 'layout_warning_pages':doc.get('layout_warning_pages',[]),
                 'read_status':doc.get('read_status'), 'error':doc.get('error'),
@@ -211,7 +224,7 @@ class DocumentStore:
         if offset>=len(blocks) and offset!=0:
             raise ValueError('offset is outside this context.')
         roles={name:set(context[name+'_fragment_ids']) for name in
-               ['section','parent','neighbor','table_row','table_header','table_first_row']}
+               ['section','parent','neighbor','table_row','table_header','table_first_row','related']}
         result={k:context[k] for k in ['document_id','document_name','role','scope','read_status','error','warnings','unread_pages','limitation']}
         result.update(fragments=[],offset=offset,total_fragments=len(blocks),next_offset=None,
                       omitted_fragments=len(blocks),truncated=False,response_limit_chars=limit_chars)
@@ -219,7 +232,12 @@ class DocumentStore:
         result['layout_warnings']=context['layout_warnings']
         result['layout_warning_pages']=context['layout_warning_pages']
         for p in blocks[offset:]:
-            block={k:p[k] for k in ['id','text','section','page','block_type','row_index','column_index'] if k in p}
+            block={k:p[k] for k in ['id','text','section','page','block_type','row_index','column_index',
+                                    'sheet','cell','cell_range','formula','formula_cached','value_type',
+                                    'number_format','sheet_state','hidden_row','source','ocr_id','box',
+                                    'coordinate_space','render_size','page_size_points','confidence',
+                                    'low_confidence','verified','review_status','truncated','engine',
+                                    'source_sha256','transcription_sha256'] if k in p}
             block['context_roles']=[name for name,ids in roles.items() if p['id'] in ids]
             block['parent_id']=self._parents.get(p['id'])
             result['fragments'].append(block)
@@ -333,7 +351,10 @@ class DocumentStore:
                                  'returned_fragment_ids':[hit['id'] for hit in result.get('hits',[])],
                                  'matched_count':result.get('matched_count'), 'truncated':result.get('truncated')})
         return deepcopy({'documents':documents,'after_fully_read':bool(after) and all(d['fully_read'] for d in after)
-                and self.packet['complete_read'] and not self.packet['mixed'] and all(d['role']!='unknown' for d in after),
+                and self.packet['complete_read'] and not self.packet['mixed'] and all(d['role']!='unknown' for d in after)
+                and not any(p.get('source')=='ocr' and not p.get('verified') for p in self.fragments.values()
+                            if self.documents[p['document_id']]['role'] in {'after','common','unknown'}),
+                'ocr_review_required':[p['id'] for p in self.fragments.values() if p.get('source')=='ocr' and not p.get('verified')],
                 'unread_document_ids':[d['id'] for d in documents if not d['fully_read'] or d['read_status']!='read'],
                 'unread_section_ids':[key for d in documents for key in d['unread_section_ids']],
                 'errors':[{'document_id':d['id'],'read_status':d['read_status'],'error':d['error']}

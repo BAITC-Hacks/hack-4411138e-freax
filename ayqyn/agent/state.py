@@ -50,6 +50,11 @@ class ResearchState:
         self.data.setdefault('checked_results',{})
         self.data.setdefault('function_work',{})
         self.data.setdefault('unfinished_work',[])
+        self.data.setdefault('ocr_pages',{})
+        from ayqyn.documents.ocr_sources import attach_ocr
+        for record in self.data['ocr_pages'].values():
+            if record.get('source_schema') == 1:
+                attach_ocr(self.packet, record)
 
     def save(self):
         self.data['updated_at']=utc_now()
@@ -141,21 +146,39 @@ class ResearchState:
                 entry['unread_candidate_ids']=[i for i in work['candidate_ids'] if i not in store.read_ids]
                 entry['read_candidate_ids']=[i for i in work['candidate_ids'] if i in store.read_ids]
                 entry['notice']='Readiness is an agent assessment, not a verified match. A read candidate still needs interpretation.'
+                missing=[side for side in ['before','after'] if not work[side+'_ids']]
+                if missing:
+                    entry['search_hint']='If no concrete candidate is available, use search with work_id='+work['work_id']+' and role='+missing[0]+'; query by action and object, then read_context. Do not assume the old owner remains responsible.'
                 result.append(entry)
         return result
 
-    def evidence_errors(self, store, evidence, side=None):
+    def evidence_errors(self, store, evidence, side=None, *, details=None, field='evidence', repair_budget=None):
         errors=[]
         if not isinstance(evidence,list) or len(evidence)>20:
             return ['Ожидается до 20 ссылок на источники.']
-        for e in evidence:
+        for number,e in enumerate(evidence):
             if not isinstance(e,dict) or set(e)!={'fragment_id','quote'}:
                 errors.append('Источник должен содержать fragment_id и quote.'); continue
             if not isinstance(e['fragment_id'],str) or not isinstance(e['quote'],str) or len(e['quote'].strip())<5:
                 errors.append('Нужны идентификатор и содержательная дословная цитата.'); continue
             checked=store.check_evidence(e['fragment_id'],e['quote'])
             if not checked['exists']:
-                errors.append(f'Цитата не существует: {e["fragment_id"]}.'); continue
+                message=f'Цитата не существует: {e["fragment_id"]}.'
+                errors.append(message)
+                if details is not None:
+                    detail={'field':field+f'[{number}].quote','code':'quote_mismatch','message':message,
+                            'fragment_id':e['fragment_id'],'required_evidence':[]}
+                    block=store.fragments.get(e['fragment_id'])
+                    if block and checked['was_read'] and repair_budget is not None:
+                        size=min(1600,max(0,repair_budget['chars']))
+                        text=block['text'][:size]
+                        repair_budget['chars']-=len(text)
+                        detail.update(source_text=text,source_chars=len(block['text']),truncated=len(text)<len(block['text']),
+                                      source_offset=0,instruction='Use an exact excerpt only if it supports the claim. For missing context use read_context at this fragment ID; the original claim is not automatically corrected.')
+                    else:
+                        detail['instruction']='Use a valid fragment ID and read its context first. No unread source text is supplied by validation.'
+                    details.append(detail)
+                continue
             if not checked['was_read']:
                 errors.append(f'Сначала прочитайте контекст: {e["fragment_id"]}.')
             if side:
@@ -198,7 +221,20 @@ class ResearchState:
             raise ValueError('Нужна причина завершения.')
         if not isinstance(findings,list) or len(findings)>40:
             raise ValueError('Ожидается до 40 выводов.')
+        budget=self.data['budget']
+        calls_left=min(budget.get('max_model_calls',0)-budget.get('model_calls_used',0),
+                       budget.get('max_tool_calls',0)-budget.get('tool_calls_used',0))
+        seconds_left=budget.get('max_seconds',0)-budget.get('elapsed_seconds',0)
+        ready=[w for w in self.data['function_work'].values() if w['status']=='ready_to_compare']
+        if not draft and outcome=='insufficient_data' and ready and calls_left>=3 and seconds_left>=40:
+            error={'finding':None,'code':'ready_work_remaining',
+                   'errors':['Ready comparisons remain with time to resolve them. Save a comparison or an insufficient_data result with the concrete evidentiary gap, then close that work. Readiness does not establish correctness; do not invent a finding.'],
+                   'ready_work':[{'work_id':w['work_id'],'next_action':w['next_action'][:240]} for w in ready],
+                   'remaining_calls':calls_left,'remaining_seconds':round(seconds_left,3)}
+            self.data['validation_errors']=[error]
+            return {'accepted':False,'errors':[error]}
         errors=[]
+        repair_budget={'chars':3200}
         coverage=store.get_coverage()
         uncertain=not self.packet.get('ready',False)
         required={'group','category','function','owner_before','owner_after','before_evidence','after_evidence','explanation','limitations'}
@@ -226,7 +262,8 @@ class ResearchState:
             except ValueError as exc: issues.append(str(exc))
             for side in ['before','after']:
                 ev=f[side+'_evidence']
-                issues.extend(self.evidence_errors(store,ev,side if f['category']!='insufficient_data' else None))
+                issues.extend(self.evidence_errors(store,ev,side if f['category']!='insufficient_data' else None,
+                    details=details,field=side+'_evidence',repair_budget=repair_budget))
                 owner=f['owner_'+side]
                 if owner is not None:
                     if not isinstance(owner,str) or not owner.strip() or len(owner)>1000:
@@ -244,14 +281,15 @@ class ResearchState:
                 checks=[]
             checked_kinds=set()
             duplication_assignments=[]
-            for check in checks:
+            for check_number,check in enumerate(checks):
                 if not isinstance(check,dict) or set(check)!={'kind','evidence','result'}:
                     issues.append('Invalid claim check.');continue
                 kind=check['kind']
                 if kind not in {'prior_assignment','retained_assignment','creation_basis','comparison','duplication_assignment'}:
                     issues.append('Unknown claim check.');continue
                 side={'prior_assignment':'before','retained_assignment':'after','creation_basis':'after','duplication_assignment':'after'}.get(kind)
-                check_errors=self.evidence_errors(store,check['evidence'],side)
+                check_errors=self.evidence_errors(store,check['evidence'],side,details=details,
+                    field=f'claim_checks[{check_number}].evidence',repair_budget=repair_budget)
                 issues.extend(check_errors)
                 if not check['evidence'] or not isinstance(check['result'],str) or not check['result'].strip():
                     issues.append('Each claim check needs read evidence and a factual result.')
@@ -285,7 +323,16 @@ class ResearchState:
                 if not left: issues.append('Нужна прежняя обязанность.')
                 if not coverage['after_fully_read'] or gaps or any(h['gaps'] for h in self.data['hypotheses'].values() if h['assessment']!='refuted'):
                     issues.append('Нельзя выводить потенциальную потерю при непрочитанном after или нерешённых пробелах.')
-            if uncertain and f['category'] not in {'insufficient_data','unmatched','unresolved'}:
+            cited=[store.fragments[e['fragment_id']] for e in (left+right) if isinstance(e,dict) and e.get('fragment_id') in store.fragments] if isinstance(left,list) and isinstance(right,list) else []
+            ocr_cited=[p for p in cited if p.get('source')=='ocr']
+            ocr_observation=(bool(ocr_cited) and f['group']=='function'
+                and f['category'] in {'preserved','reworded','changed'} and bool(left and right)
+                and assertion!='exclusive_transfer' and not self.packet.get('mixed')
+                and all(store.documents[p['document_id']]['role'] in {'before','after','common'} for p in cited))
+            if ocr_cited and isinstance(f['limitations'],list):
+                from ayqyn.documents.ocr_sources import OCR_NOTICE
+                if OCR_NOTICE not in f['limitations']: f['limitations'].append(OCR_NOTICE)
+            if uncertain and not ocr_observation and f['category'] not in {'insufficient_data','unmatched','unresolved'}:
                 issues.append('Комплект имеет ошибки или неопределённые роли; допустим только ограниченный итог о недостатке данных.')
             if issues: errors.append({'finding':number,'errors':issues,'details':details})
         hypothesis_gaps=any(h['gaps'] for h in self.data['hypotheses'].values() if h['assessment']!='refuted')
@@ -299,7 +346,9 @@ class ResearchState:
         if errors: return {'accepted':False,'errors':errors,'instruction':'Исправьте данные или завершите с недостаточностью; ссылки не доказывают интерпретацию.'}
         if draft:
             return {'accepted':True,'notice':'Source-validated agent assessment, not independent semantic verification.'}
-        self.data['findings']=[{**copy.deepcopy(f),'id':f'finding-{n}','evidence_validation':'exact_quotes_verified',
+        self.data['findings']=[{**copy.deepcopy(f),'id':f'finding-{n}','evidence_validation':
+                                ('ocr_transcription_quotes_matched' if any(store.fragments[e['fragment_id']].get('source')=='ocr'
+                                  for e in f['before_evidence']+f['after_evidence']) else 'exact_quotes_verified'),
                                 'human_review':{'status':'unreviewed','comment':''}} for n,f in enumerate(findings,1)]
         self.data.update(status=outcome,stop_reason=reason,gaps=gaps,coverage=coverage)
         return {'accepted':True,'count':len(findings),'outcome':outcome,

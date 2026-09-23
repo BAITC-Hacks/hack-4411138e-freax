@@ -1,4 +1,6 @@
-"""Seven read/research tools. Only submit_findings can complete an investigation."""
+"""Bounded research tools, including optional, unverified local page OCR."""
+import hashlib
+import re
 from ayqyn.agent.state import GROUPS
 from ayqyn.agent.inventory import inventory_summary,update_candidates,task_summary,update_tasks
 from copy import deepcopy
@@ -49,6 +51,8 @@ DEFINITIONS={
     'read_context':('Прочитать адресный пункт с контекстом. Ответ ограничен 18000 символами; next_offset означает непрочитанное продолжение. scope=document тоже постраничный. Начни с offset=0.',obj({
         'fragment_id':TEXT,'scope':{'type':'string','enum':['section','document']},'offset':{'type':'integer','minimum':0,'maximum':20000},
         'work_id':NULL_TEXT,'purpose':TEXT})),
+    'ocr_page':('Локальный RapidOCR одной физической PDF-страницы с изображениями. Сохраняет адресуемые OCR-фрагменты и обновляет поиск. Используй fragment_ids в read_context перед цитированием. Цитата проверяется по распознанному тексту, не по изображению; OCR не доказывает полноту и не считается проверкой человеком.',obj({
+        'document_id':TEXT,'page':{'type':'integer','minimum':1,'maximum':200}})),
     'update_research_state':('Сохранить ОДИН результат одной функции за вызов (result_updates: 0–1); затем следующую функцию отдельным вызовом. comparison выделяет действие, объект, условия, этап и конкретные изменённые поля. Не копируй цитаты в supporting при hypothesis_id=null. accepted_result_ids уже сохранены даже при ошибке закрытия группы. Исправляй отклонённый result_id; принятые записи не пересылай. checked у задачи требует всех её пунктов.',obj({
         'hypothesis_id':NULL_TEXT,'claim':TEXT,'assessment':{'type':'string','enum':['open','supported','refuted','uncertain']},
         'supporting':EVIDENCE,'contradicting':EVIDENCE,'gaps':STRINGS,'revision_reason':TEXT,'candidate_updates':UPDATES,
@@ -119,19 +123,28 @@ class ResearchTools:
         if work_id and (not work or work['status'] in {'completed','insufficient_data'}):
             raise ValueError('Use an existing open function work_id, or null for discovery.')
         if name=='list_documents':
+            from ayqyn.documents.ocr import capability
             documents=self.store.list_documents()
             for item in documents:
                 paragraphs=self.store.documents[item['id']]['paragraphs']
                 item['first_fragment_id']=paragraphs[0]['id'] if paragraphs else None
             return {'documents':documents,'duplicates':self.state.packet.get('duplicates',[]),
-                    'limitations':self.state.packet['warnings'],'research_tasks':task_summary(self.state)}
+                    'limitations':self.state.packet['warnings'],'research_tasks':task_summary(self.state),
+                    'ocr':capability()}
+        if name=='ocr_page':
+            return self.ocr_page(**arguments)
         if name=='search':
             if work:
                 remaining=20-len(work['candidate_ids'])
                 longest_id=max((len(key) for key in self.store.fragments),default=0)
                 if arguments['limit']>remaining or len(str(self.state.data['function_work']))+arguments['limit']*(longest_id+8)>48000:
                     raise ValueError('Assess or explicitly narrow this work candidate_ids before another search, or reduce limit. No search executed; existing candidates retained.')
-            result=self.index.search(**arguments)
+            if self.state.data.get('ocr_index_pending'):
+                result=self.store.search_fragments(**arguments)
+                result['limitation']='OCR vector index update failed; all current sources are searched lexically. Read context before citing. Missing matches do not prove absence.'
+                result['index_status']='lexical_fallback'
+            else:
+                result=self.index.search(**arguments)
             if work:
                 candidates=list(dict.fromkeys(work['candidate_ids']+[hit['id'] for hit in result['hits']]))
                 work['candidate_ids']=candidates
@@ -229,3 +242,57 @@ class ResearchTools:
             self.state.data.update(status='needs_clarification',stop_reason='Существенная неоднозначность требует ответа пользователя.')
             self.state.data['gaps'].append(arguments['question'])
             return {'accepted':True,'outcome':'needs_clarification','question':arguments['question']}
+
+    def ocr_page(self, document_id, page):
+        from ayqyn.documents.ocr import recognize_page
+        doc=self.store.documents.get(document_id)
+        if not doc or doc.get('format')!='pdf':
+            raise ValueError('OCR requires a PDF document_id from the current packet.')
+        digest=doc.get('sha256','')
+        if not isinstance(digest,str) or not re.fullmatch('[0-9a-f]{64}',digest):
+            raise ValueError('The PDF original has no valid saved hash.')
+        if isinstance(doc.get('page_count'),int) and page>doc['page_count']:
+            raise ValueError('Requested OCR page is outside this PDF.')
+        original=(self.state.path/'originals'/(digest+'.pdf')).resolve()
+        if not original.is_relative_to(self.state.path.resolve()) or not original.is_file():
+            raise ValueError('No saved PDF original is available within this research.')
+        if original.stat().st_size>10_000_000 or hashlib.sha256(original.read_bytes()).hexdigest()!=digest:
+            raise ValueError('The saved PDF original does not match the packet hash or size limit.')
+        key=document_id+':ocr:page-'+str(page)
+        if key in self.state.data['ocr_pages'] and self.state.data['ocr_pages'][key].get('engine')=='rapidocr':
+            return {**deepcopy(self.state.data['ocr_pages'][key]),'cached':True}
+        if key not in self.state.data['ocr_pages'] and len(self.state.data['ocr_pages'])>=4:
+            return {'status':'limit_reached','error':'Local OCR is limited to four pages per research. Remaining pages are unverified.'}
+        budget=self.state.data['budget']
+        remaining=budget['max_seconds']-budget['elapsed_seconds']
+        if remaining<=0:
+            return {'status':'budget_exhausted','error':'No time remains for OCR.'}
+        result=recognize_page(original,page,timeout_seconds=min(20,remaining))
+        result={**result,'document_id':document_id,'document_name':doc['name'],'sha256':digest,
+                'page':page,'ocr_id':key,'source':'ocr','verified':False,'cached':False,
+                'limitation':'OCR is an unverified transcription. Read the addressable fragments with read_context before citing; verify against the original image. Native extraction gaps remain.'}
+        if result.get('status')=='success':
+            from ayqyn.documents.ocr_sources import attach_ocr, register_ocr_inventory
+            fragments=attach_ocr(self.store.packet,result)
+            if self.state.packet is not self.store.packet:
+                attach_ocr(self.state.packet,result)
+            self.store.refresh_sources()
+            result.update(source_schema=1,fragment_ids=[p['id'] for p in fragments],citation_status='read_context_required')
+            register_ocr_inventory(self.state,self.store,fragments)
+            self.state.data['ocr_pages'][key]=deepcopy(result)
+            if fragments:
+                self.state.data['ocr_index_pending']=True
+                self.state.save()  # Derived sources survive an interrupted index update.
+                try:
+                    if not callable(getattr(self.index,'refresh',None)):
+                        raise ValueError('Index has no refresh capability.')
+                    metadata=self.index.refresh()
+                    self.state.data['index']=metadata
+                    self.state.data['ocr_index_pending']=False
+                    result['index_status']='hybrid'
+                except (ValueError,OSError):
+                    result['index_status']='lexical_fallback'
+                self.state.data['ocr_pages'][key]=deepcopy(result)
+                self.state.event('ocr_sources_registered',ocr_id=key,fragment_ids=result['fragment_ids'],index_status=result['index_status'])
+            self.state.save()
+        return result

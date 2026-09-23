@@ -168,7 +168,7 @@ def prepare_research(packet, task, config, *, path=None, budget=None, embedder=N
                 except (ValueError,KeyError): continue
                 digest=hashlib.sha256(raw).hexdigest()
                 doc=by_hash.get(digest)
-                if doc and doc['format'] in {'docx','pdf'}:
+                if doc and doc['format'] in {'docx','pdf','xlsx'}:
                     (directory/(digest+'.'+doc['format'])).write_bytes(raw)
         if index_cache is not None:
             cache=Path(index_cache).resolve()
@@ -220,6 +220,7 @@ def restore_research(path, config, embedder=None):
         return state,None,None
     index.previous_query_usage=copy.deepcopy(state.data['index'].get('usage',{}).get('query',{}))
     state.data['index']=index_metadata(index)
+    state.data['ocr_index_pending']=False
     return state,store,index
 
 
@@ -350,6 +351,7 @@ def public_result(state):
     result['checked_results']=[{k:v for k,v in record.items() if k!='history'} for record in data['checked_results'].values()]
     result['function_work']=list(data['function_work'].values())
     result['unfinished_work']=data['unfinished_work']
+    result['ocr_pages']=list(data['ocr_pages'].values())
     result['metrics']=research_metrics(state)
     text=json.dumps(result,ensure_ascii=False)
     for secret in state.secrets: text=text.replace(secret,'[REDACTED]')

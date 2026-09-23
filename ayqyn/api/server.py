@@ -73,7 +73,7 @@ class Handler(BaseHTTPRequestHandler):
                 if view=='original':
                     identifier=parse_qs(urlparse(self.path).query).get('document',[''])[0]
                     doc=next((d for d in state.packet['documents'] if d['id']==identifier),None)
-                    if not doc or not re.fullmatch(r'[a-f0-9]{64}',doc.get('sha256') or '') or doc['format'] not in {'docx','pdf'}:
+                    if not doc or not re.fullmatch(r'[a-f0-9]{64}',doc.get('sha256') or '') or doc['format'] not in {'docx','pdf','xlsx'}:
                         raise ValueError('Document not in this research.')
                     data=(state.path/'originals'/(doc['sha256']+'.'+doc['format'])).read_bytes()
                     self.send_response(200)

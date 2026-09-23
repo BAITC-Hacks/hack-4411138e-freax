@@ -259,5 +259,108 @@ class FunctionWorkTests(unittest.TestCase):
         self.assertEqual(len(result['findings']),1)
         self.assertEqual(step,2)
 
+    def ready_work(self):
+        self.store.read_context_page(self.new['paragraphs'][1]['id'])
+        work=self.work(status='ready_to_compare')
+        work['after_ids']=[p['id'] for p in self.new['paragraphs'][:3]]
+        self.assertTrue(self.tools.execute('update_research_state',self.payload([work]))['accepted'])
+        return work
+
+    def partial_args(self):
+        return {'findings':[],'saved_result_ids':[],'outcome':'insufficient_data','gaps':[],
+                'reason':'Partial review.','unfinished_work':[{'work_id':'review','reason':'Comparison not saved.'}]}
+
+    def test_early_submission_then_saved_comparison_then_submission(self):
+        work=self.ready_work()
+        actions=[('submit_findings',self.partial_args()),
+                 ('update_research_state',self.payload([self.finish(work)],[self.record()])),
+                 ('submit_findings',{**self.partial_args(),'saved_result_ids':['result-review'],'unfinished_work':[]})]
+        step=0
+        def driver(messages,*args,**kwargs):
+            nonlocal step
+            if step==1:
+                reply=json.loads(messages[-1]['content'])
+                self.assertFalse(reply['accepted'])
+                self.assertEqual(reply['errors'][0]['code'],'ready_work_remaining')
+                self.assertEqual(reply['errors'][0]['ready_work'][0]['work_id'],'review')
+                self.assertFalse(self.state.data['findings'])
+            name,arguments=actions[step];step+=1
+            return {'role':'assistant','tool_calls':[{'id':'c'+str(step),'type':'function',
+                'function':{'name':name,'arguments':json.dumps(arguments)}}]},{}
+        result=run_research(self.state,self.store,self.index,{},driver=driver)
+        self.assertEqual(result['status'],'insufficient_data')
+        self.assertEqual(len(result['findings']),1)
+        self.assertEqual(step,3)
+
+    def test_early_submission_allows_saved_concrete_insufficiency(self):
+        work=self.ready_work()
+        self.assertFalse(self.tools.execute('submit_findings',self.partial_args())['accepted'])
+        record=self.record()
+        gap='The clauses do not establish whether both reviews cover the same contract stage.'
+        record.update(status='insufficient_data',open_question=gap,next_step='Request the applicable review procedure.')
+        record['finding'].update(group='risk',category='insufficient_data',assertion_type='observation',
+                                 comparison=None,explanation=gap,limitations=[gap])
+        closed={**self.finish(work),'status':'insufficient_data','resolution':gap}
+        result=self.tools.execute('update_research_state',self.payload([closed],[record]))
+        self.assertTrue(result['accepted'],result)
+        submitted=self.tools.execute('submit_findings',{**self.partial_args(),
+            'saved_result_ids':['result-review'],'unfinished_work':[]})
+        self.assertTrue(submitted['accepted'],submitted)
+        self.assertEqual(self.state.data['findings'][0]['category'],'insufficient_data')
+        self.assertIn(gap,self.state.data['gaps'][-1])
+
+    def test_submission_guard_checks_remaining_model_tools_and_time_boundaries(self):
+        self.ready_work()
+        for model_left,tool_left,seconds_left,accepted in [(3,3,40,False),(2,3,40,True),
+                                                         (3,2,40,True),(3,3,39.9,True),(0,0,0,True)]:
+            with self.subTest(model=model_left,tools=tool_left,seconds=seconds_left):
+                self.state.data['budget'].update(model_calls_used=24-model_left,tool_calls_used=24-tool_left,
+                                                 elapsed_seconds=240-seconds_left)
+                result=self.tools.execute('submit_findings',self.partial_args())
+                self.assertEqual(result['accepted'],accepted,result)
+
+    def test_quote_error_returns_read_source_and_does_not_save_wrong_claim(self):
+        self.ready_work();record=self.record()
+        record['finding']['after_evidence'][1]['quote']='Invented contract obligation'
+        result=self.tools.execute('update_research_state',self.payload(results=[record]))
+        error=next(e for e in result['rejected_results'] if e['code']=='quote_mismatch')
+        self.assertEqual(error['field'],'after_evidence[1].quote')
+        self.assertEqual(error['source_text'],self.new['paragraphs'][1]['text'])
+        self.assertFalse(error['truncated'])
+        self.assertFalse(self.state.data['checked_results'])
+
+    def test_quote_repair_is_bounded_and_never_reads_new_sources(self):
+        self.ready_work();record=self.record()
+        for p in self.old['paragraphs'][:3]+self.new['paragraphs'][:3]:
+            self.store.fragments[p['id']]['text']='Long source text '*400
+        read_before=set(self.store.read_ids)
+        result=self.state.submit(self.store,[record['finding']],'insufficient_data',[],'Validate.',draft=True)
+        repairs=[d for e in result['errors'] for d in e.get('details',[]) if d['code']=='quote_mismatch']
+        self.assertLessEqual(sum(len(d.get('source_text','')) for d in repairs),3200)
+        self.assertTrue(all(d['truncated'] for d in repairs))
+        self.assertEqual(read_before,self.store.read_ids)
+        details=[]
+        unknown=self.new['paragraphs'][5]['id']
+        self.state.evidence_errors(self.store,[{'fragment_id':unknown,'quote':'Invented obligation'}],
+                                   details=details,repair_budget={'chars':3200})
+        self.assertNotIn('source_text',details[0])
+        self.assertNotIn(unknown,self.store.read_ids)
+
+    def test_repeated_context_still_returns_parent_and_continuations(self):
+        anchor=self.old['paragraphs'][1]['id']
+        expected=self.store.read_context_page(anchor)['fragments']
+        actual=self.tools.execute('read_context',{'fragment_id':anchor,'scope':'section','offset':0,
+                                   'purpose':'Check the consent condition and owner again.'})['fragments']
+        self.assertEqual([p['id'] for p in actual],[p['id'] for p in expected])
+        self.assertGreater(len(actual),1)
+
+    def test_missing_side_search_hint_survives_compaction_without_overwriting_next_action(self):
+        work=self.work();work['next_action']='Verify the effective date of the candidate appointment.'
+        self.tools.execute('update_research_state',self.payload([work]))
+        self.state.data['messages']=[{'role':'system','content':'Policy'},{'role':'user','content':'Compare'}]
+        memory=json.loads(compact_messages(self.state,self.store)[2]['content'])['function_work'][0]
+        self.assertEqual(memory['next_action'],work['next_action'])
+        self.assertIn('role=after',memory['search_hint'])
+
 
 if __name__=='__main__':unittest.main()

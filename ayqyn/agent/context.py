@@ -29,6 +29,10 @@ def compact_messages(state, store):
             'function_work':state.function_work_summary(store),
             'work_priority':'Finish a ready comparison, then read a concrete promising candidate, then start a new area. Read candidates are not confirmed matches. Retain contrary evidence; report specific unfinished_work reasons at submission.',
             'checked_results':[{k:v for k,v in r.items() if k!='history'} for r in state.data['checked_results'].values()],
+            'ocr_pages':[{'ocr_id':key,'document_id':v['document_id'],'page':v['page'],
+                          'fragment_ids':v.get('fragment_ids',[]),'index_status':v.get('index_status'),
+                          'verified':False,'notice':'OCR transcription: use read_context on fragment_ids before citation; image accuracy and completeness are unverified.'}
+                         for key,v in state.data['ocr_pages'].items()],
             'recent_actions':events[-8:] if compact else [],
             'validation_errors':state.data['validation_errors'],'gaps':state.data['gaps']}
     prefix=[m for m in history[:2] if m['role'] in {'system','user'}]

@@ -80,10 +80,15 @@ def read_packet(values, mode='auto', overrides=None):
             elif document['format']=='pdf':
                 from ayqyn.documents.pdf import parse_pdf
                 parsed = parse_pdf(raw,name)
+            elif document['format']=='xlsx':
+                from ayqyn.documents.excel import parse_xlsx
+                parsed = parse_xlsx(raw,name)
             else:
-                raise ValueError('Формат пока не поддерживается. Доступны текстовый PDF и DOCX; Excel и OCR не реализованы.')
+                raise ValueError('Формат пока не поддерживается. Доступны DOCX, текстовый PDF и XLSX. XLS/XLSM требуют конвертации в XLSX.')
             document.update(parsed)
             document.update(classify(document),read_status='read')
+            if document.get('extraction_incomplete'):
+                document.update(read_status='partial',error='Не все ячейки или графические объекты Excel прочитаны; см. ограничения.')
             if document.get('unread_pages'):
                 document.update(read_status='partial',error='Не извлечён текст страниц: '+', '.join(map(str,document['unread_pages'])))
             if mode=='manual' or digest in (overrides or {}):
@@ -95,7 +100,7 @@ def read_packet(values, mode='auto', overrides=None):
                          format=document['format'],page=p.get('page'),printed_page=p.get('printed_page'))
                 for field in ['parent_id','previous_id','next_id','table_id','row_id']:
                     if isinstance(p.get(field),str): p[field]=document['id']+':'+p[field]
-                for field in ['row_fragment_ids','header_row_ids','header_fragment_ids','first_row_fragment_ids']:
+                for field in ['row_fragment_ids','header_row_ids','header_fragment_ids','first_row_fragment_ids','context_fragment_ids']:
                     if isinstance(p.get(field),list): p[field]=[document['id']+':'+value for value in p[field]]
         except (ValueError,ImportError) as exc:
             document['error']=str(exc)

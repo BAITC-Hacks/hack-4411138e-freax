@@ -48,7 +48,7 @@ def main():
             paths=[(p,None) for p in args.auto];mode='auto'
         else:
             paths=[(p,'before') for p in args.before or []]+[(p,'after') for p in args.after or []];mode='manual'
-        if not paths: parser.error('Укажите комплект PDF/DOCX.')
+        if not paths: parser.error('Укажите комплект PDF/DOCX/XLSX.')
         values=[{'name':p.name,'data':base64.b64encode(p.read_bytes()).decode(),**({'role':role} if role else {})} for p,role in paths]
         packet=read_packet(values,mode)
         state,store,index=prepare_research(packet,args.task,config,

@@ -248,7 +248,8 @@ class HybridIndex:
             if temp is not None:
                 temp.unlink(missing_ok=True)
 
-    def build(self):
+    def build(self, *, reuse_current=False):
+        reusable = {c['input_hash']:v for c,v in zip(self._chunks,self._vectors)} if reuse_current else {}
         self._metadata.update(ready=False, status='building', cache_hit=False)
         try:
             documents, sources = self._snapshot()
@@ -256,7 +257,8 @@ class HybridIndex:
             identity = {'schema': SCHEMA_VERSION, 'model_fingerprint': self._metadata['model_fingerprint'],
                         'input_hash': _hash([documents, sources]),
                         'embedding_input_hash': _hash([chunk['input_hash'] for chunk in chunks])}
-            required = math.ceil(len(texts) / BATCH_SIZE)
+            missing = [i for i,c in enumerate(chunks) if c['input_hash'] not in reusable]
+            required = math.ceil(len(missing) / BATCH_SIZE)
             self._metadata.update(input_hash=identity['input_hash'], fragment_count=len(sources),
                                   document_count=len(documents), chunk_count=len(chunks), empty_fragment_ids=empty,
                                   planned_build_requests=required,
@@ -266,18 +268,20 @@ class HybridIndex:
                 vectors, dimensions, build_usage = cached
                 self._metadata.update(cache_hit=True, planned_build_requests=0, planned_build_token_upper_bound=0)
             else:
-                if required > self._budget:
+                spent = self._metadata['usage']['build']['attempted_requests'] if reuse_current else 0
+                if required + spent > self._budget:
                     raise ValueError(f'Build requires {required} embedding requests; budget is {self._budget}. No request was sent.')
-                dimensions = self._expected_dimensions
+                dimensions = self._expected_dimensions or (len(next(iter(reusable.values()))) if reusable else None)
                 if dimensions and len(chunks) * dimensions > MAX_VECTOR_COMPONENTS:
                     raise ValueError('Index vector limit exceeded before embedding.')
-                vectors = []
-                for start in range(0, len(texts), BATCH_SIZE):
-                    batch = self._embed(texts[start:start + BATCH_SIZE], 'build', dimensions)
+                vectors = [reusable.get(c['input_hash']) for c in chunks]
+                for start in range(0, len(missing), BATCH_SIZE):
+                    indices = missing[start:start + BATCH_SIZE]
+                    batch = self._embed([texts[i] for i in indices], 'build', dimensions)
                     dimensions = len(batch[0])
                     if len(chunks) * dimensions > MAX_VECTOR_COMPONENTS:
                         raise ValueError('Index vector limit exceeded; index was not accepted.')
-                    vectors.extend(batch)
+                    for i,vector in zip(indices,batch): vectors[i] = vector
                 dimensions = dimensions or 0
                 build_usage = deepcopy(self._metadata['usage']['build'])
                 self._persist(identity, {'chunks': chunks, 'vectors': vectors, 'dimensions': dimensions,
@@ -293,6 +297,9 @@ class HybridIndex:
             if isinstance(exc, ValueError):
                 raise
             raise ValueError('Hybrid index build failed; no partial index was accepted.') from None
+
+    def refresh(self):
+        return self.build(reuse_current=True)
 
     def search(self, query, role=None, document_id=None, limit=8):
         if not isinstance(query, str) or not query.strip() or len(query) > 500:
@@ -366,6 +373,9 @@ class HybridIndex:
                              'source_start': start, 'source_end': end,
                              'lexical_score': entry['lexical_score'], 'semantic_score': entry['semantic_score'],
                              'fusion_score': fused[key], 'score': fused[key]})
+                original=self.store.fragments[key]
+                if original.get('source')=='ocr':
+                    hits[-1].update(source='ocr',verified=False,ocr_id=original['ocr_id'])
         result = {'method': 'hybrid', 'query': query, 'hits': hits, 'matched_count': candidate_count,
                   'candidate_count': candidate_count, 'searched_document_ids': searched,
                   'truncated': candidate_count > limit, 'candidate_limit': CANDIDATE_LIMIT,
