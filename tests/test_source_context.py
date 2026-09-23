@@ -5,9 +5,9 @@ import json
 from pathlib import Path
 import unittest
 
-from analyzer import parse_docx
-from document_store import ContextLimitError, DocumentStore
-from packets import read_packet
+from ayqyn.documents.analyzer import parse_docx
+from ayqyn.documents.store import ContextLimitError, DocumentStore
+from ayqyn.documents.packets import read_packet
 from test_analyzer import docx, para
 
 

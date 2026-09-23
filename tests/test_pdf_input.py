@@ -9,9 +9,7 @@ from pypdf import PdfReader, PdfWriter
 from pypdf.generic import (DecodedStreamObject, DictionaryObject,
                            NameObject, NumberObject)
 
-import pdf_input
-
-
+from ayqyn.documents import pdf as pdf_input
 ROOT = Path(__file__).resolve().parents[1]
 DATASET = ROOT / "osnovanie_dataset_v1" / "inputs"
 REAL = ROOT / "dataset" / "real_sources" / "original_pdfs"

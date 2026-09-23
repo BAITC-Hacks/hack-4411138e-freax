@@ -3,7 +3,7 @@ import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
-from llm import compare_with_model
+from ayqyn.providers.llm import compare_with_model
 
 DOC = {'name':'test.docx','sha256':'test-hash','paragraphs':[{'id':'p1','section':'1','text':'Function'}]}
 
@@ -24,7 +24,7 @@ class RunRecordTests(unittest.TestCase):
             self.assertEqual(manifest['returned_model'], 'returned-model')
             self.assertFalse(manifest['truncated'])
             self.assertEqual((path/'response.raw.json').read_bytes(), raw)
-            self.assertIn('llm.py', manifest['code_sha256'])
+            self.assertIn('ayqyn/providers/llm.py', manifest['code_sha256'])
             for file in path.iterdir():
                 self.assertNotIn(b'test-secret-key', file.read_bytes())
 

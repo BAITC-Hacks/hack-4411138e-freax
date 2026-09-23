@@ -1,0 +1,423 @@
+{
+  "G01": {
+    "before": {
+      "sources": [
+        68
+      ],
+      "owner": [
+        67,
+        11
+      ],
+      "continuations": [],
+      "additional": []
+    },
+    "after": {
+      "sources": [
+        67
+      ],
+      "owner": [
+        66,
+        11
+      ],
+      "continuations": [],
+      "additional": []
+    }
+  },
+  "G02": {
+    "before": {
+      "sources": [
+        69
+      ],
+      "owner": [
+        67,
+        11
+      ],
+      "continuations": [],
+      "additional": []
+    },
+    "after": {
+      "sources": [
+        68
+      ],
+      "owner": [
+        66,
+        11
+      ],
+      "continuations": [],
+      "additional": []
+    }
+  },
+  "G03": {
+    "before": {
+      "sources": [
+        79
+      ],
+      "owner": [
+        67,
+        11
+      ],
+      "continuations": [],
+      "additional": []
+    },
+    "after": {
+      "sources": [
+        78
+      ],
+      "owner": [
+        66,
+        11
+      ],
+      "continuations": [],
+      "additional": []
+    }
+  },
+  "G04": {
+    "before": {
+      "sources": [
+        86,
+        87,
+        88,
+        89,
+        90
+      ],
+      "owner": [
+        67,
+        11
+      ],
+      "continuations": [
+        87,
+        88,
+        89,
+        90
+      ],
+      "additional": []
+    },
+    "after": {
+      "sources": [
+        85,
+        86,
+        87,
+        88,
+        89
+      ],
+      "owner": [
+        66,
+        11
+      ],
+      "continuations": [
+        86,
+        87,
+        88,
+        89
+      ],
+      "additional": []
+    }
+  },
+  "G05": {
+    "before": {
+      "sources": [
+        91,
+        92,
+        93
+      ],
+      "owner": [
+        67,
+        11
+      ],
+      "continuations": [
+        92,
+        93
+      ],
+      "additional": []
+    },
+    "after": {
+      "sources": [
+        90,
+        91,
+        92
+      ],
+      "owner": [
+        66,
+        11
+      ],
+      "continuations": [
+        91,
+        92
+      ],
+      "additional": []
+    }
+  },
+  "G06": {
+    "before": {
+      "sources": [
+        174
+      ],
+      "owner": [
+        171
+      ],
+      "continuations": [],
+      "additional": []
+    },
+    "after": {
+      "sources": [
+        188
+      ],
+      "owner": [
+        185
+      ],
+      "continuations": [],
+      "additional": []
+    }
+  },
+  "G07": {
+    "before": {
+      "sources": [
+        191
+      ],
+      "owner": [
+        185
+      ],
+      "continuations": [],
+      "additional": []
+    },
+    "after": {
+      "sources": [
+        200
+      ],
+      "owner": [
+        196
+      ],
+      "continuations": [],
+      "additional": []
+    }
+  },
+  "G08": {
+    "before": {
+      "sources": [
+        152
+      ],
+      "owner": [
+        150
+      ],
+      "continuations": [],
+      "additional": []
+    },
+    "after": {
+      "sources": [
+        164
+      ],
+      "owner": [
+        159
+      ],
+      "continuations": [],
+      "additional": []
+    }
+  },
+  "G09": {
+    "before": {
+      "sources": [
+        153,
+        154,
+        155,
+        156,
+        157,
+        158
+      ],
+      "owner": [
+        150
+      ],
+      "continuations": [
+        154,
+        155,
+        156,
+        157,
+        158
+      ],
+      "additional": []
+    },
+    "after": {
+      "sources": [
+        161,
+        162,
+        163
+      ],
+      "owner": [
+        159
+      ],
+      "continuations": [
+        162,
+        163
+      ],
+      "additional": [
+        167,
+        168,
+        169,
+        170,
+        171,
+        172
+      ]
+    }
+  },
+  "G10": {
+    "before": {
+      "sources": [
+        164
+      ],
+      "owner": [
+        150
+      ],
+      "continuations": [],
+      "additional": [
+        426
+      ]
+    },
+    "after": {
+      "sources": [
+        178
+      ],
+      "owner": [
+        159
+      ],
+      "continuations": [],
+      "additional": [
+        425
+      ]
+    }
+  },
+  "G11": {
+    "before": {
+      "sources": [
+        175,
+        176,
+        177
+      ],
+      "owner": [
+        171
+      ],
+      "continuations": [
+        176,
+        177
+      ],
+      "additional": []
+    },
+    "after": {
+      "sources": [
+        164,
+        165,
+        166
+      ],
+      "owner": [
+        159
+      ],
+      "continuations": [
+        165,
+        166
+      ],
+      "additional": []
+    }
+  },
+  "G12": {
+    "before": {
+      "sources": [
+        14
+      ],
+      "owner": [
+        14
+      ],
+      "continuations": [],
+      "additional": [
+        136
+      ]
+    },
+    "after": {
+      "sources": [
+        14
+      ],
+      "owner": [
+        14
+      ],
+      "continuations": [],
+      "additional": [
+        145
+      ]
+    }
+  },
+  "G13": {
+    "before": {
+      "sources": [
+        49
+      ],
+      "owner": [
+        43,
+        11
+      ],
+      "continuations": [],
+      "additional": []
+    },
+    "after": {
+      "sources": [
+        48
+      ],
+      "owner": [
+        42,
+        11
+      ],
+      "continuations": [],
+      "additional": []
+    }
+  },
+  "G14": {
+    "before": {
+      "sources": [
+        131
+      ],
+      "owner": [
+        129
+      ],
+      "continuations": [],
+      "additional": []
+    },
+    "after": {
+      "sources": [
+        140
+      ],
+      "owner": [
+        138
+      ],
+      "continuations": [],
+      "additional": []
+    }
+  },
+  "G15": {
+    "before": {
+      "sources": [
+        178
+      ],
+      "owner": [
+        171
+      ],
+      "continuations": [],
+      "additional": [
+        74,
+        75,
+        76,
+        77
+      ]
+    },
+    "after": {
+      "sources": [
+        189
+      ],
+      "owner": [
+        185
+      ],
+      "continuations": [],
+      "additional": [
+        73,
+        74,
+        75,
+        76
+      ]
+    }
+  }
+}

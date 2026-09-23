@@ -9,9 +9,9 @@ from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT))
-from packets import read_packet
-from research_agent import prepare_research,restore_research,run_research,public_result
-from research_state import atomic_json
+from ayqyn.documents.packets import read_packet
+from ayqyn.agent.runner import prepare_research,restore_research,run_research,public_result
+from ayqyn.agent.state import atomic_json
 
 
 def main():
@@ -29,6 +29,7 @@ def main():
     parser.add_argument('--max-calls',type=int,default=24)
     parser.add_argument('--max-seconds',type=int,default=240)
     parser.add_argument('--prepare-only',action='store_true')
+    parser.add_argument('--reuse-index',type=Path,help='Local index.json; fingerprint is revalidated, never a saved answer.')
     args=parser.parse_args()
     config={'model':args.model,'embedding_model':args.embedding_model}
     if args.reasoning_effort: config['reasoning_effort']=args.reasoning_effort
@@ -51,7 +52,7 @@ def main():
         values=[{'name':p.name,'data':base64.b64encode(p.read_bytes()).decode(),**({'role':role} if role else {})} for p,role in paths]
         packet=read_packet(values,mode)
         state,store,index=prepare_research(packet,args.task,config,
-            budget={'max_tool_calls':args.max_calls,'max_model_calls':args.max_calls,'max_seconds':args.max_seconds},originals=values)
+            budget={'max_tool_calls':args.max_calls,'max_model_calls':args.max_calls,'max_seconds':args.max_seconds},originals=values,index_cache=args.reuse_index)
     if index and not args.prepare_only: run_research(state,store,index,config)
     result=public_result(state)
     atomic_json(state.path/'result.json',result,state.secrets)

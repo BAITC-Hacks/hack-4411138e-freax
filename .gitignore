@@ -1,6 +1,7 @@
 __pycache__/
 .env
 .env.*
+!.env.example
 output/
 *.log
 # Downloaded corporate reports are retained for local evaluation only.

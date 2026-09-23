@@ -3,8 +3,8 @@ import tempfile
 from pathlib import Path
 import unittest
 from unittest.mock import patch
-from llm import agent_turn,request_json_api
-from research_tools import TOOL_SCHEMAS
+from ayqyn.providers.llm import agent_turn,request_json_api
+from ayqyn.agent.tools import TOOL_SCHEMAS
 from test_llm import BEFORE,AFTER
 
 

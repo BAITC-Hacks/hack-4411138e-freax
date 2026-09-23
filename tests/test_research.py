@@ -6,11 +6,11 @@ import tempfile
 import unittest
 from unittest.mock import Mock,patch
 
-from document_store import DocumentStore
-from packets import read_packet
-from research_agent import run_research,DEFAULT_BUDGET,restore_research
-from research_state import ResearchState
-from research_tools import ResearchTools,TOOL_SCHEMAS
+from ayqyn.documents.store import DocumentStore
+from ayqyn.documents.packets import read_packet
+from ayqyn.agent.runner import run_research,DEFAULT_BUDGET,restore_research
+from ayqyn.agent.state import ResearchState
+from ayqyn.agent.tools import ResearchTools,TOOL_SCHEMAS
 from test_packets import upload
 
 
@@ -184,7 +184,7 @@ class ResearchTests(unittest.TestCase):
         self.state.save()
         index=Mock(config={},metadata={'usage':{'query':{
             'provider_requests':0,'total_tokens':0,'token_usage_complete':True}}})
-        with patch('hybrid_search.HybridIndex',return_value=index):
+        with patch('ayqyn.retrieval.hybrid.HybridIndex',return_value=index):
             state,store,_=restore_research(self.state.path,{})
         self.assertEqual(store.get_coverage()['search_scopes'][0]['query'],'договоров')
         self.assertEqual(state.data['index']['usage']['query']['provider_requests'],2)

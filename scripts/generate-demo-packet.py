@@ -35,7 +35,7 @@ def generate():
                 archive.writestr('_rels/.rels', '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>')
                 archive.writestr('word/document.xml', '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>'+body+'</w:body></w:document>')
             sources.append({'name':name, 'file':'sources/'+name})
-    (ROOT/'demo-sources.js').write_text('/* Fictional example documents; real parsing and analysis. */\nwindow.AYQYN_EXAMPLE_SOURCES = '+json.dumps(sources,ensure_ascii=False,indent=2)+';\n',encoding='utf-8',newline='\n')
+    (ROOT/'sources'/'demo-manifest.json').write_text(json.dumps(sources,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
 
 
 if __name__ == '__main__':
