@@ -11,11 +11,13 @@ from pathlib import Path
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import urlparse, unquote
 from analyzer import parse_docx, analyze_rules
-from llm import compare_with_model
+from llm import compare_with_model, classify_with_model
 from run_record import new_run_path
 from packets import read_packet
 from research_agent import prepare_research,restore_research,run_research,public_result
 from research_state import ResearchState
+from batch import MAX_DOCUMENTS, classify_documents, combine_documents
+from time import perf_counter
 
 ROOT = Path(__file__).resolve().parent
 STATIC = {'index.html','analyze.html','styles.css','analyze.css','app.js','analysis.js','cases.js','sources.js'}
@@ -25,7 +27,7 @@ RESEARCH_LOCK=threading.Lock()
 # Explicit frontend asset allowlist; private files remain inaccessible.
 STATIC.update({
     'assets/kazakhtelecom-logo.svg',
-    'i18n.js',
+    'i18n.js', 'ayqyn.js', 'ayqyn.css', 'demo-sources.js',
     'icons.js',
     'preferences.js',
     'vendor/lucide/createElement.mjs',
@@ -67,7 +69,7 @@ def research_path(identifier):
 
 def decode_document(value):
     if not isinstance(value, dict) or not isinstance(value.get('name'),str) or not isinstance(value.get('data'),str):
-        raise ValueError('Нужны два DOCX: до и после.')
+        raise ValueError('Нужен DOCX с именем и данными файла.')
     if len(value['data']) > 14_000_000: raise ValueError('Максимальный размер DOCX — 10 МБ.')
     try: data = base64.b64decode(value['data'], validate=True)
     except (ValueError,binascii.Error): raise ValueError('Повреждена загрузка файла.') from None
@@ -155,11 +157,46 @@ class Handler(BaseHTTPRequestHandler):
                 finally:
                     with RESEARCH_LOCK: ACTIVE_RESEARCH.discard(path.name)
                 return self.send_json(code,result)
-            before, after = decode_document(data.get('before')), decode_document(data.get('after'))
+            started = perf_counter()
+            trace = []
+            def event(stage, count):
+                trace.append({'stage': stage, 'count': count, 'elapsed_ms': round((perf_counter()-started)*1000)})
+            documents = []
+            classification_warning = ''
+            classification_usage = {}
+            if 'documents' in data:
+                packet = data['documents']
+                if not isinstance(packet, list) or not 2 <= len(packet) <= MAX_DOCUMENTS:
+                    raise ValueError('Загрузите от 2 до 20 документов DOCX.')
+                if any(not isinstance(item,dict) or not isinstance(item.get('data'),str) for item in packet):
+                    raise ValueError('Некорректные данные документа в пакете.')
+                if sum(len(item['data'])*3//4 - (len(item['data'])-len(item['data'].rstrip('='))) for item in packet) > 20_000_000:
+                    raise ValueError('Общий размер пакета — до 20 МБ.')
+                documents = [decode_document(item) for item in packet]
+                event('traceExtract', len(documents))
+                classify_documents(documents, packet)
+                if data.get('useAI') and any(doc['side'] is None for doc in documents):
+                    config = data.get('config') or {}
+                    if not isinstance(config,dict): raise ValueError('Некорректные настройки модели.')
+                    try:
+                        classification_usage = classify_with_model(documents, config)
+                    except ValueError as exc:
+                        classification_warning = str(exc)
+                manifest = [{k: doc.get(k) for k in ('id','name','sha256','side','classification','revision','classification_quote','classification_reason')} for doc in documents]
+                unresolved = any(doc['side'] is None for doc in documents)
+                sides = {doc['side'] for doc in documents}
+                if unresolved or not {'before','after'} <= sides:
+                    return self.send_json(200, {'needs_review': True, 'documents': manifest, 'classification_warning': classification_warning})
+                event('traceClassify', len(documents))
+                before, after = combine_documents(documents, 'before'), combine_documents(documents, 'after')
+            else:
+                before, after = decode_document(data.get('before')), decode_document(data.get('after'))
+                event('traceExtract', 2)
             findings = analyze_rules(before,after)
             for item in findings:
                 item['method']='rules'
                 item['reviewed']=False
+            event('traceRules', len(findings))
             warnings=[]
             mode='rules'
             usage={}
@@ -171,13 +208,15 @@ class Handler(BaseHTTPRequestHandler):
                     # AI is the semantic pass; exact rule findings remain visible for cross-checking.
                     findings.extend(ai)
                     mode='ai'
+                    event('traceModel', len(ai))
                     if rejected: warnings.append(f'Отброшено выводов с некорректными источниками: {rejected}.')
                     if not ai: warnings.append('Модель не вернула допустимых находок. Это не доказывает отсутствие рисков.')
                 except ValueError as exc:
                     warnings.append(str(exc))
                     mode='fallback'
             if before['sha256']==after['sha256']: warnings.append('Загружены одинаковые файлы. Внутренние пересечения всё ещё могут присутствовать.')
-            self.send_json(200,{'before':before,'after':after,'findings':findings,'mode':mode,'warnings':warnings,'usage':usage})
+            event('traceSources', sum(len(f['before_ids'])+len(f['after_ids']) for f in findings))
+            self.send_json(200,{'before':before,'after':after,'documents':documents,'trace':trace,'findings':findings,'mode':mode,'warnings':warnings,'usage':usage,'classification_usage':classification_usage})
         except (ValueError,UnicodeError) as exc:
             self.send_json(400,{'error':str(exc)})
         except Exception:

@@ -90,6 +90,53 @@ class HttpTests(unittest.TestCase):
                 urlopen(self.base + path)
             self.assertEqual(raised.exception.code, 404)
 
+    def test_eight_document_packet_preserves_individual_sources(self):
+        from server import ROOT
+        paths=sorted((ROOT/'sources').glob('AYQYN_ПРИМЕР_*.docx'))
+        self.assertEqual(len(paths),8)
+        packet=[{'name':p.name,'data':base64.b64encode(p.read_bytes()).decode()} for p in reversed(paths)]
+        result=self.post({'documents':packet})
+        self.assertEqual(len(result['documents']),8)
+        self.assertEqual({d['side'] for d in result['documents']},{'before','after'})
+        ids=[p['id'] for side in ['before','after'] for p in result[side]['paragraphs']]
+        self.assertEqual(len(ids),len(set(ids)))
+        self.assertEqual(result['trace'][-1]['stage'],'traceSources')
+        for f in result['findings']:
+            for side in ['before','after']:
+                self.assertTrue(set(f[side+'_ids']) <= {p['id'] for p in result[side]['paragraphs']})
+        for d in result['documents']:
+            self.assertTrue(all(p['document_name']==d['name'] for p in d['paragraphs']))
+        self.assertEqual(len([f for f in result['findings'] if f['type'].startswith('department_')]),4)
+
+    def test_unresolved_packet_returns_review_then_accepts_overrides(self):
+        packet=list(self.payload().values())
+        for item in packet:item['name']='anonymous.docx'
+        result=self.post({'documents':packet})
+        self.assertTrue(result['needs_review'])
+        self.assertNotIn('findings',result)
+        packet[0]['side']='before';packet[1]['side']='after'
+        result=self.post({'documents':packet})
+        self.assertEqual([d['classification'] for d in result['documents']],['manual','manual'])
+        self.assertTrue(result['findings'])
+
+    def test_unresolved_ai_failure_does_not_guess(self):
+        packet=list(self.payload().values())
+        for item in packet:item['name']='unknown.docx'
+        with patch('server.classify_with_model',side_effect=ValueError('Model unavailable')):
+            result=self.post({'documents':packet,'useAI':True})
+        self.assertTrue(result['needs_review']);self.assertEqual(result['classification_warning'],'Model unavailable')
+
+    def test_packet_rejects_non_string_data(self):
+        packet=list(self.payload().values());packet[0]['data']=42
+        with self.assertRaises(HTTPError) as raised:self.post({'documents':packet})
+        self.assertEqual(raised.exception.code,400)
+
+    def test_packet_count_bounds(self):
+        sample=self.payload()['before']
+        for count in [0,1,21]:
+            with self.subTest(count=count),self.assertRaises(HTTPError) as raised:self.post({'documents':[sample]*count})
+            self.assertEqual(raised.exception.code,400)
+
     def test_private_source_files_not_served(self):
         for path in ['/server.py','/.env','/.git/config']:
             with self.subTest(path=path),self.assertRaises(HTTPError) as raised:urlopen(self.base+path)
