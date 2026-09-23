@@ -11,6 +11,15 @@ export function createWorkspace(hooks){
  const sourceScrollByRef=new Map();
  let active=null,records=[],loaded=false,storageFailed=false,sourceOpener=null,controller=null,activeRunCase=null,queue=Promise.resolve(),routeToken=0;const persistTimers=new Map();
  const media=matchMedia('(max-width: 900px)');
+ let headingCollapsed=false;try{headingCollapsed=localStorage.getItem('teledoc.chatHeaderCollapsed')==='true';}catch{}
+ function renderHeading(){
+  const agent=active?.view==='agent',collapsed=agent&&headingCollapsed;
+  $('case-heading-toggle-row').hidden=!agent;$('case-heading-content').hidden=collapsed;
+  $('toggle-case-heading').setAttribute('aria-expanded',String(!collapsed));
+  $('toggle-case-heading').setAttribute('aria-label',t(collapsed?'expandCaseHeader':'collapseCaseHeader'));
+  $('case-heading-toggle-label').textContent=t(collapsed?'caseDefault':'collapseCaseHeader');
+ }
+ $('toggle-case-heading').addEventListener('click',()=>{captureReading();headingCollapsed=!headingCollapsed;try{localStorage.setItem('teledoc.chatHeaderCollapsed',String(headingCollapsed));}catch{}renderHeading();fitChat();});
  function readingMetrics(){
   const el=$('chat-messages'),top=el.getBoundingClientRect().top;
   return {scrollTop:el.scrollTop,scrollHeight:el.scrollHeight,clientHeight:el.clientHeight,messages:[...el.querySelectorAll('[data-message-id]')].map(node=>({id:node.dataset.messageId,top:node.getBoundingClientRect().top-top+el.scrollTop,height:node.getBoundingClientRect().height}))};
@@ -85,7 +94,7 @@ export function createWorkspace(hooks){
   const view=active.view;
   document.querySelectorAll('[data-case-tab]').forEach(el=>{const selected=el.dataset.caseTab===view;el.setAttribute('aria-selected',String(selected));el.tabIndex=selected?0:-1;});
   $('agent-view').hidden=view!=='agent';$('case-documents').hidden=view!=='documents';$('results').hidden=!['results','report'].includes(view);$('case-artifacts').hidden=view!=='report';
-  $('case-workspace').classList.toggle('agent-active',view==='agent');
+  $('case-workspace').classList.toggle('agent-active',view==='agent');renderHeading();
   if(view!=='agent'&&$('chat-source').open)closeSource(false,false);
   if(view==='results'||view==='report')hooks.renderResults(view==='report'?'report':active.resultTab);
   renderChat();renderDocuments();renderArtifacts();fitChat();
@@ -106,7 +115,7 @@ export function createWorkspace(hooks){
   if(part.type==='citation'){
    try{const {doc,fragment}=resolveRef(active,part.ref);return `<button class="citation-card" data-chat-source="${esc(fragment.id)}"><span class="citation-meta">${icon('file-text')}<span>${esc(t(doc.side+'Short'))} · ${esc(doc.name)}<small>V${active.analysisVersion} · ${esc(fragment.page?t('pageNumber',{page:fragment.page}):t('pageUnavailable'))} · § ${esc(fragment.section||fragment.id)}</small></span>${icon('external-link')}</span><blockquote>${esc(fragment.text)}</blockquote></button>`;}catch{return `<p class="notice">${tx('sourceUnavailable')}</p>`;}
   }
-  if(part.type==='finding'){const f=active.snapshot.findings.find(f=>f.id===part.id);return f?`<div class="comparison-part"><p class="eyebrow">${tx('preliminary')} · ${esc(f.id)}</p><p>${esc(f.explanation)}</p>${part.common?`<p class="helper">${tx('commonWording')}</p><blockquote>${esc(part.common)}</blockquote>`:''}<button class="text-button" data-finding="${esc(f.id)}">${tx('showSources')}${icon('external-link')}</button></div>`:'';}
+  if(part.type==='finding'){const f=active.snapshot.findings.find(f=>f.id===part.id);return f?`<div class="comparison-part"><p class="eyebrow">${tx('preliminary')} · ${esc(f.id)}</p><p>${esc(f.explanation)}</p>${part.common?`<p class="helper">${tx('commonWording')}</p><blockquote>${esc(part.common)}</blockquote>`:''}<div class="finding-actions"><button class="source-button" data-finding="${esc(f.id)}">${icon('external-link')}${tx('showSources')}</button></div></div>`:'';}
   if(part.type==='artifact'){const a=active.artifacts.find(a=>a.id===part.id);return a?artifactMarkup(a):`<p>${tx('artifactMissing')}</p>`;}
   return '';
  }
