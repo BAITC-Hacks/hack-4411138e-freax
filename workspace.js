@@ -82,7 +82,6 @@ export function createWorkspace(hooks){
   if(!active)return;captureDocuments();
   $('case-title').textContent=name(active);$('page-title').textContent=t('cases');
   $('case-meta').textContent=`${t(active.kind==='demo'?'demoLabel':'savedAnalysis')} · ${t('analysisVersion',{version:active.analysisVersion})} · ${t((active.snapshot.mode==='fallback'||(active.snapshot.research&&active.snapshot.research.status!=='completed'))?'partial':'complete')}`;
-  $('case-storage').textContent=t('localCaseStorage');
   if(active.kind!=='demo'&&active.view==='agent')active.view='results';
   const view=active.view;
   document.querySelectorAll('[data-case-tab]').forEach(el=>{el.hidden=el.dataset.caseTab==='agent'&&active.kind!=='demo';const selected=el.dataset.caseTab===view;el.setAttribute('aria-selected',String(selected));el.tabIndex=selected?0:-1;});

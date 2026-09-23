@@ -77,3 +77,91 @@ body.distingt-demo:has(dialog:modal),body.distingt-demo.mobile-nav-open{overflow
  .distingt-demo #evidence .drawer-footer{gap:12px;flex-wrap:wrap}.distingt-demo #evidence .drawer-footer .secondary{min-height:44px;padding:9px 12px}
 }
 @media(prefers-reduced-motion:reduce){.distingt-demo *,.distingt-demo *::before,.distingt-demo *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+/* Transparent partner identity, with the SVG wordmark following the site theme. */
+.distingt-demo .public-header .telecom-brand,.distingt-demo .topbar .header-brand.telecom-brand,.distingt-demo .public-footer .partner-logo,.distingt-demo .product-footer .logo-plate{background:transparent;border-color:transparent;box-shadow:none;padding-inline:0}
+.distingt-demo img[src="assets/kazakhtelecom-logo.svg"]{color-scheme:light}
+html[data-theme=dark] .distingt-demo img[src="assets/kazakhtelecom-logo.svg"]{color-scheme:dark}
+
+/* Two familiar glass cards surround a real, readable document comparison. */
+.distingt-demo .hero .hero-stack{height:auto;min-height:580px;display:grid;gap:18px;align-content:center;padding:8px 0;max-width:100%;perspective:none}
+.distingt-demo .hero-stack>a{position:relative;inset:auto;max-width:100%;text-decoration:none;color:var(--text)}
+.distingt-demo .hero-stack .float-card{background:linear-gradient(120deg,color-mix(in srgb,var(--panel) 88%,transparent),color-mix(in srgb,var(--blue) 10%,var(--panel)));border-color:var(--line);box-shadow:inset 0 1px 0 #ffffff25,0 18px 44px #00000012}
+.distingt-demo .hero-stack .float-card.top{justify-self:end;width:92%;padding:17px 20px;gap:12px;animation:hero-drift 7s ease-in-out infinite}
+.distingt-demo .hero-stack .float-card.top strong{display:block;line-height:1.6;font-size:12px;margin-top:3px}
+.distingt-demo .hero-stack .mini-label{color:var(--muted);font-size:9px;line-height:1.6;letter-spacing:.05em}
+.distingt-demo .hero-stack .float-card.top>.icon:last-child{margin-left:auto}
+.distingt-demo .hero-stack .floating-document{width:96%;justify-self:start;animation:hero-drift 8s ease-in-out -3s infinite;transform:none;box-shadow:0 20px 60px #00000015}
+.distingt-demo .hero-stack .example-toolbar{padding:15px 18px}
+.distingt-demo .hero-stack .example-documents{padding:14px;gap:12px}
+.distingt-demo .hero-stack .example-document{padding:15px}
+.distingt-demo .hero-stack .example-version{font-size:10px;margin-bottom:14px}
+.distingt-demo .hero-stack .example-address{font-size:10px}
+.distingt-demo .hero-stack .example-document blockquote{font-size:12px;line-height:1.85;margin:12px 0}
+.distingt-demo .hero-stack .example-document strong{font-size:14px;line-height:1.5}
+.distingt-demo .hero-stack .example-document p{font-size:12px;line-height:1.75;margin:12px 0 0}
+.distingt-demo .hero-stack .float-card.bottom{width:87%;justify-self:end;animation:hero-drift 7.5s ease-in-out -5s infinite;padding:17px 20px}
+.distingt-demo .hero-stack .card-head{margin-bottom:12px;font-size:11px}
+.distingt-demo .hero-stack .floating-finding{display:flex;align-items:center;gap:10px;font-size:14px;line-height:1.5}
+.distingt-demo .hero-stack .floating-finding>.icon{color:var(--blue)}
+.distingt-demo .hero-stack .floating-finding>.icon:last-child{margin-left:auto}
+.distingt-demo .hero-stack .float-card.bottom p{font-size:11px;line-height:1.75;color:var(--muted);margin:10px 0 0}
+.distingt-demo .hero-stack a:hover,.distingt-demo .hero-stack a:focus-visible{animation-play-state:paused;border-color:var(--blue)}
+@keyframes hero-drift{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+
+/* Chat uses a small toolbar and compact case heading; other pages keep theirs. */
+.distingt-demo:has(#case-workspace.agent-active:not([hidden])) .topbar{height:56px;min-height:56px;padding:6px 24px}
+.distingt-demo:has(#case-workspace.agent-active:not([hidden])) .topbar .header-brand.telecom-brand{height:34px;width:154px;flex-basis:154px;padding-block:5px}
+.distingt-demo:has(#case-workspace.agent-active:not([hidden])) .main-column>main{padding-top:14px}
+.distingt-demo #case-workspace.agent-active .case-header{margin-bottom:8px;gap:14px}
+.distingt-demo #case-workspace.agent-active .case-header h1{font-size:22px;margin:0;line-height:1.4;letter-spacing:-.025em}
+.distingt-demo #case-workspace.agent-active .case-header .eyebrow{font-size:9px;margin-bottom:4px}
+.distingt-demo #case-workspace.agent-active .case-header>.secondary{min-height:40px;padding:8px 12px;font-size:11px}
+.distingt-demo #case-workspace.agent-active .case-tabs{margin:8px 0 10px;gap:22px}
+.distingt-demo #case-workspace.agent-active .case-tabs button{padding:8px 0;min-height:40px}
+.distingt-demo #case-workspace.agent-active .agent-mode-note{padding-bottom:8px;font-size:10px;line-height:1.6}
+
+/* A finding is a route, with the same document selectors and persisted review. */
+.distingt-demo #finding-view{min-width:0}
+.distingt-demo #evidence.finding-page{position:static;display:flex;flex-direction:column;width:100%;max-width:none;height:auto;max-height:none;margin:0;padding:0;border:1px solid var(--line);border-radius:16px;background:var(--panel);color:var(--text);overflow:visible;box-shadow:none}
+.distingt-demo #evidence .drawer-header{align-items:flex-start;border-radius:16px 16px 0 0}
+.distingt-demo #evidence .drawer-header h1{font-size:25px;font-weight:500;line-height:1.45;letter-spacing:-.03em;margin:0;overflow-wrap:anywhere}
+.distingt-demo #evidence .finding-back{flex-shrink:0;min-height:42px;font-size:12px;gap:7px}
+.distingt-demo #evidence .drawer-body{overflow:visible;padding:24px;flex:none}
+.distingt-demo #evidence .drawer-body>p:first-child{margin-top:0}
+.distingt-demo #evidence .document-pane{display:flex;flex-direction:column;min-width:0}
+.distingt-demo #evidence .pane-head{min-height:138px;display:flex;flex-direction:column;gap:8px}
+.distingt-demo #evidence .pane-head label{margin:0}
+.distingt-demo #evidence .pane-head select{width:100%;min-height:42px}
+.distingt-demo #evidence .pane-meta{margin-top:auto;min-height:32px}
+.distingt-demo #evidence .document-text{height:clamp(260px,45vh,620px);min-height:0;max-height:none}
+.distingt-demo #evidence .review-inspector{align-items:start;grid-template-columns:minmax(220px,.8fr) minmax(0,1.4fr);gap:24px}
+.distingt-demo #evidence .review-inspector label{line-height:1.5;margin:0 0 8px}
+.distingt-demo #evidence .review-inspector :is(select,textarea){margin:0;min-height:44px}
+.distingt-demo #evidence .drawer-footer{border-radius:0 0 16px 16px}
+.distingt-demo .source-cell .source-button,.distingt-demo .source-cell .discuss-button{justify-content:flex-start;min-height:36px;margin:0 0 8px}
+.distingt-demo .source-cell .discuss-button{display:flex;gap:6px;font-size:11px}
+.distingt-demo .source-cell :is(.review-badge,.review-pending){margin:0;max-width:100%}
+.distingt-demo .source-button,.distingt-demo .finding-title a{text-decoration:none}
+.distingt-demo .finding-title a{color:inherit;text-underline-offset:4px}
+.distingt-demo .finding-title a:hover{text-decoration:underline;color:var(--blue)}
+@media(max-width:1050px){.distingt-demo .hero .hero-stack{max-width:700px;width:100%;justify-self:center;min-height:0}.distingt-demo #evidence .drawer-header{flex-direction:column}.distingt-demo #evidence .finding-back{order:-1}}
+@media(max-width:750px){
+ .distingt-demo:has(#case-workspace.agent-active:not([hidden])) .topbar{padding:6px 16px}
+ .distingt-demo:has(#case-workspace.agent-active:not([hidden])) .topbar .header-brand.telecom-brand{width:130px;flex-basis:130px;min-width:105px}
+ .distingt-demo #case-workspace.agent-active .case-header h1{font-size:18px}
+ .distingt-demo #case-workspace.agent-active .case-header>.secondary{width:40px;min-width:40px;padding:8px}
+ .distingt-demo #case-workspace.agent-active .case-header>.secondary [data-i18n]{display:none}
+ .distingt-demo #case-workspace.agent-active .case-tabs{gap:18px}
+ .distingt-demo #case-workspace.agent-active .case-tabs button{min-height:44px}
+ .distingt-demo .hero-stack .float-card.top,.distingt-demo .hero-stack .float-card.bottom,.distingt-demo .hero-stack .floating-document{width:100%;animation:none}
+ .distingt-demo .hero-stack .example-documents{grid-template-columns:minmax(0,1fr)}
+ .distingt-demo .hero-stack .example-document blockquote{font-size:14px}
+ .distingt-demo #evidence .drawer-header,.distingt-demo #evidence .drawer-body{padding:16px}
+ .distingt-demo #evidence .drawer-header h1{font-size:21px}
+ .distingt-demo #evidence .review-inspector{grid-template-columns:minmax(0,1fr);gap:18px}
+ .distingt-demo #evidence .document-text{height:auto;overflow:visible}
+ .distingt-demo #evidence .pane-head{min-height:0}
+ .distingt-demo #evidence .drawer-footer>div{width:100%;justify-content:space-between}
+ .distingt-demo #evidence .drawer-footer button span:not([data-icon]){display:inline}
+}
