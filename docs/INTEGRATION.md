@@ -1,6 +1,6 @@
 # Совместный запуск Distingt / AYQYN
 
-Интеграционная ветка `codex/fullstack-integration` объединяет frontend `origin/main` (90318d3), backend snapshot (c287a1e) и последующий backend чата. История объединяется merge-коммитами. Публикация, push и merge в main не выполнялись.
+Интеграционная ветка `codex/fullstack-integration` объединяет frontend `origin/main` (38f0281), backend snapshot (c287a1e) и backend чата (7aa675f). История объединяется merge-коммитами. Публикация, push и merge в main не выполнялись.
 
 ## Запуск
 

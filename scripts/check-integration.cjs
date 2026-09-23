@@ -10,7 +10,7 @@ const moduleUrl=code=>'data:text/javascript;charset=utf-8,'+encodeURIComponent(c
  assert(value.synthetic);assert.equal(value.seconds,12);assert(value.documents[0].original_url.includes('document=d1'));
  await assert.rejects(()=>research.loadResearch('../secret'));
  assert.equal(requests.length,0);
- global.document={createElement:()=>({className:'',addEventListener(){},open:false}),body:{append(){}}};
+ global.document={createElement:()=>({className:'',setAttribute(){},addEventListener(){},open:false}),body:{append(){}}};
  const events={},root={hidden:true,innerHTML:'',setAttribute(){},addEventListener(k,fn){events[k]=fn;},querySelector(){return {disabled:false};}};
  const code=fs.readFileSync('live-chat.js','utf8').replace("import {t} from './i18n.js';","const t=key=>key;").replace("import {api} from './research-client.js';",`import {api} from ${JSON.stringify(moduleUrl(researchCode))};`);
  const {createLiveChat}=await import(moduleUrl(code));
