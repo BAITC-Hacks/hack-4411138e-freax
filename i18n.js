@@ -1158,6 +1158,12 @@ Object.assign(entries,{
  ]
 });
 Object.assign(entries,{collapseCaseHeader:['Свернуть шапку','Тақырып бөлігін жию','Collapse header'],expandCaseHeader:['Развернуть шапку проверки документов','Құжаттарды тексеру тақырыбын ашу','Expand document review header']});
+Object.assign(entries,{
+ documentAdded:['Документ добавлен','Құжат қосылды','Document added'],
+ documentsAdded:['Добавлено документов: {count}','Қосылған құжаттар: {count}','Documents added: {count}'],
+ uploadSelectionNote:['Документы добавлены и готовы к отправке. Обработка начнётся после нажатия «Начать анализ».','Құжаттар қосылды және жіберуге дайын. Өңдеу «Талдауды бастау» батырмасын басқаннан кейін басталады.','Documents are added and ready to send. Processing begins when you select Start analysis.'],
+ uploadBytes:['{size} Б','{size} Б','{size} B'],uploadKB:['{size} КБ','{size} КБ','{size} KB'],uploadMB:['{size} МБ','{size} МБ','{size} MB']
+});
 const enumEntries={
 'department_added':['Добавлено в перечень','Тізімге қосылды','Added to the list'], 'department_removed':['Убрано из перечня','Тізімнен алынды','Removed from the list'], 'department_retained':['Сохранено в перечне','Тізімде сақталды','Retained in the list'], 'reorganization':['Преобразование','Қайта ұйымдастыру','Reorganization'], 'function_loss':['Потенциальная потеря','Ықтимал жоғалу','Potential loss'], 'function_transfer':['Передача функции','Функцияны беру','Function transfer'], 'duplication':['Возможное дублирование','Ықтимал қайталану','Potential duplication'], 'conflict':['Конфликт интересов','Мүдделер қақтығысы','Conflict of interest'], 'contradiction':['Противоречие формулировок','Тұжырымдар қайшылығы','Conflicting wording'], 'unknown':['Недостаточно данных','Деректер жеткіліксіз','Insufficient information'], 'risk':['Возможный риск','Ықтимал тәуекел','Potential risk'], 'confirmed':['Подтверждено аналитиком','Талдаушы растады','Confirmed by analyst'], 'dismissed':['Отклонено аналитиком','Талдаушы қабылдамады','Dismissed by analyst']};
 Object.assign(entries,enumEntries);

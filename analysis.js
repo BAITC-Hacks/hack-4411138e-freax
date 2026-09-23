@@ -6,6 +6,7 @@ import {createWorkspace} from './workspace.js';
 import {analyzeResearch,loadResearch,api} from './research-client.js';
 import {createLiveChat} from './live-chat.js';
 import {adaptDemo} from './demo.js';
+import {splitFilename} from './agent-model.js';
 const $=id=>document.getElementById(id);
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const kinds=['department_added','department_retained','department_removed','reorganization','function_loss','function_transfer','duplication','conflict','contradiction'];
@@ -173,12 +174,26 @@ function updateControls(){
  document.querySelectorAll('[data-i18n=packetLimits]').forEach(el=>el.textContent=t($('use-research').checked?'researchLimits':'packetLimits'));
  $('upload-form').setAttribute('aria-busy',String(busy));
 }
+function uploadFilename(file){
+ const {stem,extension}=splitFilename(file.name);
+ return `<strong class="upload-file-name" title="${esc(file.name)}"><span>${esc(stem)}</span><span>${esc(extension)}</span></strong>`;
+}
+function uploadSize(file){
+ const unit=file.size>=1000000?'uploadMB':file.size>=1000?'uploadKB':'uploadBytes',divisor=file.size>=1000000?1000000:file.size>=1000?1000:1;
+ return esc(t(unit,{size:number(Math.round(file.size/divisor*10)/10)}));
+}
 function renderFiles(){
- $('batch-list').innerHTML=files.map((item,index)=>`<div class="packet-file"><span class="file-glyph">${icon('file-text')}</span><div class="packet-name"><strong>${esc(item.file.name)}</strong><small>${number(Math.round(item.file.size/1024))} KB · ${item.classification?esc(t('class_'+item.classification)):esc(t('awaitingClassification'))}</small></div><label><span class="sr-only">${esc(t('versionFor',{name:item.file.name}))}</span><select data-side-select="${index}" aria-label="${esc(t('versionFor',{name:item.file.name}))}">${['auto','before','after'].map(side=>`<option value="${side}" ${item.side===side?'selected':''}>${esc(t(side==='auto'?'automatic':side+'Short'))}</option>`).join('')}</select></label><button type="button" class="icon-button" data-remove="${index}" aria-label="${esc(t('removeFile',{name:item.file.name}))}">${icon('trash')}</button></div>`).join('');
+ $('batch-list').innerHTML=files.map((item,index)=>`<div class="packet-file"><span class="file-glyph">${icon('file-text')}</span><div class="packet-name">${uploadFilename(item.file)}<small>${uploadSize(item.file)} · ${item.classification?esc(t('class_'+item.classification)):esc(t('awaitingClassification'))}</small><span class="upload-ready">${icon('circle-check')}${esc(t('documentAdded'))}</span></div><label><span class="sr-only">${esc(t('versionFor',{name:item.file.name}))}</span><select data-side-select="${index}" aria-label="${esc(t('versionFor',{name:item.file.name}))}">${['auto','before','after'].map(side=>`<option value="${side}" ${item.side===side?'selected':''}>${esc(t(side==='auto'?'automatic':side+'Short'))}</option>`).join('')}</select></label><button type="button" class="icon-button" data-remove="${index}" aria-label="${esc(t('removeFile',{name:item.file.name}))}">${icon('trash')}</button></div>`).join('');
  $('batch-error').hidden=!batchError;$('batch-error').textContent=batchError?t(batchError):'';
  $('classification-review').hidden=!classificationReview;
- $('file-rejections').innerHTML=fileRejections.map(item=>`<p class="file-error"><strong>${esc(item.name)}</strong> — ${esc(t(item.reason))}</p>`).join('');
- for(const side of ['before','after'])$(side+'-packet-count').textContent=t('packetCount',{count:number(files.filter(item=>item.side===side).length)});
+ for(const side of ['auto','before','after']){
+  $(side==='auto'?'file-rejections':side+'-file-rejections').innerHTML=fileRejections.filter(item=>item.side===side).map(item=>`<p class="file-error"><strong>${esc(item.name)}</strong> — ${esc(t(item.reason))}</p>`).join('');
+  if(side==='auto')continue;
+  const selected=files.map((item,index)=>({...item,index})).filter(item=>item.side===side);
+  $(side+'-packet-count').textContent=t(selected.length?'documentsAdded':'packetCount',{count:number(selected.length)});
+  $(side+'-file-list').innerHTML=selected.map(({file,index})=>`<li class="upload-receipt"><span class="upload-receipt-icon">${icon('file-text')}</span><div>${uploadFilename(file)}<small>${uploadSize(file)} · ${esc(t(side+'Short'))}</small><span class="upload-ready">${icon('circle-check')}${esc(t('documentAdded'))}</span></div><button type="button" class="icon-button" data-remove="${index}" data-remove-input="${side}-file" aria-label="${esc(t('removeFile',{name:file.name}))}">${icon('x')}</button></li>`).join('');
+ }
+ $('upload-selection-note').hidden=!files.length;
  $('packet-count').textContent=t('packetCount',{count:number(files.length)});
 }
 function invalidateResult(){liveResult=null;result=null;selectedId=null;$('nav-count').hidden=true;$('error-state').hidden=true;errorKey='';noticeKey='';$('run-status').textContent='';if($('evidence').open)$('evidence').close();showView('new');}
@@ -187,7 +202,7 @@ function acceptFiles(selection,side='auto'){
  fileRejections=[];let accepted=0;
  for(const file of selection){
   const reason=!(file.name.toLowerCase().endsWith('.docx')||($('use-research').checked&&file.name.toLowerCase().endsWith('.pdf')))?(file.name.toLowerCase().endsWith('.pdf')?'researchPdf':'fileTypeError'):!file.size||file.size>($('use-research').checked?10000000:100000000)?($('use-research').checked?'researchLimits':'fileSizeError'):files.length>=20?'packetCountError':files.reduce((sum,item)=>sum+item.file.size,0)+file.size>($('use-research').checked?40000000:200000000)?($('use-research').checked?'researchLimits':'packetSizeError'):'';
-  if(reason)fileRejections.push({name:file.name,reason});else{files.push({file,side,classification:side==='auto'?null:'manual'});accepted++;}
+  if(reason)fileRejections.push({name:file.name,reason,side});else{files.push({file,side,classification:side==='auto'?null:'manual'});accepted++;}
  }
  if(accepted){sampleFiles=false;classificationReview=false;invalidateResult();}
  batchError='';for(const id of ['batch-file','before-file','after-file'])$(id).value='';renderFiles();updateControls();
@@ -198,7 +213,7 @@ for(const [id,side,zone] of [['batch-file','auto',$('packet-drop')],['before-fil
  for(const event of ['dragleave','drop'])zone.addEventListener(event,e=>{e.preventDefault();zone.classList.remove('dragging');if(event==='drop')acceptFiles([...e.dataTransfer.files],side);});
 }
 $('batch-list').addEventListener('change',e=>{const index=e.target.dataset.sideSelect;if(index===undefined||busy)return;files[Number(index)].side=e.target.value;files[Number(index)].classification=e.target.value==='auto'?null:'manual';invalidateResult();renderFiles();updateControls();});
-document.addEventListener('click',e=>{const button=e.target.closest('[data-remove]');if(!button||busy)return;files.splice(Number(button.dataset.remove),1);classificationReview=false;batchError='';invalidateResult();renderFiles();updateControls();$('batch-file').focus();});
+document.addEventListener('click',e=>{const button=e.target.closest('[data-remove]');if(!button||busy)return;const picker=button.dataset.removeInput||'batch-file';files.splice(Number(button.dataset.remove),1);classificationReview=false;batchError='';invalidateResult();renderFiles();updateControls();$(picker).focus();});
 function showError(key,raw=''){errorKey=key;errorRaw=raw;$('error-state').hidden=false;$('error-message').textContent=t(key);$('error-details').hidden=!raw;$('error-raw').textContent=raw;updateControls();}
 $('load-example').addEventListener('click',async()=>{
  if(busy)return;busy=true;noticeKey='loadingExample';$('run-status').textContent=t(noticeKey);updateControls();
