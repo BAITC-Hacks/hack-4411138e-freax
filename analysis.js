@@ -278,7 +278,7 @@ function scopeText(f,snapshot=result,tt=t){
  const docs=(snapshot.documents||[]).filter(d=>f.search_scope?f.search_scope.includes(d.id):d.side==='after');
  return `${tt('searchScope')}: ${docs.map(d=>d.name+' ['+d.id+']').join('; ')||snapshot.after.name}. ${tt('lossCaution')}`;
 }
-function sourceButton(f){return `<a class="source-button" href="#${esc(findingPath(f.id))}" data-finding="${esc(f.id)}">${icon('external-link')}${esc(t('showSources'))}</a>${caseWorkspace?.active?`<button class="discuss-button text-button" data-discuss="${esc(f.id)}">${icon('list-checks')}${esc(t('discussAgent'))}</button>`:''}`;}
+function sourceButton(f){return `<div class="finding-actions"><a class="source-button" href="#${esc(findingPath(f.id))}" data-finding="${esc(f.id)}">${icon('external-link')}${esc(t('showSources'))}</a>${caseWorkspace?.active?`<button class="discuss-button text-button" data-discuss="${esc(f.id)}">${icon('list-checks')}${esc(t('discussAgent'))}</button>`:''}</div>`;}
 function renderFindings(){
  const list=visibleFindings();$('finding-count').textContent=t('shown',{count:number(list.length),total:number(result.findings.filter(f=>groupTypes[activeTab]?.includes(f.type)).length)});
  if(!list.length){$('findings').innerHTML=`<div class="empty-results">${icon('search')}<h3>${esc(t('emptyResults'))}</h3><p>${esc(t('emptyResultsHint'))}</p><button class="secondary" data-clear-filters>${esc(t('clearFilters'))}</button></div>`;return;}

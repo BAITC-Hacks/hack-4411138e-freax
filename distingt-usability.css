@@ -146,6 +146,60 @@ html[data-theme=dark] .distingt-demo img[src="assets/kazakhtelecom-logo.svg"]{co
 .distingt-demo .finding-title a{color:inherit;text-underline-offset:4px}
 .distingt-demo .finding-title a:hover{text-decoration:underline;color:var(--blue)}
 /* The composer is one surface; focus must not draw a second textarea frame. */
+/* One action column keeps every source link aligned regardless of title length. */
+.distingt-demo .finding-actions{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;width:210px;max-width:100%;min-width:0;align-content:start}
+.distingt-demo .finding-actions :is(.source-button,.discuss-button){display:flex;align-items:center;justify-content:center;width:100%;min-height:42px;box-sizing:border-box;margin:0;padding:9px 12px;border:1px solid var(--line);border-radius:9px;line-height:1.5;font-size:11px;white-space:normal;text-align:center;gap:8px}
+.distingt-demo .finding-actions .source-button{background:var(--panel);color:var(--blue)}
+.distingt-demo .finding-actions .discuss-button{background:transparent;color:var(--muted)}
+.distingt-demo .finding-actions .icon{width:16px;height:16px;flex:0 0 16px}
+.distingt-demo .report-question{display:grid;grid-template-columns:minmax(0,1fr) 210px;align-items:start;gap:24px;padding:24px 0}
+.distingt-demo .report-question>div:first-child{overflow-wrap:anywhere}
+.distingt-demo .report-question .helper{margin-bottom:0}
+.distingt-demo .source-cell{width:246px;min-width:246px;vertical-align:top}
+.distingt-demo .source-cell .finding-actions{width:210px}
+.distingt-demo .risk-top>div{min-width:0;flex:1}
+.distingt-demo .risk-top .finding-actions{margin-top:16px}
+@media(max-width:900px){
+ .distingt-demo .report-question{grid-template-columns:minmax(0,1fr);gap:16px}
+ .distingt-demo .report-question .finding-actions{width:100%;grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:750px){
+ .distingt-demo .findings-table{min-width:0;width:100%}
+ .distingt-demo .findings-table tbody tr{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .distingt-demo .findings-table .source-cell{width:auto;min-width:0;display:block}
+ .distingt-demo .source-cell .finding-actions,.distingt-demo .risk-top .finding-actions{width:100%}
+ .distingt-demo .report-question .finding-actions{grid-template-columns:minmax(0,1fr)}
+}
+
+.distingt-demo #case-heading-toggle-row{display:flex;justify-content:flex-end;margin-bottom:4px}
+.distingt-demo .case-heading-toggle{display:inline-flex;align-items:center;gap:7px;min-height:32px;padding:4px 8px;font-size:11px;color:var(--muted);border-radius:8px}
+.distingt-demo .case-heading-toggle:hover{color:var(--blue);background:var(--soft)}
+.distingt-demo .case-heading-toggle .icon{width:15px;height:15px;flex-basis:15px;transform:rotate(-90deg);transition:transform 180ms ease}
+.distingt-demo .case-heading-toggle[aria-expanded=false] .icon{transform:rotate(90deg)}
+.distingt-demo .case-heading-toggle[aria-expanded=false]{color:var(--blue)}
+@media(max-width:750px){.distingt-demo .case-heading-toggle{min-height:40px}}
+
+.distingt-demo .faq{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:64px;max-width:none;align-items:start}
+.distingt-demo .faq .eyebrow{padding:0;margin:0 0 18px;color:var(--blue)}
+.distingt-demo .faq h2{font-size:clamp(32px,3.5vw,48px);margin:0 0 20px;line-height:1.12;font-weight:500}
+.distingt-demo .faq .faq-description{padding:0;margin:0;color:var(--muted);font-size:14px;line-height:1.85;max-width:32ch}
+.distingt-demo .faq-guide{display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:0;margin-top:20px;color:var(--blue);font-size:12px;text-decoration:none}
+.distingt-demo .faq-items{display:grid;gap:12px;min-width:0}
+.distingt-demo .faq .faq-item{padding:0;border:1px solid var(--line);border-radius:16px;background:var(--panel);overflow:hidden;transition:background-color 180ms,border-color 180ms,box-shadow 180ms}
+.distingt-demo .faq .faq-item:hover{border-color:color-mix(in srgb,var(--blue) 55%,var(--line))}
+.distingt-demo .faq .faq-item[open]{border-color:color-mix(in srgb,var(--blue) 60%,var(--line));background:color-mix(in srgb,var(--soft) 45%,var(--panel));box-shadow:0 8px 30px #00000008}
+.distingt-demo .faq .faq-item summary{display:grid;grid-template-columns:24px minmax(0,1fr) 32px;align-items:center;gap:14px;padding:22px;list-style:none;cursor:pointer;font-size:15px;line-height:1.55;font-weight:500}
+.distingt-demo .faq .faq-item summary::-webkit-details-marker{display:none}
+.distingt-demo .faq .faq-item summary:focus-visible{outline-offset:-4px;border-radius:16px}
+.distingt-demo .faq-number{font:11px/1.4 ui-monospace,Consolas,monospace;color:var(--blue)}
+.distingt-demo .faq-toggle{display:grid;place-items:center;width:32px;height:32px;background:var(--soft);border:1px solid var(--line);border-radius:50%;color:var(--blue)}
+.distingt-demo .faq-toggle .icon{width:16px;height:16px;transition:transform 180ms ease}
+.distingt-demo .faq-item[open] .faq-toggle .icon{transform:rotate(45deg)}
+.distingt-demo .faq .faq-answer{padding:0 68px 24px 60px}
+.distingt-demo .faq .faq-answer p{padding:0;margin:0;font-size:13px;line-height:1.9;color:var(--muted);overflow-wrap:anywhere}
+@media(max-width:900px){.distingt-demo .faq{grid-template-columns:minmax(0,1fr);gap:28px}.distingt-demo .faq .faq-description{max-width:50ch}}
+@media(max-width:750px){.distingt-demo .faq .faq-item summary{padding:18px 16px;gap:10px;grid-template-columns:20px minmax(0,1fr) 30px;font-size:14px}.distingt-demo .faq .faq-answer{padding:0 18px 20px 46px}}
+
 .distingt-demo #case-workspace #agent-input:is(:focus,:focus-visible){outline:none;box-shadow:none;border-color:var(--border)}
 .distingt-demo #composer:has(#agent-input:focus-visible) .composer-bottom{border-bottom-color:var(--blue)}
 
