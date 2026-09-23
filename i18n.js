@@ -953,6 +953,167 @@ Object.assign(entries,{packetTitle:['Начнём с документов.','Қ�
 Object.assign(entries,{documentEditingUnavailable:['Предложения правок и создание рабочих версий документов ещё не подключены. Исходники доступны для чтения; отметки аналитика сохраняются локально.','Құжат түзетулерін ұсыну және жұмыс нұсқаларын жасау әлі қосылмаған. Түпнұсқалар оқуға қолжетімді; талдаушы белгілері жергілікті сақталады.','Document change proposals and working versions are not connected yet. Originals remain readable; analyst decisions are saved locally.']});
 Object.assign(entries,{previewArtifact:['Посмотреть эту версию','Осы нұсқаны көру','Preview this version']});
 Object.assign(entries,{sampleProcessed:['Учебные DOCX обработаны настоящим backend. Это синтетический комплект для проверки, а не подготовленный результат C010.','Оқу DOCX файлдарын нақты backend өңдеді. Бұл C010 дайын нәтижесі емес, тексеруге арналған синтетикалық жинақ.','Sample DOCX files were processed by the real backend. This is a synthetic test set, not the prepared C010 result.']});
+Object.assign(entries,{
+ "tabTitle": [
+  "Distingt — анализ документов",
+  "Distingt — құжаттарды талдау",
+  "Distingt — document analysis"
+ ],
+ "findingsBadge": [
+  "Замечания · {count}",
+  "Ескертулер · {count}",
+  "Findings · {count}"
+ ],
+ "expandNav": [
+  "Открыть боковую панель",
+  "Бүйірлік панельді ашу",
+  "Open sidebar"
+ ],
+ "collapseNav": [
+  "Свернуть боковую панель",
+  "Бүйірлік панельді жию",
+  "Collapse sidebar"
+ ],
+ "newAnswer": [
+  "К новым сообщениям",
+  "Жаңа хабарламаларға",
+  "New messages"
+ ],
+ "agentTrace": [
+  "Действия",
+  "Әрекеттер",
+  "Actions"
+ ],
+ "demoOperation": [
+  "Действие",
+  "Әрекет",
+  "Action"
+ ],
+ "settings": [
+  "Настройки обработки",
+  "Өңдеу параметрлері",
+  "Processing settings"
+ ],
+ "semanticAnalysis": [
+  "Искать смысловые изменения",
+  "Мағыналық өзгерістерді іздеу",
+  "Find changes in meaning"
+ ],
+ "analysisAvailable": [
+  "Готово к сравнению документов.",
+  "Құжаттарды салыстыруға дайын.",
+  "Ready to compare your documents."
+ ],
+ "textComparisonAvailable": [
+  "Доступно сравнение формулировок. Смысловые изменения требуют дополнительной проверки.",
+  "Тұжырымдарды салыстыру қолжетімді. Мағыналық өзгерістерді қосымша тексеру қажет.",
+  "Wording comparison is available. Changes in meaning need additional review."
+ ],
+ "reading": [
+  "Подготавливаем документы…",
+  "Құжаттарды дайындаудамыз…",
+  "Preparing documents…"
+ ],
+ "processing": [
+  "Сравниваем документы…",
+  "Құжаттарды салыстырудамыз…",
+  "Comparing documents…"
+ ],
+ "processingAI": [
+  "Сравниваем функции…",
+  "Функцияларды салыстырудамыз…",
+  "Comparing responsibilities…"
+ ],
+ "progressHint": [
+  "Дождитесь результата. Обработка может занять несколько минут; промежуточные этапы пока недоступны.",
+  "Нәтижені күтіңіз. Өңдеу бірнеше минутқа созылуы мүмкін; аралық кезеңдер әзірге қолжетімсіз.",
+  "Please wait for the result. Processing can take several minutes; intermediate stages are not available yet."
+ ],
+ "complete": [
+  "Готово",
+  "Дайын",
+  "Ready"
+ ],
+ "timeout": [
+  "Не удалось дождаться результата. Повторите попытку или попробуйте меньший комплект документов.",
+  "Нәтижені күту уақыты аяқталды. Қайталаңыз немесе құжаттар санын азайтыңыз.",
+  "The result took too long. Retry or try a smaller set of documents."
+ ],
+ "technicalDetails": [
+  "Подробности ошибки",
+  "Қате туралы мәлімет",
+  "Error details"
+ ],
+ "localWorkspace": [
+  "Сохранено в браузере",
+  "Браузерде сақталған",
+  "Saved in this browser"
+ ],
+ "localHint": [
+  "Дела и история доступны в этом браузере. Подробнее — в разделе «Обработка данных».",
+  "Істер мен тарих осы браузерде қолжетімді. Толығырақ — «Деректерді өңдеу» бөлімінде.",
+  "Cases and history stay available in this browser. See Data processing for details."
+ ],
+ "dataPolicy": [
+  "Обработка данных",
+  "Деректерді өңдеу",
+  "Data processing"
+ ],
+ "guideRunText": [
+  "Нажмите «Начать анализ». Сервис использует настроенный способ обработки. Если смысловой анализ недоступен, вы увидите сравнение формулировок и его ограничения. Результаты проверяйте по источникам.",
+  "«Талдауды бастау» батырмасын басыңыз. Қызмет бапталған өңдеу тәсілін қолданады. Мағыналық талдау қолжетімсіз болса, тұжырымдарды салыстыру және оның шектеулері көрсетіледі. Нәтижелерді дереккөздермен тексеріңіз.",
+  "Select Start analysis. The service uses its configured processing method. If semantic analysis is unavailable, you will see wording comparisons and their limitations. Check results against their sources."
+ ],
+ "dataProviderText": [
+  "При настроенном смысловом анализе текст документов отправляется выбранному поставщику ИИ. Если он не подключён или не ответил, доступны только текстовые сравнения с явной отметкой об ограничениях. Администратор может проверить и изменить подключение ниже. Условия обработки зависят от поставщика.",
+  "Мағыналық талдау бапталғанда, құжат мәтіні таңдалған ЖИ жеткізушісіне жіберіледі. Ол қосылмаса немесе жауап бермесе, шектеулері белгіленген мәтіндік салыстыру ғана қолжетімді. Әкімші қосылымды төменде тексеріп, өзгерте алады. Өңдеу шарттары жеткізушіге байланысты.",
+  "When semantic analysis is configured, document text is sent to the selected AI provider. If it is not connected or fails to respond, only wording comparisons are available, with a clear limitation notice. An administrator can inspect or change the connection below. Processing terms depend on the provider."
+ ],
+ "modelSettingsSaved": [
+  "Настройки обработки применены.",
+  "Өңдеу параметрлері қолданылды.",
+  "Processing settings applied."
+ ],
+ "sampleProcessed": [
+  "Учебные документы обработаны сервисом. Это вымышленный комплект для проверки, а не готовый результат демонстрации.",
+  "Оқу құжаттарын қызмет өңдеді. Бұл дайын демо нәтижесі емес, тексеруге арналған ойдан шығарылған жинақ.",
+  "The service processed these sample documents. This is a fictional test set, not a prepared demo result."
+ ]
+});
+Object.assign(entries,{checkingAvailability:['Проверяем доступность обработки…','Өңдеу қолжетімділігін тексерудеміз…','Checking processing availability…']});
+Object.assign(entries,{"demoAdapter": ["Демонстрация", "Көрсетілім", "Demonstration"], "demoAgentDisclosure": ["Демонстрационный пример C010. Действия выполняются на учебных документах без обращения к ИИ.", "C010 көрсетілім мысалы. Әрекеттер оқу құжаттарымен ЖИ-ге жүгінбей орындалады.", "C010 demonstration. Actions use sample documents without contacting an AI model."], "localDemoExecution": ["Проверяем учебный пример в этом браузере. Внешние сервисы не используются.", "Оқу мысалы осы браузерде тексеріледі. Сыртқы қызметтер қолданылмайды.", "The sample is checked in this browser. No external service is used."], "agentUnavailable": ["Разговор по загруженным документам пока недоступен. Можно изучить результаты, проверить источники и скачать заключение.", "Жүктелген құжаттар бойынша әңгіме әзірге қолжетімсіз. Нәтижелерді зерттеп, дереккөздерді тексеріп, қорытындыны жүктей аласыз.", "Chat about uploaded documents is not available yet. You can review results, check sources and download a conclusion."], "liveComposerHint": ["Вопрос сохраняется как черновик. Отправка пока недоступна.", "Сұрақ нобай ретінде сақталады. Жіберу әзірге қолжетімсіз.", "Your question is saved as a draft. Sending is not available yet."], "demoComposerHint": ["Enter — отправить · Shift+Enter — новая строка. В примере доступны поиск по словам, проверка замечания и заключение.", "Enter — жіберу · Shift+Enter — жаңа жол. Мысалда сөзбен іздеу, ескертуді тексеру және қорытынды қолжетімді.", "Enter to send · Shift+Enter for a new line. The demo supports word search, finding review and conclusions."], "candidateChanges": ["Замечания", "Ескертулер", "Findings"]});
+Object.assign(entries,{
+ "candidates": [
+  "Замечания",
+  "Ескертулер",
+  "Findings"
+ ],
+ "riskContext": [
+  "Замечание",
+  "Ескерту",
+  "Finding"
+ ],
+ "dataUploadText": [
+  "После нажатия «Начать анализ» файлы DOCX передаются серверу Distingt. Он извлекает текст и сравнивает документы. Для сравнения формулировок внешний сервис не требуется.",
+  "«Талдауды бастау» батырмасын басқан соң DOCX файлдары Distingt серверіне жіберіледі. Ол мәтінді шығарып, құжаттарды салыстырады. Тұжырымдарды салыстыру үшін сыртқы қызмет қажет емес.",
+  "After you select Start analysis, DOCX files are sent to the Distingt server. It extracts text and compares documents. Wording comparison does not require an external service."
+ ],
+ "dataStorageText": [
+  "Материалы смыслового анализа — документы, запросы и ответы — сохраняются на компьютере, где запущен сервер. Отдельный исследовательский режим также сохраняет документы и ход работы. Автоматическое удаление и управление сроками хранения в интерфейсе пока недоступны.",
+  "Мағыналық талдау материалдары — құжаттар, сұраулар мен жауаптар — сервер іске қосылған компьютерде сақталады. Бөлек зерттеу режимі де құжаттар мен жұмыс барысын сақтайды. Интерфейсте автоматты жою және сақтау мерзімдерін басқару әзірге қолжетімсіз.",
+  "Semantic analysis documents, requests and responses are saved on the computer running the server. The separate research mode also saves documents and work progress. Automatic deletion and retention controls are not available in the interface yet."
+ ],
+ "dataReviewText": [
+  "Язык и тема, дела, исходные файлы, результаты, решения и переписка сохраняются в этом браузере. Ключ подключения туда не записывается. Сохранённые дела не переносятся автоматически на другие устройства. Очистка данных сайта удалит историю.",
+  "Тіл мен тақырып, істер, бастапқы файлдар, нәтижелер, шешімдер мен әңгімелер осы браузерде сақталады. Қосылым кілті сақталмайды. Сақталған істер басқа құрылғыларға автоматты түрде көшірілмейді. Сайт деректерін тазалау тарихты жояды.",
+  "Language, theme, cases, original files, results, decisions and conversations are saved in this browser. Connection keys are not stored there. Saved cases do not automatically transfer to other devices. Clearing site data deletes the history."
+ ],
+ "aboutLimits": [
+  "Это хакатонный продукт. Качество смыслового анализа ещё требует проверки; полнота обнаружения изменений не гарантируется. Разговор по вашим документам и применение правок пока недоступны. Отдельный демочат работает только с учебным примером.",
+  "Бұл — хакатон өнімі. Мағыналық талдау сапасы әлі тексеруді қажет етеді; барлық өзгерістерді табуға кепілдік жоқ. Өз құжаттарыңыз бойынша әңгіме және түзетулер енгізу әзірге қолжетімсіз. Бөлек демочат тек оқу мысалымен жұмыс істейді.",
+  "This is a hackathon product. Semantic analysis still needs validation; complete detection is not guaranteed. Chat about your documents and applying edits are not available yet. The separate demo chat works only with a sample case."
+ ]
+});
 const enumEntries={
 'department_added':['Добавлено в перечень','Тізімге қосылды','Added to the list'], 'department_removed':['Убрано из перечня','Тізімнен алынды','Removed from the list'], 'department_retained':['Сохранено в перечне','Тізімде сақталды','Retained in the list'], 'reorganization':['Преобразование','Қайта ұйымдастыру','Reorganization'], 'function_loss':['Потенциальная потеря','Ықтимал жоғалу','Potential loss'], 'function_transfer':['Передача функции','Функцияны беру','Function transfer'], 'duplication':['Возможное дублирование','Ықтимал қайталану','Potential duplication'], 'conflict':['Конфликт интересов','Мүдделер қақтығысы','Conflict of interest'], 'contradiction':['Противоречие формулировок','Тұжырымдар қайшылығы','Conflicting wording'], 'unknown':['Недостаточно данных','Деректер жеткіліксіз','Insufficient information'], 'risk':['Возможный риск','Ықтимал тәуекел','Potential risk'], 'confirmed':['Подтверждено аналитиком','Талдаушы растады','Confirmed by analyst'], 'dismissed':['Отклонено аналитиком','Талдаушы қабылдамады','Dismissed by analyst']};
 Object.assign(entries,enumEntries);
@@ -963,7 +1124,7 @@ export function setLanguage(value){if(!dictionaries[value])return;language=value
 export function translate(root=document){
  root.querySelectorAll('[data-i18n]').forEach(el=>{el.textContent=t(el.dataset.i18n);});
  for(const attr of ['placeholder','aria-label','title'])root.querySelectorAll(`[data-i18n-${attr}]`).forEach(el=>el.setAttribute(attr,t(el.getAttribute(`data-i18n-${attr}`))));
- document.title=t('brand')+' — '+t('product');
+ document.title=t('tabTitle');
 }
 export const number=value=>new Intl.NumberFormat(language==='kk'?'kk-KZ':language==='ru'?'ru-RU':'en-GB').format(value);
 export const date=value=>new Intl.DateTimeFormat(language==='kk'?'kk-KZ':language==='ru'?'ru-RU':'en-GB',{dateStyle:'medium',timeStyle:'short'}).format(new Date(value));

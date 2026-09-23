@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <title>Distingt</title>
+  <rect width="128" height="128" rx="26" fill="#071c36"/>
+  <g transform="translate(4 4) scale(1.2)">
+    <path fill="#42c9ff" d="M16 17H43V28H27V73H43V84H16Z M57 17H84V84H57V73H73V28H57Z"/>
+    <path fill="#b7e8ff" d="M36 37H64V47H36Z M36 54H64V64H36Z"/>
+  </g>
+</svg>
