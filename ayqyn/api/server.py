@@ -17,11 +17,13 @@ from ayqyn.documents.packets import read_packet
 from ayqyn.agent.runner import prepare_research,restore_research,run_research,public_result
 from ayqyn.agent.state import ResearchState
 from ayqyn.api.workspace import workspace_result,progress_result
+from ayqyn.api.chat import handle as handle_chat, analysis_features, research_features
 from ayqyn.analysis.batch import MAX_DOCUMENTS, classify_documents, combine_documents
 from time import perf_counter
 
 from ayqyn.paths import ROOT
 RESEARCH_ROOT=ROOT/'output'/'research'
+ANALYSIS_ROOT=ROOT/'output'/'analyses'
 ACTIVE_RESEARCH=set()
 RESEARCH_LOCK=threading.Lock()
 
@@ -59,6 +61,8 @@ class Handler(BaseHTTPRequestHandler):
         self.wfile.write(data)
 
     def do_GET(self):
+        if urlparse(self.path).path.startswith('/api/analyses/'):
+            return handle_chat(self, 'GET')
         if not self.safe_host(): return self.send_json(403,{'error':'Недопустимый адрес сервера.'})
         path = unquote(urlparse(self.path).path).lstrip('/')
         if path in {'', 'api/health'}:
@@ -85,9 +89,9 @@ class Handler(BaseHTTPRequestHandler):
                     self.end_headers()
                     self.wfile.write(data)
                     return
-                if view=='workspace': return self.send_json(200,workspace_result(state))
+                if view=='workspace': return self.send_json(200,{**workspace_result(state), **research_features(self, state)})
                 if view=='progress': return self.send_json(200,progress_result(state))
-                return self.send_json(200,public_result(state))
+                return self.send_json(200,{**public_result(state), **research_features(self, state)})
             except (ValueError,OSError):
                 return self.send_json(404,{'error':'Исследование не найдено.'})
         candidate = (ROOT/path).resolve()
@@ -104,6 +108,8 @@ class Handler(BaseHTTPRequestHandler):
         self.wfile.write(data)
 
     def do_POST(self):
+        if urlparse(self.path).path.startswith('/api/analyses/'):
+            return handle_chat(self, 'POST')
         origin = self.headers.get('Origin')
         allowed = {f'http://127.0.0.1:{self.server.server_port}',f'http://localhost:{self.server.server_port}'}
         if not self.safe_host() or (origin and origin not in allowed): return self.send_json(403,{'error':'Недопустимый источник запроса.'})
@@ -138,7 +144,7 @@ class Handler(BaseHTTPRequestHandler):
                         code,result=404,{'error':'Исследование не найдено.'}
                     else:
                         run_research(state,store,index,config)
-                        code,result=200,public_result(state)
+                        code,result=200,{**public_result(state), **research_features(self, state)}
                 finally:
                     with RESEARCH_LOCK: ACTIVE_RESEARCH.discard(path.name)
                 return self.send_json(code,result)
@@ -203,7 +209,11 @@ class Handler(BaseHTTPRequestHandler):
                     mode='fallback'
             if before['sha256']==after['sha256']: warnings.append('Загружены одинаковые файлы. Внутренние пересечения всё ещё могут присутствовать.')
             event('traceSources', sum(len(f['before_ids'])+len(f['after_ids']) for f in findings))
-            self.send_json(200,{'before':before,'after':after,'documents':documents,'trace':trace,'findings':findings,'mode':mode,'warnings':warnings,'usage':usage,'classification_usage':classification_usage})
+            result={'before':before,'after':after,'documents':documents,'trace':trace,'findings':findings,'mode':mode,'warnings':warnings,'usage':usage,'classification_usage':classification_usage}
+            result.update(analysis_features(self, result, data.get('config') or {}))
+            if result['analysis_id'] is None:
+                result['warnings'].append('Результат не сохранён; чат по этому анализу недоступен.')
+            self.send_json(200,result)
         except (ValueError,UnicodeError) as exc:
             self.send_json(400,{'error':str(exc)})
         except Exception:
