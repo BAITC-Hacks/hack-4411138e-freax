@@ -2,7 +2,7 @@
 
 ## Reference study
 
-User-owned reference repositories were read before implementation. Their application code was not copied; no license was found at the repository roots, so the implementation uses original HTML/CSS/JS inspired by the visual principles. No reference scripts or applications were executed.
+No license was found at the reference repository roots. Their application code was not copied; the implementation uses original HTML/CSS/JS inspired by their visual principles.
 
 | Reference | Components/styles read | AYQYN adaptation |
 | --- | --- | --- |
@@ -25,4 +25,4 @@ The public sites could not be fetched by the web text reader; repository source 
 
 ## Main implementation files
 
-analyze.html, ayqyn.css, ayqyn.js, analyze.css, analysis.js, i18n.js. No React components or nonexistent imports were introduced. The original supplied Kazakhtelecom SVG is used as-is. No separate AYQYN/freax artwork was supplied in the current attachments; the product/team marks use typography.
+analyze.html, ayqyn.css, ayqyn.js, analyze.css, analysis.js, i18n.js. The supplied Kazakhtelecom SVG is used as-is; AYQYN/freax marks use typography.
