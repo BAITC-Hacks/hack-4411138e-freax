@@ -82,7 +82,6 @@ export function createWorkspace(hooks){
   if(!active)return;captureDocuments();
   $('case-title').textContent=name(active);$('page-title').textContent=t('cases');
   $('case-meta').textContent=`${t(active.kind==='demo'?'demoLabel':'savedAnalysis')} · ${t('analysisVersion',{version:active.analysisVersion})} · ${t(active.snapshot.mode==='fallback'?'partial':'complete')}`;
-  $('case-storage').textContent=t('localCaseStorage');
   const view=active.view;
   document.querySelectorAll('[data-case-tab]').forEach(el=>{const selected=el.dataset.caseTab===view;el.setAttribute('aria-selected',String(selected));el.tabIndex=selected?0:-1;});
   $('agent-view').hidden=view!=='agent';$('case-documents').hidden=view!=='documents';$('results').hidden=!['results','report'].includes(view);$('case-artifacts').hidden=view!=='report';

@@ -4,7 +4,19 @@ The approved blue palette, local Manrope, glass details, three languages and two
 
 ## User-facing changes
 
-- Official Kazakhtelecom logo with its original proportions/colors on a light plate; aligned navigation and mobile menu. Full-name language menu supports arrows, Home/End, selection, Escape and outside clicks.
+### Latest follow-up: individual finding pages
+
+- Two glass hero cards now surround a readable HTML before/after comparison. All three open C010-F03. Floating motion pauses on hover/focus and is disabled on small screens and for reduced motion.
+- Logo plates are transparent; the original blue symbol is retained and the SVG wordmark follows the image's explicit light/dark color scheme.
+- Chat alone uses a 56px toolbar and smaller heading/tabs. The redundant local-history sentence was removed from the case header.
+- Each finding has a dedicated `#/app/cases/<case>/findings/<finding>` page. Titles and source actions are links. `#/app/demo/findings/C010-F03` and the older `#/app/demo#finding-C010-F03` both work. Existing document selectors, original files, analyst decisions and comments are retained. Previous/next navigation updates the URL.
+- Document headers and review fields are aligned. Browser Back restores list position/focus; chat drafts and reading state remain in the case. Mobile documents are sequential.
+
+Follow-up checks, without screenshots: frontend checks passed with 424 translation keys × three locales; agent-state checks, JavaScript syntax and diff checks passed. Browser layout checks at 360/390/768/1024/1440px showed no horizontal overflow for hero and finding page in light/dark, or compact chat in light. Checked legacy and new demo URLs, title/source links, next finding, direct reload, Escape, Back/focus, draft preservation and comment persistence. RU/KK/EN leave source quotations unchanged. No console errors recorded. Full backend tests and screenshot review were not repeated for this frontend-only follow-up; the following verification list describes the preceding iteration.
+
+### Previous iteration
+
+- Official Kazakhtelecom logo with its original proportions; aligned navigation and mobile menu. Full-name language menu supports arrows, Home/End, selection, Escape and outside clicks.
 - The hero's decorative eyebrow and raster artwork are replaced by a readable, explicitly synthetic C010-F03 comparison. Its link opens the actual finding and reserve-power quotation, with the inspected after-document scope.
 - Desktop sidebar collapse persists; mobile drawer supports backdrop, Escape and focus return. Findings use a compact localized badge.
 - Upload offers one Start analysis action. Advanced connection controls are available only from Data processing. The existing server configuration selects AI when a key or loopback provider is available; otherwise wording comparison is disclosed. Configuration loading cannot silently race with submission. Rules/AI/fallback responses remain distinct.
