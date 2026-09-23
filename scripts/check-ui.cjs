@@ -1,0 +1,58 @@
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+const { chromium } = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
+
+(async () => {
+  const browser = await chromium.launch({channel:'chrome',headless:true});
+  const page = await browser.newPage({viewport:{width:1440,height:1000}});
+  const errors=[];
+  page.on('pageerror',e=>errors.push(e.message));
+  const output=path.resolve('output/playwright');fs.mkdirSync(output,{recursive:true});
+  try {
+    await page.goto('http://127.0.0.1:8765/');
+    await page.getByRole('button',{name:'Открыть редакции 8 и 9'}).click();
+    await page.getByText('Загружены реальные редакции 8 и 9. Анализ ещё не выполнялся.').waitFor();
+    await page.getByRole('button',{name:'Сравнить документы'}).click();
+    await page.locator('#results').waitFor({state:'visible',timeout:90000});
+    assert.match(await page.locator('#findings').innerText(),/ДИТААД/);
+    assert.match(await page.locator('#findings').innerText(),/ДОА/);
+    assert.match(await page.locator('#run-method').innerText(),/БЕЗ LLM/);
+    await page.screenshot({path:path.join(output,'analysis-desktop.png'),fullPage:false});
+    await page.locator('[data-side]').first().click();
+    await page.locator('#evidence[open]').waitFor();
+    assert.match(await page.locator('#evidence-file').innerText(),/редакция_/);
+    assert(await page.locator('#evidence-body .target').innerText());
+    await page.screenshot({path:path.join(output,'evidence-desktop.png')});
+    await page.getByRole('button',{name:'Закрыть источник',exact:true}).click();
+    await page.locator('[data-review]').first().selectOption('confirmed');
+    assert.match(await page.locator('#conclusion').innerText(),/Подтверждено аналитиком: 1/);
+    const downloadEvent=page.waitForEvent('download');
+    await page.getByRole('button',{name:'Скачать заключение'}).click();
+    const download=await downloadEvent;await download.saveAs(path.join(output,'conclusion.md'));
+    assert.match(fs.readFileSync(path.join(output,'conclusion.md'),'utf8'),/SHA-256/);
+    await page.setViewportSize({width:390,height:844});
+    await page.screenshot({path:path.join(output,'analysis-mobile.png'),fullPage:false});
+    assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+    await page.goto('http://127.0.0.1:8765/index.html');
+    await page.locator('input[value="0"]').check();
+    await page.getByRole('button',{name:'Проверить ответ',exact:true}).click();
+    assert.match(await page.locator('.feedback').innerText(),/Пока неверно/);
+    await page.locator('input[value="1"]').check();
+    await page.getByRole('button',{name:'Проверить ещё раз'}).click();
+    assert.match(await page.locator('#stats').innerText(),/Всего попыток\s*2/);
+    await page.getByRole('button',{name:'Следующий кейс'}).click();
+    await page.locator('input[value="2"]').check();
+    await page.getByRole('button',{name:'Проверить ответ',exact:true}).click();
+    await page.getByRole('button',{name:'Следующий кейс'}).click();
+    await page.locator('input[value="0"]').check();
+    await page.getByRole('button',{name:'Проверить ответ',exact:true}).click();
+    assert.match(await page.locator('#stats').innerText(),/Кейсов решено\s*3 \/ 3/);
+    assert.match(await page.locator('#stats').innerText(),/С первой попытки\s*2 \/ 3/);
+    assert.match(await page.locator('#stats').innerText(),/Решено после объяснения\s*1 \/ 3/);
+    assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+    await page.screenshot({path:path.join(output,'training-mobile.png'),fullPage:true});
+    assert.deepEqual(errors,[]);
+    console.log('PASS: actual DOCX upload, analysis, sources, review, export, mobile width, training retry and counters; no browser errors.');
+  } finally {await browser.close();}
+})().catch(e=>{console.error(e);process.exitCode=1;});

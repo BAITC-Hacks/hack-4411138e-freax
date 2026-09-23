@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="ru">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Основание — практикум аналитика</title><link rel="stylesheet" href="styles.css"></head>
+<body>
+<header><a class="brand" href="analyze.html" title="Вернуться к анализу документов">Основание<span>Практикум аналитика</span></a><span class="demo">Демонстрационный набор · 3 кейса</span></header>
+<main>
+<div class="heading"><div><p class="eyebrow">ОРГАНИЗАЦИОННЫЕ ИЗМЕНЕНИЯ</p><h1>Что подтверждает источник?</h1></div><button id="reset" class="quiet">Начать заново</button></div>
+<section class="comparison" aria-labelledby="comparison-title"><div class="section-head"><h2 id="comparison-title">Карта изменений</h2><span>Редакции 8 и 9 + учебные примеры</span></div><div class="table-scroll"><table><thead><tr><th>Объект</th><th>Было</th><th>Стало</th><th>Статус вывода</th><th>Источник</th></tr></thead><tbody id="rows"></tbody></table></div></section>
+<div class="workspace"><section class="exercise" aria-labelledby="case-title"><nav id="steps" aria-label="Учебные кейсы"></nav><div id="exercise"></div></section><aside><p class="eyebrow">ВАШ РЕЗУЛЬТАТ</p><h2>От факта к выводу</h2><div id="stats" aria-live="polite"></div><div class="principle"><span>Критерий проверки</span><p>Утверждение должно быть не сильнее, чем его источник.</p></div><div id="summary"></div></aside></div>
+<footer>Подготовленные кейсы. Реальный источник: п. 3.4 двух редакций положения. Кейсы 2 и 3 — синтетические.</footer>
+</main>
+<dialog id="source-dialog" aria-labelledby="source-title"><div class="dialog-head"><div><p class="eyebrow" id="source-origin"></p><h2 id="source-title">Источники</h2></div><button id="close-source" aria-label="Закрыть источники" title="Закрыть">×</button></div><div id="source-content"></div></dialog>
+<script src="sources.js"></script><script src="cases.js"></script><script src="app.js"></script>
+</body></html>
